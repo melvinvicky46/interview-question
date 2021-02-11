@@ -1,8 +1,19 @@
-// import { setPageName, setSiteName, setServerName, setSiteSection, setSiteSectionLevel2, setSiteSectionLevel3, setAllHier1 } from './ar-common.js';
-
 // Initialize the adobe datalayer
 window.adobeDataLayer = window.adobeDataLayer || [];
 console.log(`Adobe Data Layer Initialized`);
+
+// import { 
+//     setPageName,
+//     setSiteName,
+//     setServerName,
+//     setSiteSection,
+//     setSiteSectionLevel2,
+//     setSiteSectionLevel3,
+//     setAllHier1 
+//     } from "https://static.int.projectmanagement.com/jquery/data-layer/ar-common.js";
+
+// Get the Script tag from the DOM for page load
+const getPageLoadEl = document.querySelector('script[data-tracking="tracking-ar-page"]');
 
 // Get the Script tag from the DOM for logged in user
 const getLoggedInUserEl = document.querySelector('script[data-tracking="tracking-ar-user"]');
@@ -25,13 +36,80 @@ const getFormInteractionEl = document.querySelector('script[data-tracking="track
 // Get the Script tag from the DOM for Event Detials page
 const getEventDetailEl = document.querySelector('script[data-tracking="tracking-ar-event-details"]');
 
-
 const locationHostname = window.location.hostname;
 const locationPathname = window.location.pathname;
 const navigatorLang = navigator.language || navigator.userLanguage;
 
-// Get the Script tag from the DOM for page load
-const getPageLoadEl = document.querySelector('script[data-tracking="tracking-ar-page"]');
+// Setting Page Name with browser default props
+function setPageName() {
+    let pageName = "";
+    const siteSection = setSiteSection();
+    const siteName = setSiteName();
+    const getSiteSectionLevel2 = locationPathname.split('/')[2];
+    const getSiteSectionLevel3 = locationPathname.split('/')[3];
+    pageName = `${siteName}|${navigatorLang}|${siteSection}`
+    if (getSiteSectionLevel2 !== undefined && getSiteSectionLevel2 !== "") {
+        pageName = `${siteName}|${navigatorLang}|${getSiteSectionLevel2.replace('.','-')}`
+    }
+    if (getSiteSectionLevel3 !== undefined && getSiteSectionLevel3 !== ""){
+        pageName = `${siteName}|${navigatorLang}|${getSiteSectionLevel3.replace('.','-')}`
+    }
+    return pageName;
+}
+
+// Setting Site Name with browser default props
+function setSiteName() {
+    if (locationHostname.match(/^www\.(.*)(\.com|\.org)$/) !== null) {
+        return locationHostname.match(/^www\.(.*)(\.com|\.org)$/)[1].replace('.','-');
+    } else {
+        const getSite = locationHostname.match(/(.*)(\.com|\.org)$/);
+        if (getSite && getSite[1].split('.')[0] === "my") {
+            return `${getSite[1].split('.')[1]}-mypmi`
+        } else if(getSite){
+            return `${getSite[1].split('.')[1]}-${getSite[1].split('.')[0]}`
+        }
+    }
+    return "pmi";
+}
+
+// Setting Server Name with browser default props
+function setServerName() {
+    if (locationHostname.replace(/^(?:https?:\/\/)?(?:www\.)?/i, "").split('/')[0] !== undefined) {
+        return locationHostname.replace(/^(?:https?:\/\/)?(?:www\.)?/i, "").split('/')[0];
+    }
+}
+
+// Setting Site Section with browser default props
+function setSiteSection() {
+    if (locationPathname.split('/')[1] === "") {
+        return "home";
+    }
+    return locationPathname.split('/')[1].replace('.','-');
+}
+
+// Setting Site Section Level2 with browser default props
+function setSiteSectionLevel2() {
+    const siteSection = setSiteSection();
+    if (siteSection === "home" || locationPathname.split('/')[2] === undefined) {
+        return "";
+    } else {
+        return locationPathname.split('/')[2].replace('.','-');
+    }
+}
+
+// Setting Site Section Level3 with browser default props
+function setSiteSectionLevel3() {
+    const getSiteSectionLevel2 = setSiteSectionLevel2();
+    return (getSiteSectionLevel2 === undefined || getSiteSectionLevel2 === "" || locationPathname.split('/')[3] === undefined) ? "" : locationPathname.split('/')[3].replace('.','-');
+}
+
+// Setting Hier1 with browser default props
+function setAllHier1() {
+    if (locationPathname.split('/').join('|') === "|") {
+        return "home";
+    }
+    return locationPathname.replace(/\/$/, '').split('/').join('|').substring(1).replace('.','-');
+}
 
 if (getContentDetailEl !== null) {
     adobeOnloadPush(getContentDetailEl);
@@ -72,7 +150,7 @@ if (getPageLoadEl !== null) {
     }
 }
 
-// Check if the tracking-ar-page is not present in the DOM
+// Check for tracking-ar-page is not in the DOM
 if (getPageLoadEl === null) {
     genericPageData({});
 }
@@ -118,7 +196,7 @@ function setGenericPageData(pageLoadData) {
     return genericPageData;
 }
 
-// Anchor/Button Link click event 
+// onClick event trigger 
 document.querySelector("body").addEventListener('click', (e) => {
     const dataTracking = e.target.getAttribute('data-tracking');
     if (dataTracking) {
@@ -166,46 +244,4 @@ function findParentNode(childObj) {
         count++;
     }
     return getParentEl.getAttribute('adoberegion')
-}
-
-let formStartState = 0;
-const formElement = document.querySelector('form');
-formElement.addEventListener('input', (e) => {
-    const classList = e?.target?.classList;
-    const classLen = e?.target?.classList?.length;
-    // Check for any form error
-    if (classLen > 0) {
-        for (let i = 0; i < classLen; i++) {
-            if (classList[i] === "input-validation-error") {
-                onFormChange(e);
-            }
-        }
-    }
-    // When the form start
-    if (!formStartState) {
-        onFormChange(e);
-        formStartState = 1;
-    }
-})
-
-// When the for is submitted
-formElement.addEventListener('submit', (e) => {
-    const errorNames = [];
-    for ( let i = 0; i < formElement.elements.length; i++ ) {
-        const formEls = formElement.elements[i];
-        const elClass = formEls.getAttribute('class');
-        if (elClass !== null) {
-            if (elClass.includes("input-validation-error")) {
-                const elNameAttr = formEls.getAttribute('name');
-                errorNames.push(elNameAttr);
-            }
-        }
-    }
-    console.log("errorNames", errorNames)
-    onFormChange(e)
-    e.preventDefault();
-})
-
-function onFormChange(e) {
-    console.log("form interaction", e)
 }
