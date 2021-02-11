@@ -1,6 +1,9 @@
 // Initialize the adobe datalayer
 window.adobeDataLayer = window.adobeDataLayer || [];
-console.log(`Adobe Data Layer Initialized`);
+
+window.onload = function(){ 
+   console.log(`Adobe Data Layer Initialized`); 
+}
 
 // import { 
 //     setPageName,
