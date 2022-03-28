@@ -6,7 +6,7 @@ function CheckoutCart(props: any) {
     <div>
       <Header />
       <h2> Checkout Cart Page Load
-        
+        Testing linting
       </h2>
     </div>
   );
