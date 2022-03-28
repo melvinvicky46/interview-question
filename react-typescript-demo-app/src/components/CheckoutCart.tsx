@@ -5,7 +5,9 @@ function CheckoutCart(props: any) {
   return (
     <div>
       <Header />
-      <h2> Checkout Cart Page Load</h2>
+      <h2> Checkout Cart Page Load
+        
+      </h2>
     </div>
   );
 }
