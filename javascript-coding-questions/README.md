@@ -215,3 +215,1254 @@ const flatten = (arr) => {
 console.log(flatten(arr))
 // [1, 2, 3, 4, 5, 6, 8, 9]
 ```
+
+9. **Find the number of Occurrences of elements in an array**
+
+```
+const tempArr = [2, 3, 1, 1, 2, 3, 1, 3, 4, 4, 2, 1, 4];
+const count = {};
+for (const ele of tempArr) {
+  if (count[ele]) {
+    count[ele] = count[ele] + 1;
+  } else {
+    count[ele] = 1;
+  }
+  // OR
+  // count[ele] = count[ele] ? count[ele] + 1 : 1;
+}
+console.log(count); // {1: 4, 2: 3, 3: 3, 4: 3}
+```
+
+10. **Add all the zero to end of the array**
+
+```
+const array = [1, 2, 0, 3, 0, 4, 0, 5];
+
+function pushZeroToLast(arr) {
+  let count = 0;
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] !== 0) {
+      arr[count++] = arr[i];
+    }
+  }
+
+  while (count < arr.length) {
+    arr[count++] = 0;
+  }
+  return arr;
+}
+console.log(pushZeroToLast(array)); // [1, 2, 3, 4, 5, 0, 0, 0]
+```
+
+11. **Segregate even and odd number in an array**
+
+```
+const array = [2, 3, 4, 5, 6, 7, 8, 9];
+const newArr = [];
+let index = 0;
+for (let i = 0; i < array.length; i++) {
+  if (array[i] % 2 === 0) {
+    newArr[index++] = array[i]
+  }
+}
+
+for (let i = 0; i < array.length; i++) {
+  if (array[i] % 2 !== 0) {
+    newArr[index++] = array[i]
+  }
+}
+console.log(newArr); // [2, 4, 6, 8, 3, 5, 7, 9]
+
+// OR
+
+const array = [2, 3, 4, 5, 6, 7, 8, 9];
+const newArr = array.filter(num => num % 2 === 0).concat(array.filter(num => num % 2 !== 0));
+console.log(newArr); // [2, 4, 6, 8, 3, 5, 7, 9]
+
+// OR
+const array = [2, 3, 4, 5, 6, 7, 8, 9];
+let i = -1, j = 0;
+let temp;
+while (array[j] % 2 === 0) {
+  i++;
+  temp = array[i];
+  array[i] = array[j];
+  array[j] = temp;
+}
+j++;
+
+console.log(array); // [2, 4, 6, 8, 3, 5, 7, 9]
+```
+
+12. **Rearrange Array such that Even Index elements are Smaller and Odd Index Elements are Greater**
+
+```
+const array = [2, 3, 4, 5, 6, 7, 8, 9];
+const index = 0;
+let temp;
+function rearrangeOrder(array, len) {
+  for (let i = 0; i < len-1; i++) {
+    if (i % 2 === 0 && array[i] >= array[i + 1]) {
+      temp = array[i];
+      array[i] = array[i + 1];
+      array[i + 1] = temp;
+    }
+    if (i % 2 !== 0 && array[i] <= array[i + 1]) {
+      temp = array[i];
+      array[i] = array[i + 1];
+      array[i + 1] = temp;
+    }
+  }
+  console.log(array) //[2, 4, 3, 6, 5, 8, 7, 9]
+}
+rearrangeOrder(array, array.length)
+```
+
+13. **Difference Between typeof and instanceof in JavaScript**
+
+```
+const a = "string";
+const b = new String("string");
+
+typeof a // "string"
+typeof b // "object"
+
+a instanceof String // false
+b instanceof String // true
+```
+
+14. **Check For Pair In An Array With a Given Sum and return they indexes**
+
+```
+const sumOfPairs = (arr, target) => {
+  let numIndex = {};
+  let difference;
+  for (let i = 0; i < arr.length; i++) {
+    difference = target - arr[i];
+    if (numIndex[difference] !== undefined) {
+      return [numIndex[difference], i]
+    } else {
+      numIndex[arr[i]] = i;
+    }
+  }
+}
+
+sumOfPairs([1, 2, 3, 4], 6) //index [1, 3]
+```
+
+15. **Return the indexes of NaN in Array**
+
+```
+const array = [2, 3, 4, NaN, NaN, 5, NaN];
+const tempArr = [];
+array.filter((item, index) => {
+  if(isNaN(item)) {
+    tempArr.push(index)
+  }
+});
+console.log(tempArr);
+
+// OR
+
+const reduceFn = array.reduce((acc, val, index) => {
+  if(val !== val) {
+    acc.push(index);
+  }
+  return acc;
+}, [])
+console.log(reduceFn)
+```
+
+16. **Implement Group by in JavaScript**
+
+```
+const cars = [
+  { make: 'audi', model: 'r8', year: 2012, quantity: 2},
+  { make: 'audi', model: 'v7', year: 2013, quantity: 5},
+  { make: 'benz', model: 'q8', year: 2014, quantity: 23},
+  { make: 'benz', model: 'r8', year: 2015, quantity: 20},
+  { make: 'bmw', model: 'q7', year: 2017, quantity: 22}
+]
+
+let result = cars.reduce((acc, current) => {
+  acc[current.make] = acc[current.make] || [];
+  acc[current.make].push(current)
+  return acc;
+}, {});
+
+// OR
+
+const result = cars.group(({ make }) => make);
+console.log(result)
+```
+
+17. **Difference between substring and substr in JavaScript**
+
+```
+"abc".substring(1, 2) // b  --> from, to   //returns a new string
+"abc".substr(1, 2) // bc  --> from, length
+```
+
+18. **Find min and max number in an Array without using in-built methods**
+
+```
+function findMinMax(array) {
+  let min = array[0],
+    max = array[0];
+  for (let i = 1; i < array.length; i++) {
+    if (max < array[i]) {
+      max = array[i];
+    }
+    if (min > array[i]) {
+      min = array[i];
+    }
+  }
+  return { min, max };
+}
+
+findMinMax([19, 23, 0, -10, -19]); //{min: -19, max: 23}
+```
+
+19. **Polyfill for Filter Method to return even numbers in JavaScript**
+
+```
+Array.prototype.myFilter = function() {
+  let newArr = [];
+  for (let i = 0; i < this.length; i++) {
+    if (this[i] % 2 === 0) {
+      newArr.push(this[i])
+    }
+  }
+
+  // OR
+  // for (let item of this) {
+  //   newArr.push(callback(item))
+  // }
+  return newArr;
+}
+
+[10, 2, 3, 5, 6, 9, 8].myFilter(current => current % 2 === 0);
+```
+
+20. **Polyfill For map() Method In JavaScript**
+
+```
+Array.prototype.myMap = function(callback) {
+  const newArr = [];
+  for (let item of this) {
+    newArr.push(callback(item));
+  }
+  return newArr
+}
+
+[10, 2, 3, 5, 6, 9, 8].myMap(current => current * 2);
+```
+
+21. **Polyfill to sum the given array using reduce function in JavaScript**
+
+```
+function sum(a, b) {
+  return a + b;
+}
+
+Array.prototype.myReduce = function (callback, initialVal) {
+  let acc = initialVal;
+  for (let i = 0; i < this.length; i++) {
+    acc = callback(acc, this[i]);
+  }
+
+  // OR
+  // let k = 0;
+  // while (k < this.length) {
+    // acc = callback(acc, this[k]);
+    // k++;
+  // }
+  return acc;
+}
+
+const sumArray = [10, 20, 30, 40];
+sumArray.myReduce(sum, 0);
+```
+
+22. **Polyfill to check if the given string or not in JavaScript**
+
+```
+const isString = (str) => {
+  return typeof str === "string" || str instanceof String;
+}
+
+isString("check string") //true
+isString(new String("check String")) //true
+```
+
+23. **Polyfill to find the max number in an array in JavaScript**
+
+```
+Array.prototype.maxNumber = function () {
+  let max = this[0];
+  for (let i = 0; i < this.length; i++) {
+    if (max < this[i]) {
+      return (max = this[i]);
+    }
+  }
+};
+
+[1, 20, 1, 3, 5].maxNumber(); //20
+```
+
+24. **Polyfill to find the min number in an array in JavaScript**
+
+```
+Array.prototype.minNumber = function () {
+  let min = this[0];
+  for (let i = 0; i < this.length; i++) {
+    if (min > this[i]) {
+      return (min = this[i]);
+    }
+  }
+};
+
+[1, 20, 11, 3, 5].minNumber(); //1
+```
+
+25. **Remove duplicate from an array**
+
+```
+// Filter()
+const arr = [1, 2, 3, 2, 1, 4, 5, 6, 5];
+const uniqueArr = arr.filter((value, index, self) => self.indexOf(value) === index);
+console.log(uniqueArr); // [1, 2, 3, 4, 5, 6]
+
+
+// Set()
+const arr = [1, 2, 3, 2, 1, 4, 5, 6, 5];
+const uniqueArr = [...new Set(arr)];
+console.log(uniqueArr); // [1, 2, 3, 4, 5, 6]
+
+// for...of loop
+const arr = [1, 2, 3, 2, 1, 4, 5, 6, 5];
+const uniqueArr = [];
+for (const value of arr) {
+  if (!uniqueArr.includes(value)) {
+    uniqueArr.push(value);
+  }
+}
+console.log(uniqueArr); // [1, 2, 3, 4, 5, 6]
+
+```
+
+26. **Convert an Array into Object**
+
+```
+const arrayOfStrings = ['foo', 'bar', 'baz'];
+const newObj = { ...arrayOfStrings }; // {0: "foo", 1: "bar", 2: "baz"}
+
+// OR
+
+const newObject = {}
+for (let i = 0; i < arrayOfStrings.length; i++) {
+  newObject[i] = newObject[arrayOfStrings[i]]
+}
+
+// OR
+
+const arr = [
+  { id: 1, name: 'John' },
+  { id: 2, name: 'Jane' },
+  { id: 3, name: 'Bob' }
+];
+
+const obj = arr.reduce((result, item) => {
+  result[item.id] = item.name;
+  return result;
+}, {});
+
+console.log(obj); // { 1: 'John', 2: 'Jane', 3: 'Bob' }
+
+// OR
+
+const obj = {};
+for (let i = 0; i < arr.length; i++) {
+  obj[arr[i].id] = arr[i].name;
+}
+console.log(obj); // { 1: 'John', 2: 'Jane', 3: 'Bob' }
+```
+
+27. **Measure Time Taken by a Function to Execute in JavaScript**
+
+```
+console.time('consoleTime')
+methodCall()
+console.timeEnd('consoleTime')
+
+// OR
+
+const start = performance.now() //return the timestamp
+methodCall()
+const end = performance.now()
+console.log(end-start); //time taken to run the method
+```
+
+28. **Find the Pivot element of the given Array**
+
+```
+function findPivot(arr) {
+  let leftSum = 0;
+  let rightSum = arr.reduce((acc, currValue) => acc + currValue, 0);
+  for (let i = 0; i < arr.length; i++) {
+    rightSum -= arr[i];  // 28 - 1 = 27, 27 - 7 = 20, 20 - 3 = 17,  17 - 6 = 11
+    if (leftSum === rightSum) {
+      return arr[i];
+    }
+    leftSum += arr[i]; // 0 + 1 = 1, 1 + 7 = 8, 8 + 3 = 11
+  }
+  return -1;
+}
+
+// example usage
+const arr = [1, 7, 3, 6, 5, 6];  --> //[1, 7, 3] = 11 and [5, 6] = 11, middle is 6
+const pivotIndex = findPivot(arr);
+console.log(pivotIndex) // 6
+```
+
+29. **Array Rotation with k number of rotation**
+
+```
+const nums = [1, 2, 3, 4, 5, 6];
+const k = 3;
+const rotateArray = (arr, k) => {
+  for (let i = 0; i < k; i++) {
+    arr.unshift(arr.pop())
+  }
+  return arr;
+}
+rotateArray(arr, k) // [4, 5, 6, 1, 2, 3];
+```
+
+30. **Object Immutability In JavaScript | Object.preventExtensions | Object.seal() | Object.freeze()**
+
+```
+const cars = {
+  maxSpeed: 40,
+  weight: 200,
+  color: 'red'
+}
+
+Object.preventExtensions(cars);
+// Cannot add new property, but you can modify or delete
+
+Object.seal(cars);
+// You cannot add, delete, But you can modify properties
+// Object.isSealed(cars) // true
+
+Object.freeze(cars);
+// Cannot add, delete or modify
+// Object.isFrozen(cars) // true
+```
+
+31. **Memoization In JavaScript**
+
+```
+function addition(a, b) {
+  return a + b;
+}
+
+const setUniqueProps = (fnToAdd, args) => {
+  let propKey = [];
+  return propKey.concat(fnToAdd, args).join("|");
+}
+
+function memoization(fnToAdd) {
+  let cacheObj = {};
+  return function(...args) {
+    const uniqueProps = setUniqueProps(fnToAdd, args);
+    if (!cacheObj[uniqueProps]) {
+      cacheObj[uniqueProps] = fnToAdd(...args);
+    }
+    return cacheObj[uniqueProps];
+  }
+}
+
+const memoized = memoization(addition)
+console.log(memoized(10, 20)) //Returns value from memoized cache
+console.log(memoized(10, 30)) //New function call
+console.log(memoized(10, 20)) //Returns value from memoized cache
+```
+
+32. **Map Polyfill to find the square root**
+
+```
+const arr = [1, 2, 3, 4, 5]
+function myMapFn(arr, sqrt) {
+  let newArr = [];
+  for (let i = 0; i < arr.length; i++) {
+    let result = sqrt(arr[i], i, arr);
+    newArr.push(result);
+  }
+  return newArr;
+}
+
+const squartRoot = myMapFn(arr, function(currentItem, index, arr) {
+  return currentItem ** 2
+})
+
+console.log(squartRoot); // [1, 4, 9, 16, 25]
+```
+
+33. **Filter Polyfill find item greater than 3**
+
+```
+const arr = [1, 2, 3, 4, 5]
+function myFilterFn(arr, greater) {
+  let newArr = [];
+  for (let i = 0; i < arr.length; i++) {
+    let result = greater(arr[i], i, arr);
+    if (result) {
+      newArr.push(arr[i])
+    }
+  }
+  return newArr;
+}
+
+const numberGreaterThan3 = myFilterFn(arr, function(currentItem, index, arr) {
+  return currentItem > 3
+})
+
+console.log(numberGreaterThan3); // [4, 5]
+```
+
+34. **Find the Missing number or numbers in an Array In JavaScript**
+
+```
+function findMissingNumber(arr) {
+  let missingNumber = [];
+  let minNum = Math.min(...arr);
+  let maxNum = Math.max(...arr);
+  for (let i = minNum; i < maxNum; i++) {
+    if (arr.indexOf(i) < 0) { //0 = item found, -1 item not found
+      missingNumber.push(i)
+    }
+  }
+  return missingNumber;
+}
+
+console.log(findMissingNumber([1, 4, 5, 7])) // [2, 3, 6]
+console.log(findMissingNumber([5, 2, 6, 1, 3, 10])) //[4, 7, 8, 9]
+```
+
+35. **Swap First & Last Character of a String In JavaScript**
+
+```
+function swap(value) {
+  const len = value.length;
+  return value.charAt(len - 1) + value.substring(1, len - 1) + value.charAt(0)
+}
+console.log(swap('Melvin')) //nelviM
+```
+
+36. **Deep Copy in Javascript**
+
+```
+var student1 ={
+  name : "Manish",
+  company : "Gfg"
+}
+
+var student2 =  { ...student1 };
+OR
+// var student2 = Object.assign( {} ,student1);
+OR
+// var student2 = JSON.parse(JSON.stringify(student1))
+
+student1.name = "Rakesh"
+
+console.log("student 1 name is",student1.name)
+console.log("student 2 name is ",student2.name);
+```
+
+38. **Find the factorial of a number**
+
+```
+function factorial(x) {
+  // if number is 0
+  if (x === 0) {
+    return 1;
+  }
+  // if number is positive
+  else {
+    return x * factorial(x - 1);
+  }
+}
+const result = factorial(3); // 3x2x1 = 6
+```
+
+39. **Reverse a string**
+
+```
+function reverseString(str) {
+  // empty string
+  let newString = "";
+  for (let i = str.length - 1; i >= 0; i--) {
+    newString += str[i];
+  }
+  return newString;
+}
+reverseString("Hello world") //dlrow olleH
+```
+
+40. **Check Occurrence of a Character Using for Loop**
+
+```
+function countCharacters(str, character) {
+  let count = 0;
+  for (let i = 0; i < str.length; i++) {
+    if (str.charAt(i) === character) {
+      count++;
+    }
+  }
+  return count;
+}
+countCharacters("Hello world", "l") // 3
+```
+
+41. **Convert first letter of a string to uppercase**
+
+```
+function convertToUpperCase(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1, str.length);
+}
+convertToUpperCase("melvin");  // Melvin
+```
+
+41. **Remove duplicate elements from second array**
+
+```
+const array1 = [1, 2, 3];
+const array2 = [2, 3, 5];
+const filtered = array2.filter((item, index) => {
+  return !array1.includes(item);
+});
+console.log(filtered); //[5]
+
+// OR
+
+array2.filter(function(val) {
+  return array1.indexOf(val) === -1;
+});
+```
+
+42. **Currying in JavaScript**
+
+```
+function sum(a) {
+  return (b) => {
+      return (c) => {
+          return a + b + c
+      }
+  }
+}
+console.log(sum(1)(2)(3)) // 6
+
+function sum(a) {
+  return (b, c) => {
+      return a * b * c
+  }
+}
+sum(10)(3,12);
+
+// Nested/multiple arguments
+function currying(fn, ...args) {
+  return (..._arg) => {
+      return fn(...args, ..._arg);
+  }
+}
+
+function sum(a,b,c) {
+  return a + b + c
+}
+let add = currying(sum,10);
+add(20,90);
+```
+
+43. **Check palindrome**
+
+```
+const str1 = 'racecar';
+function isPalindrome(str){
+  for(let i =0; i<str.length/2; i++){
+    if (str[i]!== str[str.length -1 -i])
+       return false;
+  }
+  return true;
+}
+
+console.log(isPalindrome(str1)); // false
+```
+
+44. **Check number of zeros**
+
+```
+function countZeros(num) {
+  let count = 0;
+  while (num > 0) {
+    if (num % 10 === 0) {
+      count++;
+    }
+    num = Math.floor(num / 10);
+  }
+  return count;
+}
+const num2 = 12000;
+console.log(countZeros(num2)); //3
+
+```
+
+45. **How do you validate an email in javascript**
+
+```
+let email = "pradeep.kumar@gmail.com";
+function validateEmail(email) {
+  // regex pattern for email
+  const re = /\S+@\S+\.\S+/g;
+
+  // check if the email is valid
+  let result = re.test(email);
+  if (result) {
+    console.log("Valid");
+  } else {
+    console.log("Not valid.");
+  }
+}
+```
+
+46. **Memoized function to Add Number**
+
+```
+const memoizedAdd = () => {
+  let cache = {};
+  return (number) => {
+    if (number in cache) {
+      console.log('Fetching from cache: ');
+      return cache[number];
+    }
+    else {
+      console.log('Calculating result: ');
+      let result = number + 10;
+      cache[number] = result;
+      return result;
+    }
+  }
+}
+// returned function from memoizedAdd
+const sum = memoizedAdd();
+
+console.log(sum(10)); // Calculating result: 20
+console.log(sum(10)); // Fetching from cache: 20
+```
+
+47. **What is bind method in javascript**
+
+```
+The bind() method allows an object to borrow a method from another object without making a copy of that method. This is known as function borrowing in JavaScript.
+
+const person = {
+  firstName: "Chhavi",
+  lastName: "Goswami",
+  fullName: function () {
+    return this.firstName + " " + this.lastName;
+  }
+};
+
+const member = {
+  firstName: "Vasuda",
+  lastName: "Sahota"
+};
+
+let fullName = person.fullName.bind(member);
+console.log(fullName()); // Vasuda Sahota
+```
+
+48. **What are Closures**
+
+```
+A Closure is the combination of a function and the lexical environment within which that function was declared. i.e, it is an inner function that has access to the outer or enclosing function's variables.
+
+Closure is useful in hiding implementation detail in JavaScript. In other words, it can be useful to create private variables or functions
+Lexical Scope:
+In lexical scoping free variables must belong to a parent scope.
+
+// Lexical Scope
+function init() {
+  let name = "JavaScript closures"; // name is a local variable created by init
+  function displayName() {
+    // displayName() is the inner function, a closure
+    console.log(name); // use variable declared in the parent function
+  }
+  return displayName;
+}
+var closure = init();
+closure();
+
+// Dynamic Scope
+function fun1() {
+  console.log(a); // 10
+}
+
+function fun2() {
+  var a = 20;
+  fun1();
+}
+
+var a = 10;
+fun2();
+
+// Output 10
+```
+
+49. **What is an event delegation**
+
+```
+Event delegation is a technique in JavaScript that allows you to attach a single event listener to a parent element, rather than attaching a separate event listener to each child element.
+
+With event delegation, you attach a single event listener to the parent element, and then use the event.target property to determine which child element triggered the event.
+
+const parent = document.getElementById('parent');
+
+parent.addEventListener('click', function(event) {
+  if (event.target.tagName === 'BUTTON') {
+    console.log('Button clicked');
+  }
+});
+
+```
+
+50. **Difference for..in and for..of**
+
+```
+for...in is used to iterate over the properties of an object. It returns the name of each property in the object. For example:
+const obj = { a: 1, b: 2, c: 3 };
+
+for (const prop in obj) {
+  console.log(prop); // 'a', 'b', 'c'
+}
+
+
+for...of is used to iterate over the elements of an array or other iterable value. It returns the value of each element in the array. For example:
+const arr = [1, 2, 3];
+
+for (const element of arr) {
+  console.log(element); // 1, 2, 3
+}
+
+```
+
+51. **How to get the first non-null/undefined argument in JavaScript**
+
+```
+function findNonNull() {
+  for (let i = 0; i < arguments.length; i++) {
+    if (arguments[i] != null) {
+      return arguments[i];
+    }
+  }
+}
+
+console.log(findNonNull(null, undefined, "First", 1, 2, 3, null) );  // First
+```
+
+52. **Compare two objects to determine the first object contains equivalent property values to the second object**
+
+```
+let obj1 = {
+	name: "John",
+	age: 23,
+	degree: "CS"
+}
+
+// Define the second object
+let obj2 = {
+	age: 23,
+	degree: "CS"
+}
+
+// Define the function check
+function check(obj1, obj2) {
+
+	// Iterate the obj2 using for..in
+	for (key in obj2) {
+
+		// Check if both objects do not have the equal values of same key
+		if (obj1[key] !== obj2[key]) {
+			return false;
+		}
+	}
+	return true
+}
+
+// Call the function
+console.log(check(obj1, obj2)) //false
+```
+
+53. **Polyfill method for the get Lodash method in JavaScript**
+
+```
+function get(object, path, defaultValue = 'undefined') {
+    if (object === undefined || object === null) {
+      return defaultValue;
+    }
+
+    let keys = path.split('.');
+    let current = object;
+
+    for (let i = 0; i < keys.length; i++) {
+      if (current === undefined || current === null) {
+        return defaultValue;
+      }
+
+      current = current[keys[i]];
+    }
+
+    return current;
+  }
+
+  const object = {
+    a: {
+      b: {
+        c: 'hello',
+      },
+    },
+  };
+
+  const value = get(object, 'a.b.c');
+
+  console.log(value); // 'hello'
+```
+
+54. **Polyfill method for the isEqual Lodash method in JavaScript**
+
+```
+function isEqual(value, other) {
+    // Check if both values are objects
+    if (typeof value !== 'object' || typeof other !== 'object') {
+      return value === other;
+    }
+
+    // Check if both objects have the same number of properties
+    if (Object.keys(value).length !== Object.keys(other).length) {
+      return false;
+    }
+
+    // Loop through the properties of the first object
+    for (const key in value) {
+      // Check if the property exists in the second object
+      if (!other.hasOwnProperty(key)) {
+        return false;
+      }
+
+      // Recursively check if the property values are equal
+      if (!isEqual(value[key], other[key])) {
+        return false;
+      }
+    }
+
+    // If all properties are equal, return true
+    return true;
+  }
+```
+
+55. **How to merge multiple arrays and remove duplicate items in JavaScript**
+
+```
+let arr1 = [1, 2, 3, 4, 5, 6];
+let arr2 = [3, 4, 5, 7];
+let arr3 = [3, 4, 5, 7, 8];
+// let arr = [...arr1, ...arr2, ...arr3];
+// let mergedArr = [...new Set(arr)];
+// console.log(mergedArr);
+
+function mergeDuplicate(...arr) {
+  const tempArr = [];
+  arr.forEach((item) => {
+    tempArr.push(...item);
+  });
+  return [...new Set(tempArr)];
+}
+
+const merged = mergeDuplicate(arr1, arr2, arr3);
+console.log("merged", merged); // [1, 2, 3, 4, 5, 6, 7, 8]
+```
+
+56. **Program to Generate all Binary Strings From Given Pattern**
+
+```
+function generateBinaryStrings(str) {
+  const queue = [""];
+
+  for (let i = 0; i < queue.length; i++) {
+    const current = queue[i];
+
+    if (current.length === str.length) {
+      console.log(current);
+    } else {
+      const nextIndex = current.length;
+      if (str[nextIndex] === "X") {
+        queue.push(current + "0");
+        queue.push(current + "1");
+      } else {
+        queue.push(current + str[nextIndex]);
+      }
+    }
+  }
+}
+
+const result = "X1X";
+generateBinaryStrings(result);
+
+```
+
+57. **Program to Count Number of Alphabets**
+
+```
+let str = "Geeks123for#$Geeks";
+let regex = /[a-zA-Z]/g;
+console.log("Number of aplhabet", str.match(regex).length);
+
+let regexNum = /[0-9]/g;
+console.log("Number of aplhabet", str.match(regexNum).length);
+```
+
+58. **Program to Convert a String to Roman Numerals**
+
+```
+function stringToRomans(num) {
+  let roman = {
+    M: 1000,
+    CM: 900,
+    D: 500,
+    CD: 400,
+    C: 100,
+    XC: 90,
+    L: 50,
+    XL: 40,
+    X: 10,
+    IX: 9,
+    V: 5,
+    IV: 4,
+    I: 1,
+  };
+  let str = 0;
+  const temp = num.split("");
+  for (let [i, values] of Object.entries(roman)) {
+    for (let j = 0; j < temp.length; j++) {
+      if (temp[j] === i) {
+        str += values;
+      }
+    }
+  }
+  return str;
+}
+
+const result = stringToRomans("MMLI");
+console.log("result", result);
+```
+
+OR
+
+```
+function stringToRoman(num) {
+  const values = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1];
+  const symbols = [
+    "M",
+    "CM",
+    "D",
+    "CD",
+    "C",
+    "XC",
+    "L",
+    "XL",
+    "X",
+    "IX",
+    "V",
+    "IV",
+    "I",
+  ];
+  let result = 0;
+  for (let i = 0; i < symbols.length; i++) {
+    for (let j = 0; j < num.length; j++) {
+      if (num[j] === symbols[i]) {
+        result += values[i];
+      }
+    }
+  }
+
+  return result;
+}
+
+const input = "DDM";
+const result = stringToRoman(input.split(""));
+console.log(result);
+```
+
+59. **Program to remove duplicate and show duplicate**
+
+```
+const arr = [4, 3, 1, 2, 5, 6, 1, 2, 3, 4];
+const removedDup = arr.filter((item, index) => arr.indexOf(item) === index);
+console.log("removedDup", removedDup); // [4, 3, 1, 2, 5, 6]
+
+const duplicate = arr.filter((item, index) => arr.indexOf(item) !== index);
+console.log("duplicate", duplicate); // [1, 2, 3, 4]
+```
+
+60. **Program to replace specific element with specific number**
+
+```
+const arr = [4, 3, 1, 2, 5, 6, 1, 2, 3, 4];
+const replace2by9 = arr.toString().replaceAll(2, 9);
+const replacedValue = replace2by9.split(",").map(Number); // or(parseInt)
+console.log(replacedValue) // [4, 3, 1, 9, 5, 6, 1, 9, 3, 4];
+```
+
+61. **Program to find the factorial of a number**
+
+```
+function factorial(x) {
+  // if number is 0
+  if (x === 0) {
+    return 1;
+  }
+  // if number is positive
+  else {
+    return x * factorial(x - 1);
+  }
+}
+
+factorial(3) // 6
+```
+
+62. **JavaScript Promise and Promise Chaining**
+
+```
+// In JavaScript, a promise is a good way to handle asynchronous operations. It is used to find out if the asynchronous operation is successfully completed or not.
+// A promise may have one of three states.
+// Pending
+// Fulfilled
+// Rejected
+
+doSomething()
+  .then((result) => doSomethingElse(result))
+  .then((newResult) => doThirdThing(newResult))
+  .then((finalResult) => {
+    console.log(`Got the final result: ${finalResult}`);
+  })
+  .catch(failureCallback);
+```
+
+63. **Javascript async/await**
+
+```
+// We use the async keyword with a function to represent that the function is an asynchronous function.
+// The async function returns a promise.
+
+// JavaScript await Keyword
+// The await keyword is used inside
+// the async function to wait for the asynchronous operation.
+// The use of await pauses the async function until the promise returns a result (resolve or reject) value
+// Using async
+
+async function restaurantCustomer() {
+  try{
+      let customer = await getCustomer();
+      let order = await getOrder(customer);
+      let meal = await prepareFood(order);
+      let food = await serveFood(meal);
+      return await eatFood(food);
+  } catch(e) {
+      showError(e);
+  }
+}
+
+```
+
+64. **Difference between promises and async/await in JavaScript**
+
+```
+Promises:
+are objects that represent the eventual completion or failure of an asynchronous operation. They are created using the new Promise() constructor and can be chained together using the .then() and .catch() methods.
+
+const promise = new Promise((resolve, reject) => {
+  // Do something asynchronous
+  if (success) {
+    resolve(result);
+  } else {
+    reject(error);
+  }
+});
+
+promise.then(result => {
+  // Do something with the result
+}).catch(error => {
+  // Handle the error
+});
+
+
+Async/await:
+is a syntax that allows you to write asynchronous code in a more synchronous style. It is used in conjunction with promises and allows you to wait for promises to resolve before continuing execution.
+
+async function asyncFunction() {
+  // Do something asynchronous
+  const result = await promise;
+
+  // Do something with the result
+}
+
+asyncFunction();
+```
+
+65. **Difference Between Promise.all, Promise.allSettled, Promise.any, Promise.race**
+
+```
+const promise1 = Promise.resolve(3);
+const promise2 = 42;
+const promise3 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 1000, 'foo');
+})
+
+// Promise.all
+Promises.all([promise1, promise2, promise3]).then(values => console.log(values)) // [3, 42, "foo"]
+// If any of the promise is reject it will stop at that point and return only the reject message, it wont return next/previous promise
+
+// Promise.allSettled
+Promises.allSettled([promise1, promise2, promise3]).then(values => values.forEach(val => val.status));
+// It returns an array of object with all resolved and rejected promises.
+// status --> status of promise
+// value --> resolved
+// reason --> rejected
+
+// Promise.any
+Promises.any([promise1, promise2, promise3]).then(values => console.log(values))
+// It doesn't care about reject promise, it will return you the fastest resolved promise
+// if all the promise are rejected then it will return an aggregated error message for all the promises
+
+// Promise.race
+Promises.race([promise1, promise2, promise3]).then(values => console.log(values))
+// It will return the fastest promise which is either resolved or rejected
+```
+
+66. **Why To Use JavaScript Async/Await Over Promises**
+
+```
+const makeRequest = () => {
+  return promise1.then((value1) => {
+    return promise2(value1).then((value2) => {
+      return promise3(value1, value2)
+    })
+  })
+}
+
+const makeRequest = () => {
+  const value1 = await promise1();
+  const value2 = await promise2(value1)
+  return promise3(value1, value2);
+}
+```
