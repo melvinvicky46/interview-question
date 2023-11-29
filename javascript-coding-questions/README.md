@@ -889,14 +889,27 @@ add(20,90);
 ```
 const str1 = 'racecar';
 function isPalindrome(str){
-  for(let i =0; i<str.length/2; i++){
-    if (str[i]!== str[str.length -1 -i])
+  for(let i = 0; i < str.length/2; i++){
+    if (str[i] !== str[str.length -1 -i])
        return false;
   }
   return true;
 }
 
 console.log(isPalindrome(str1)); // false
+
+OR
+
+function isPalindrome(str) {
+  // Convert the string to lowercase and remove all non-alphanumeric characters.
+  const cleanedStr = str.toLowerCase().replace(/[^A-Za-z0-9]/g, "");
+
+  // Reverse the string.
+  const reversedStr = cleanedStr.split("").reverse().join("");
+
+  // Check if the original string and the reversed string are equal.
+  return cleanedStr === reversedStr;
+}
 ```
 
 44. **Check number of zeros**
@@ -1106,7 +1119,7 @@ console.log(check(obj1, obj2)) //false
 53. **Polyfill method for the get Lodash method in JavaScript**
 
 ```
-function get(object, path, defaultValue = 'undefined') {
+function get(object, path, defaultValue = 'Error') {
     if (object === undefined || object === null) {
       return defaultValue;
     }
@@ -1115,7 +1128,7 @@ function get(object, path, defaultValue = 'undefined') {
     let current = object;
 
     for (let i = 0; i < keys.length; i++) {
-      if (current === undefined || current === null) {
+      if (current[strArr[i]] === undefined || current[strArr[i]] === null) {
         return defaultValue;
       }
 
@@ -1231,39 +1244,36 @@ let regexNum = /[0-9]/g;
 console.log("Number of aplhabet", str.match(regexNum).length);
 ```
 
-58. **Program to Convert a String to Roman Numerals**
+58. **Program to Convert a Roman Number to Integer**
 
 ```
-function stringToRomans(num) {
-  let roman = {
-    M: 1000,
-    CM: 900,
-    D: 500,
-    CD: 400,
-    C: 100,
-    XC: 90,
-    L: 50,
-    XL: 40,
-    X: 10,
-    IX: 9,
-    V: 5,
-    IV: 4,
+function romanToInt(num) {
+  const roman = {
     I: 1,
+    V: 5,
+    X: 10,
+    L: 50,
+    C: 100,
+    D: 500,
+    M: 1000,
   };
-  let str = 0;
+
   const temp = num.split("");
-  for (let [i, values] of Object.entries(roman)) {
-    for (let j = 0; j < temp.length; j++) {
-      if (temp[j] === i) {
-        str += values;
-      }
+  let number = roman[temp[0]];
+
+  for (let i = 1; i < temp.length; i++) {
+    const current = roman[temp[i]];
+    const previous = roman[temp[i - 1]];
+    if (current <= previous) {
+      number += current;
+    } else {
+      number = number - previous * 2 + current;
     }
   }
-  return str;
+  return number;
 }
 
-const result = stringToRomans("MMLI");
-console.log("result", result);
+console.log(romanToInt("MCMXCIV")); // 1994
 ```
 
 OR
@@ -1301,6 +1311,38 @@ function stringToRoman(num) {
 const input = "DDM";
 const result = stringToRoman(input.split(""));
 console.log(result);
+```
+
+58. **Program to Convert a Integer to Roman Number**
+
+```
+function intToRoman(num) {
+  var romanNumerals = {
+    M: 1000,
+    CM: 900,
+    D: 500,
+    CD: 400,
+    C: 100,
+    XC: 90,
+    L: 50,
+    XL: 40,
+    X: 10,
+    IX: 9,
+    V: 5,
+    IV: 4,
+    I: 1,
+  };
+  var result = "";
+  for (var i in romanNumerals) {
+    while (num >= romanNumerals[i]) {
+      result += i;
+      num -= romanNumerals[i];
+    }
+  }
+  return result;
+}
+
+console.log(romanToInt(1994)); // Output: MCMXCIV
 ```
 
 59. **Program to remove duplicate and show duplicate**
@@ -1464,5 +1506,156 @@ const makeRequest = () => {
   const value1 = await promise1();
   const value2 = await promise2(value1)
   return promise3(value1, value2);
+}
+```
+
+67. **How to Sort Numeric Array using JavaScript**
+
+```
+const arrList = [3, 2, 4, 20, 1];
+
+for (var i = 0; i < arrList.length; i++) {
+  for (var j = i + 1; j < arrList.length; j++) {
+    if (arrList[j] < arrList[i]) {
+      // swap the numbers
+      var a = arrList[i];
+      arrList[i] = arrList[j];
+      arrList[j] = a;
+    }
+  }
+}
+
+console.log(arrList); // [1, 2, 3, 4, 20]
+```
+
+67. **Counting Zeros**
+
+```
+function numofZeros(num) {
+  let count = 0;
+  while (num > 0) {
+    count += Math.floor(num / 10);
+    num = num / 10;
+  }
+  return count;
+}
+
+console.log(numofZeros(2014)); //223
+```
+
+67. **Random between 5 to 7 using javascript**
+
+```
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+const randomNumber = getRandomInt(5, 7);
+
+console.log(randomNumber); // 6
+```
+
+68. **Ways to remove duplicate characters from a string**
+
+```
+const str = "Hello, world!";
+const uniqueStr = new Set(str).join("");
+console.log(uniqueStr); // "Hellowrdl!"
+
+OR
+
+const str = "Hello, world!";
+const uniqueStr = str.split("").filter((char, index, arr) => arr.indexOf(char) === index).join("");
+console.log(uniqueStr); // "Hellowrdl!"
+
+OR
+
+const str = "Hello, world!";
+const uniqueStr = [];
+str.split("").forEach((char) => {
+  if (!uniqueStr.includes(char)) {
+    uniqueStr.push(char);
+  }
+});
+console.log(uniqueStr.join("")); // "Hellowrdl!"
+```
+
+69. **Finding the First Non-repeating Character in a String**
+
+```
+const findChar = function (str) {
+  let char;
+  for (let i = 0; i < str.length; i++) {
+    if (str.indexOf(str[i]) === str.lastIndexOf(str[i])) {
+      char = str[i];
+      break;
+    }
+  }
+  return char;
+};
+
+console.log(findChar("eelloWorld")); //W
+```
+
+70. **A peak element is an element that is strictly greater than its neighbors**
+
+```
+// Input: nums = [1,2,1,3,5,6,4]
+// Output: 5
+// Explanation: Your function can return either index number 1 where the peak element is 2, or index number 5 where the peak element is 6.
+
+function findPeak(number) {
+  if (!number) return false;
+  for (let i = 1; i < number.length; i++) {
+    if (number[i] >= number[i - 1] && number[i] >= number[i + 1]) {
+      return i;
+    }
+  }
+}
+
+const nums = [1, 2, 1, 3, 5, 6, 4]; //1
+
+const result = findPeak(nums);
+console.log("result index", result); //1
+```
+
+71. **Given an integer target, return true if target is in matrix or false otherwise.**
+
+```
+// Input: matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 3
+// Output: true
+
+function findTarget(matrix, target) {
+  const [...item] = matrix;
+  const tempArr = [];
+  item.forEach((it) => {
+    tempArr.push(...it);
+  });
+  return tempArr.includes(target);
+}
+const matrix = [
+  [1, 3, 5, 7],
+  [10, 11, 16, 20],
+  [23, 30, 34, 60],
+];
+const target = 3;
+const result = findTarget(matrix, target);
+console.log(result); //true
+
+
+OR
+
+
+function findTarget(matrix, target) {
+  for (let i = 0; i < matrix.length; i++) {
+    for (let j = 0; j < matrix[i].length - 1; j++) {
+      return matrix[j].includes(target);
+    }
+
+    // OR
+    // return matrix[i].filter((item) => item === target).includes(target);
+  }
 }
 ```
