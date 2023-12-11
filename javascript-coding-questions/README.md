@@ -108,7 +108,7 @@ const arr = ["a", "b", "a", "c", "a"];
 const indexes = [];
 
 arr.forEach((element, index) => {
-  if (element === "a") {
+  if (element === "a") {s
     indexes.push(index);
   }
 });
@@ -977,6 +977,7 @@ console.log(sum(10)); // Fetching from cache: 20
 
 ```
 The bind() method allows an object to borrow a method from another object without making a copy of that method. This is known as function borrowing in JavaScript.
+bind(): creates a new function that is bound to a specific context. This means that when the new function is called, the this keyword will be set to the specified value.
 
 const person = {
   firstName: "Chhavi",
@@ -1515,12 +1516,15 @@ const makeRequest = () => {
 const arrList = [3, 2, 4, 20, 1];
 
 for (var i = 0; i < arrList.length; i++) {
-  for (var j = i + 1; j < arrList.length; j++) {
-    if (arrList[j] < arrList[i]) {
+  for (var j = 0; j < arrList.length; j++) {
+    if (arrList[j] > arrList[i]) {
       // swap the numbers
-      var a = arrList[i];
+      const a = arrList[i];
       arrList[i] = arrList[j];
       arrList[j] = a;
+
+      OR
+      // [arrList[i], arrList[j]] = [arrList[j], arrList[i]]
     }
   }
 }
@@ -1635,6 +1639,7 @@ function findTarget(matrix, target) {
   });
   return tempArr.includes(target);
 }
+
 const matrix = [
   [1, 3, 5, 7],
   [10, 11, 16, 20],
@@ -1658,4 +1663,199 @@ function findTarget(matrix, target) {
     // return matrix[i].filter((item) => item === target).includes(target);
   }
 }
+```
+
+72. **Sort string/number with and without sort method.**
+
+```
+const str = "Hi JavaScript TypeScript C CPP Python Java HTML CSS"
+const sortedStr = str.split(" ").sort().join(" ");
+console.log(sortedStr) //"C CPP CSS HTML Hi Java JavaScript Python TypeScript"
+
+const withoutSort(str) {
+  const convertToArr = str.split(" ");
+  for (let i = 0; i < convertToArr.length; i++) {
+    for (let j = 0; j < convertToArr.length; j++) {
+      if (convertToArr[j] > convertToArr[i]) {
+        [convertToArr[i], convertToArr[j]] = [convertToArr[j], convertToArr[i]]
+
+        OR
+
+        if (convertToArr[j] > convertToArr[i]) {
+          const temp = convertToArr[i];
+          convertToArr[i] = convertToArr[j];
+          convertToArr[j] = temp;
+        }
+      }
+    }
+  }
+  return convertToArr.join(" ")
+}
+
+```
+
+73. **bind() method and Polyfill bind().**
+
+```
+The bind() method creates a new function and when that new function is called it set this keyword to the first argument which is passed to the bind method
+
+let nameObj = {
+	name: "Tony"
+}
+
+let PrintName = {
+	name: "steve",
+	sayHi: function () {
+
+		// Here "this" points to nameObj
+		console.log(this.name);
+	}
+}
+
+let HiFun = PrintName.sayHi.bind(nameObj);
+HiFun();
+
+// Polyfill for bind()
+Object.prototype.MyBind = function (bindObj, ...args) {
+    bindObj.myMethod = this;
+    return function () {
+        bindObj.myMethod(...args);
+    }
+}
+let HiFun = PrintName.sayHi.MyBind(nameObj, 42);
+HiFun();
+```
+
+74. **call() method and Polyfill call().**
+
+```
+The call() method calls the function directly and sets this to the first argument passed to the call method
+call(): and apply() both allow you to call a function with a specific context. This means that you can specify the value of the this keyword inside the function.
+
+let nameObj = {
+	name: "Tony"
+}
+
+let PrintName = {
+	name: "steve",
+	sayHi: function (age) {
+		console.log(this.name + " age is " + age);
+	}
+}
+
+PrintName.sayHi.call(nameObj, 42);
+
+// Polyfill for call()
+Object.prototype.MyCall = function (callObj, ...args) {
+    callObj.myMethod = this;
+
+    callObj.myMethod(...args);
+
+}
+PrintName.sayHi.MyCall(nameObj, 42);
+```
+
+75. **apply() method and Polyfill apply().**
+
+```
+The apply() method calls the function directly and sets this to the first argument passed to the apply method
+call(): and apply() both allow you to call a function with a specific context. This means that you can specify the value of the this keyword inside the function.
+
+let nameObj = {
+	name: "Tony"
+}
+
+let PrintName = {
+	name: "steve",
+	sayHi: function (...age) {
+		console.log(this.name + " age is " + age);
+	}
+}
+PrintName.sayHi.apply(nameObj, [42]);
+
+// Polyfill for apply()
+Object.prototype.MyApply = function (applyObj, args) {
+    applyObj.myMethod = this;
+
+    applyObj.myMethod(...args);
+
+}
+PrintName.sayHi.MyApply(nameObj, [42]);
+```
+
+76. **deep and shallow copy.**
+
+```
+Shallow copy
+A shallow copy is a copy of an object that only goes one level deep. In other words, it copies the object and all its properties, but any nested objects or arrays will still reference the same memory location as the original object.
+
+// Shallow copy
+const obj1 = {
+  a: 1,
+  b: {
+    c: 2
+  }
+};
+
+const obj2 = obj1;
+
+// Change the value of a property in the original object
+obj1.a = 3;
+
+// The value of the property in the copy object has also changed
+console.log(obj2.a); // 3
+
+
+Deep copy
+A deep copy is a copy of an object that includes all of its properties and any nested objects or arrays. This means that the new object is completely independent of the original object and any changes made to the new object will not affect the original object.
+
+// Deep copy
+const obj3 = JSON.parse(JSON.stringify(obj1));
+
+// Change the value of a property in the original object
+obj1.a = 4;
+
+// The value of the property in the copy object has not changed
+console.log(obj3.a); // 1
+```
+
+77. **Differences between arrow functions and regular functions in JavaScript**
+
+```
+Regular Functions
+We can write the regular function in two ways, i.e Function declaration, and Function expression.
+
+// function declaration
+function add(a, b) { return a + b }
+
+// function expression
+const sum = function(a, b) { return a + b }
+
+Arrow Functions
+The arrow function — also called the fat arrow function — is a new feature introduced in ES6 that is a more concise syntax for writing function expressions.
+const sum = (a, b) => a + b
+
+
+const user = {
+  username: "Melvin",
+  getUserName: function () {
+    return this.username; //this binds to user object
+  }
+
+   getUserName: () => {
+    return this.username; //this binds to window object
+  }
+}
+
+const getName = user.getUserName;
+console.log(getName()) //undefined
+console.log(user.getUserName()) //Melvin
+
+- Syntax
+- No arguments (arguments are array-like objects)
+- No prototype object for the Arrow function
+- Cannot be invoked with a new keyword (Not a constructor function)
+- No own this (call, apply & bind won't work as expected)
+- It cannot be used as a Generator function
+- Duplicate-named parameters are not allowed
 ```
