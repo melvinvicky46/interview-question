@@ -1859,3 +1859,253 @@ console.log(user.getUserName()) //Melvin
 - It cannot be used as a Generator function
 - Duplicate-named parameters are not allowed
 ```
+
+78. **JavaScript performance optimization**
+
+```
+Before looking at the tips contained in this section, it is important to talk about where in the process of browser page rendering JavaScript is handled. When a web page is loaded:
+
+- The HTML is generally parsed first, in the order in which it appears on the page.
+- Whenever CSS is encountered, it is parsed to understand the styles that need to be applied to the page. During this time, linked assets such as images and web fonts start to be fetched.
+- Whenever JavaScript is encountered, the browser parses, evaluates, and runs it against the page.
+- Slightly later on, the browser works out how each HTML element should be styled, given the CSS applied to it.
+- The styled result is then painted to the screen.
+
+*Loading critical assets as soon as possible:
+<head>
+  ...
+  <!-- Preload a JavaScript file -->
+  <link rel="preload" href="important-js.js" as="script" />
+  <!-- Preload a JavaScript module -->
+  <link rel="modulepreload" href="important-module.js" />
+  ...
+</head>
+
+*The preload <link> fetches the JavaScript as soon as possible, without blocking rendering. You can then use it wherever you want in your page:
+<!-- Include this wherever makes sense -->
+<script src="important-js.js"></script>
+
+
+*Deferring execution of non-critical JavaScript:
+you can add the async attribute to your <script> elements
+<head>
+  ...
+  <script async src="main.js"></script>
+  ...
+</head>
+
+
+*Breaking down long tasks
+
+*Optimizing event performance:
+Events can be expensive for the browser to track and handle, especially when you are running an event continuously.
+It is, therefore, a good idea to remove event listeners that are no longer needed. This can be done using removeEventListener()
+
+Tips for writing more efficient code:
+- Reduce DOM manipulation
+- Batch DOM changes
+- Reduce the amount of looped code
+
+loading attribute to lazy load a JavaScript file
+<script src="script.js" loading="lazy"></script>
+
+the Intersection Observer API to lazy load a JavaScript file
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const script = document.createElement('script');
+      script.src = 'script.js';
+      document.head.appendChild(script);
+    }
+  });
+});
+
+observer.observe(document.querySelector('#lazy-load'));
+```
+
+79. **HTML performance optimization**
+
+```
+Key HTML performance issues
+- Size of the image and video files
+- Order of resource loading
+
+Providing different image resolutions via srcset
+<img
+  srcset="480w.jpg 480w, 800w.jpg 800w"
+  sizes="(max-width: 600px) 480px, 800px"
+  src="800w.jpg"
+  alt="Family portrait" />
+
+
+Providing different sources for images and videos
+<picture>
+  <source media="(max-width: 799px)" srcset="narrow-banner-480w.jpg" />
+  <source media="(min-width: 800px)" srcset="wide-banner-800w.jpg" />
+  <img src="large-banner-800w.jpg" alt="Dense forest scene" />
+</picture>
+
+
+Lazy loading images:
+<img src="800w.jpg" alt="Family portrait" loading="lazy" />
+
+```
+
+80. **CSS performance optimization**
+
+```
+- Remove unnecessary styles
+ lighthouse developer tools
+
+- Split CSS into separate modules
+<!-- Loading and parsing styles.css is render-blocking -->
+<link rel="stylesheet" href="styles.css" />
+
+<!-- Loading and parsing print.css is not render-blocking -->
+<link rel="stylesheet" href="print.css" media="print" />
+
+<!-- Loading and parsing mobile.css is not render-blocking on large screens -->
+<link
+  rel="stylesheet"
+  href="mobile.css"
+  media="screen and (max-width: 480px)" />
+
+- Minify and compress your CSS
+
+- Simplify selectors
+
+- Cut down on image HTTP requests with CSS sprites
+
+- Preload important assets
+  <link rel="preload" href="style.css" as="style" />
+
+  <link
+    rel="preload"
+    href="ComicSans.woff2"
+    as="font"
+    type="font/woff2"
+    crossorigin />
+
+  <link
+    rel="preload"
+    href="bg-image-wide.png"
+    as="image"
+    media="(min-width: 601px)" />
+
+```
+
+80. **CSS specificity rule**
+
+```
+Here are the priorities of CSS:
+- Inline
+- Internal/Embedded
+- External
+
+The priority order of CSS selectors is:
+- Value defined as Important
+- Inline
+- Id nesting
+- Id
+- Class nesting
+- Class
+- Tag nesting
+- Tag
+
+Here are the priorities of CSS selectors:
+- Inline style
+- Id selector
+- Classes, pseudo-classes, and attributes
+
+To avoid conflicts, you can:
+- Only use classes
+- Avoid applying multiple classes on a single HTML element
+```
+
+80. **Optimising Mobile App Performance in Low Internet Connectivity**
+
+```
+- Optimize data usage
+Minimize the amount of data your app consumes by using efficient data formats, compressing images, and reducing unnecessary network requests.
+
+- Caching
+Implement caching mechanisms to store data locally on the device. This allows your app to display content even when there is no internet connection.
+Use appropriate caching strategies for different types of data, such as HTTP caching headers or database caching.
+
+- Offline capabilities
+ Implement offline workflows and synchronize data when the connection is restored.
+ Store data locally on the device using databases like SQLite
+
+- Progressive loading
+Start by loading essential content first and then progressively load additional content. This approach ensures that users can access critical information quickly, even with a slow or intermittent internet connection.
+
+- Error handling
+Implement effective error handling and provide informative messages to users when network requests fail
+
+- Background synchronisation
+If your app involves data synchronisation, implement background synchronisation mechanisms to update data whenever an internet connection is available.
+
+- Reduce network requests
+Minimise the number of network requests by combining multiple requests into a single one, using batch APIs
+Implement pagination techniques to load data in smaller chunks instead of fetching all at once.
+
+```
+
+80. **Implementing a mobile-first approach**
+
+```
+- Use responsive design
+Responsive design allows on-site elements to automatically adjust and rearrange themselves to fit the screens of different devices.
+
+- Test across devices
+Test your mobile interface on a real device to ensure it is user-friendly and functioning well on different devices.
+
+- Keep the design simple
+Simple and minimal web design improves content clarity and focuses users' attention on what matters the most.
+
+- Prioritize content
+Prioritize content that is always visible on smaller devices and what to hide behind navigational drawers, dropdown menus, or accordions.
+
+- Avoid large chunks of content
+Designing for smaller screens is all about avoiding clutter and building minimalistic user interfaces so that the user's focus is directed to only the most important things.
+
+- Defining the Break Points
+Media Query is a technique in CSS that can be used to apply different CSS styles based on a few particular rules, such as the viewport width.
+
+```
+
+80. **How to Lazy Load Images in Javascript**
+
+```
+Lazy Loading images is a technique to load images on a web page only when required. This way can improve the page’s loading time without reducing the page size.
+
+Techniques for Lazy Loading Images in Javascript
+- Using EventListeners
+-  Using Intersection Observer API
+```
+
+**Clean code principles**
+
+```
+Clean code is simple, readable, maintainable, and testable. Some principles of clean code include
+
+Exception handling
+Exception handling improves maintainability, extensibility, and readability.
+
+Single-responsibility principle
+Each function should be responsible for one thing. If a function is doing more than one thing, it should be split.
+
+Refactoring
+Refactoring is the practice of reorganizing existing software code without impacting its external behavior. It aims to improve code readability and reduce complexity.
+
+Functions
+Functions should be short and focused. A good rule of thumb is to keep functions under 20 lines of code, and to ensure that each function only performs a single task.
+
+Design patterns
+A design pattern is a way to write clean, organized code. It emphasizes reusability by providing a series of techniques for an engineer to tackle specific problems.
+
+DRI principle
+DRI stands for Don't Repeat Yourself. Code should be written in a way that avoids repetition and promotes reuse
+
+
+```
