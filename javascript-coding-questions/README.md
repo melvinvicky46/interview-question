@@ -871,17 +871,28 @@ function sum(a) {
 sum(10)(3,12);
 
 // Nested/multiple arguments
-function currying(fn, ...args) {
-  return (..._arg) => {
-      return fn(...args, ..._arg);
-  }
+function curry(func) {
+  return function curried(...args) {
+    if (args.length >= func.length) {
+      return func.apply(this, args);
+    } else {
+      return function(...args2) {
+        return curried.apply(this, args.concat(args2));
+      }
+    }
+  };
+
 }
 
-function sum(a,b,c) {
-  return a + b + c
+function sum(a, b, c) {
+  return a + b + c;
 }
-let add = currying(sum,10);
-add(20,90);
+
+let curriedSum = curry(sum);
+
+alert( curriedSum(1, 2, 3) ); // 6, still callable normally
+alert( curriedSum(1)(2,3) ); // 6, currying of 1st arg
+alert( curriedSum(1)(2)(3) ); // 6, full currying
 ```
 
 43. **Check palindrome**
