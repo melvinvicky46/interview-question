@@ -2107,5 +2107,171 @@ A design pattern is a way to write clean, organized code. It emphasizes reusabil
 DRI principle
 DRI stands for Don't Repeat Yourself. Code should be written in a way that avoids repetition and promotes reuse
 
+```
+
+**find the first non-repeating character in a string using JavaScript**
+
+```
+function firstNonRepeatingCharacter(string) {
+  for (let i = 0; i < string.length; i++) {
+    let c = string.charAt(i);
+    if (string.indexOf(c) === i && string.indexOf(c, i + 1) === -1) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+console.log(firstNonRepeatingCharacter('abacddbec')); // 7
+----------------------------------------------------------------------
+function nonRepeated(str) {
+   for(let i = 0; i < str.length; i++) {
+      let j = str.charAt(i)
+      if (str.indexOf(j) === str.lastIndexOf(j)) {
+        return i;
+      }
+   }
+   return -1;
+}
+
+console.log(nonRepeated("aabcbd")); // 3
+```
+
+**find the longest palindromic substring in a given string**
+
+```
+var longestPalindrome = function(s) {
+    let len = s.length;
+    while (len>0) {
+        for (let i=0; i<s.length-len+1; i++) {
+            let str = s.slice(i, i+len);
+            if (isPalindrome(str))
+                return str;
+        }
+        len--;
+    }
+    return "";
+};
+
+const isPalindrome = function(arr) {
+    let i=0;
+    let j=arr.length-1;
+    while (i<=j) {
+        if (arr[i]!==arr[j])
+            return false;
+        i++; j--;
+    }
+    return true;
+}
+
+----------------------------------------------
+
+function longestPalindrome(str) {
+  let longest = '';
+  for (let i = 0; i < str.length; i++) {
+    for (let j = i + 1; j <= str.length; j++) {
+      const substr = str.slice(i, j);
+      if (substr === substr.split('').reverse().join('')) {
+        if (substr.length > longest.length) {
+          longest = substr;
+        }
+      }
+    }
+  }
+  return longest;
+}
+console.log(longestPalindrome('forgeeksskeegfor')); //geeksskeeg
+```
+
+**Merge two sorted arrays in JavaScript**
+
+```
+function mergeArrays(arr1, arr2) {
+  // Create a new array to store the merged result
+  const mergedArray = [];
+
+  // Iterate over both arrays and compare the elements
+  let i = 0;
+  let j = 0;
+  while (i < arr1.length && j < arr2.length) {
+    if (arr1[i] < arr2[j]) {
+      mergedArray.push(arr1[i]);
+      i++;
+    } else {
+      mergedArray.push(arr2[j]);
+      j++;
+    }
+  }
+
+  // Add the remaining elements of the first array to the merged array
+  while (i < arr1.length) {
+    mergedArray.push(arr1[i]);
+    i++;
+  }
+
+  // Add the remaining elements of the second array to the merged array
+  while (j < arr2.length) {
+    mergedArray.push(arr2[j]);
+    j++;
+  }
+
+  // Return the merged array
+  return mergedArray;
+}
+
+// Example usage:
+const arr1 = [1, 3, 5, 7];
+const arr2 = [2, 4, 6, 8];
+
+const mergedArray = mergeArrays(arr1, arr2);
+
+console.log(mergedArray); // [1, 2, 3, 4, 5, 6, 7, 8]
+
+----------------------------------------------------------------
+
+function mergeSortedArrays(arr1, arr2) {
+  const mergedArray = [];
+
+  while (arr1.length && arr2.length) {
+    const firstElementOfArr1 = arr1[0];
+    const firstElementOfArr2 = arr2[0];
+
+    if (firstElementOfArr1 < firstElementOfArr2) {
+      mergedArray.push(firstElementOfArr1);
+      arr1.shift();
+    } else {
+      mergedArray.push(firstElementOfArr2);
+      arr2.shift();
+    }
+  }
+
+  // Add any remaining elements from arr1 to the merged array.
+  while (arr1.length) {
+    mergedArray.push(arr1.shift());
+  }
+
+  // Add any remaining elements from arr2 to the merged array.
+  while (arr2.length) {
+    mergedArray.push(arr2.shift());
+  }
+
+for (var i = 0; i < mergedArray.length; i++) {
+  for (var j = 0; j < mergedArray.length; j++) {
+    if (mergedArray[j] > mergedArray[i]) {
+        [mergedArray[i], mergedArray[j]] = [mergedArray[j], mergedArray[i]]
+    }
+  }
+}
+
+  return mergedArray;
+}
+
+// Example usage:
+const arr11 = [1, 13, 5];
+const arr22 = [2, 4, 6];
+
+const mergedArray = mergeSortedArrays(arr11, arr22);
+
+console.log(mergedArray); // [1, 2, 4, 5, 6, 13]
 
 ```
