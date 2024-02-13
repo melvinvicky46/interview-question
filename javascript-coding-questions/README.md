@@ -2120,7 +2120,7 @@ DRI stands for Don't Repeat Yourself. Code should be written in a way that avoid
 
 ```
 
-**find the first non-repeating character in a string using JavaScript**
+**find the first non-repeating character in a string and return its index using JavaScript**
 
 ```
 function firstNonRepeatingCharacter(string) {
@@ -2285,4 +2285,381 @@ const mergedArray = mergeSortedArrays(arr11, arr22);
 
 console.log(mergedArray); // [1, 2, 4, 5, 6, 13]
 
+```
+
+**Advance Data types**
+
+```
+<!-- Symbols -->
+Symbols are created using the Symbol() function, which returns a new unique symbol. Symbols are often used as object keys to ensure that they are unique and cannot be modified by other code.
+Sets are useful for performing operations on collections of unique values, such as finding the union, intersection, or difference of two or more Sets.
+
+const mySymbol = Symbol('mySymbol');
+
+Symbols can also be used as methods to define object properties:
+const myObject = {
+  [mySymbol]: 'Hello, world!'
+};
+
+console.log(myObject[mySymbol]); // Output: "Hello, world!"
+
+<!-- SET -->
+Set is a collection of unique values. It is similar to an array, but with a few key differences.
+const mySet = new Set();
+mySet.add(1);
+mySet.add(2);
+mySet.add(3);
+
+mySet.add([4, 5, 6]);
+
+You can check if a value is in a Set using the has() method:
+console.log(mySet.has(2)); // Output: true
+console.log(mySet.has(4)); // Output: false
+
+You can remove a value from a Set using the delete() method:
+mySet.delete(2);
+mySet.delete([4, 5, 6]);
+
+You can iterate over a Set using a for...of loop:
+for (const value of mySet) {
+  console.log(value);
+}
+
+<!-- MAP -->
+Map is a collection of key-value pairs. It is similar to an object
+
+const myMap = new Map();
+You can add key-value pairs to a Map using the set() method
+myMap.set('key1', 'value1');
+myMap.set('key2', 'value2');
+myMap.set('key3', 'value3');
+
+You can also add multiple key-value pairs at once using the set() method with an object:
+myMap.set({ key4: 'value4' }, { key5: 'value5' });
+
+You can check if a key is in a Map using the has() method:
+console.log(myMap.has('key2')); // Output: true
+console.log(myMap.has('key4')); // Output: false
+
+You can retrieve a value from a Map using the get() method:
+console.log(myMap.get('key2')); // Output: "value2"
+console.log(myMap.get('key4')); // Output: undefined
+
+myMap.delete('key2');
+
+You can iterate over a Map using a for...of loop:
+for (const [key, value] of myMap) {
+  console.log(`${key}: ${value}`);
+}
+
+Maps are useful for performing operations on collections of key-value pairs, such as finding the sum, average, or maximum value of a set of numbers, or mapping a set of values to a set of keys.
+
+<!-- WeakSet  -->
+WeakSet is a collection of objects that allows you to store weak references to objects. WeakSet objects are similar to Set objects, but they only accept objects as values and do not prevent those objects from being garbage collected.
+
+create a WeakSet in JavaScript:
+const myWeakSet = new WeakSet();
+
+You can add objects to a WeakSet using the add() method:
+const myObject1 = { name: 'John' };
+const myObject2 = { name: 'Jane' };
+
+myWeakSet.add(myObject1);
+myWeakSet.add(myObject2);
+
+const myObject3 = { name: 'Bob' };
+const myObject4 = { name: 'Alice' };
+
+myWeakSet.add([myObject3, myObject4]);
+
+You can check if an object is in a WeakSet using the has() method:
+console.log(myWeakSet.has(myObject1)); // Output: true
+
+You can remove an object from a WeakSet using the delete() method:
+myWeakSet.delete(myObject1);
+myWeakSet.delete([myObject3, myObject4]);
+
+You can iterate over a WeakSet using a for...of loop:
+for (const value of myWeakSet) {
+  console.log(value);
+}
+
+WeakSet objects are useful for storing objects that should not prevent their properties from being garbage collected. For example, if you have a large object that is no longer needed and you want to prevent it from being garbage collected, you can store it in a WeakSet.
+
+<!-- WeakMap -->
+WeakMap objects are useful for storing objects that should not prevent their properties from being garbage collected. For example, if you have a large object that is no longer needed and you want to prevent it from being garbage collected, you can store it in a WeakMap.
+
+create a WeakMap in JavaScript:
+const myWeakMap = new WeakMap();
+
+You can add key-value pairs to a WeakMap using the set() method:
+const myObject1 = { name: 'John' };
+const myObject2 = { name: 'Jane' };
+
+myWeakMap.set(myObject1, 'value1');
+myWeakMap.set(myObject2, 'value2');
+
+You can also add multiple key-value pairs at once using the set() method with an object:
+const myObject3 = { name: 'Bob' };
+const myObject4 = { name: 'Alice' };
+
+myWeakMap.set({ key1: myObject3, key2: myObject4 }, { value1: 'value3', value2: 'value4' });
+
+You can check if a key is in a WeakMap using the has() method:
+console.log(myWeakMap.has(myObject1)); // Output: true
+console.log(myWeakMap.has({ name: 'John' })); // Output: false
+
+You can retrieve a value from a WeakMap using the get() method:
+console.log(myWeakMap.get(myObject1)); // Output: "value1"
+console.log(myWeakMap.get({ name: 'John' })); // Output: undefined
+
+```
+
+**Debouncing in JavaScript**
+
+```
+Debouncing in JavaScript is a technique that prevents a function from being called too frequently. It is often used to improve the performance of event handlers, such as those used for resizing or scrolling.
+
+To debounce a function, you wrap it in a function that delays its execution until a certain amount of time has passed since the last time it was called. This delay prevents the function from being called multiple times in quick succession, which can improve performance and prevent unnecessary work.
+
+Here is an example of a debounced function in JavaScript:
+const debounce = (mainFunction, delay) => {
+  // Declare a variable called 'timer' to store the timer ID
+  let timer;
+
+  // Return an anonymous function that takes in any number of arguments
+  return function (...args) {
+    // Clear the previous timer to prevent the execution of 'mainFunction'
+    clearTimeout(timer);
+
+    // Set a new timer that will execute 'mainFunction' after the specified delay
+    timer = setTimeout(() => {
+      mainFunction(...args);
+    }, delay);
+  };
+};
+
+// Define a function called 'searchData' that logs a message to the console
+function searchData() {
+  console.log("searchData executed");
+}
+
+// Create a new debounced version of the 'searchData' function with a delay of 3000 milliseconds (3 seconds)
+const debouncedSearchData = debounce(searchData, 3000);
+
+// Call the debounced version of 'searchData'
+debouncedSearchData();
+
+Debouncing can be a useful technique for improving the performance of event handlers. For example, if you have a function that updates the DOM in response to a scroll event, you can debounce it to prevent it from being called too frequently. This can improve the performance of your application and prevent unnecessary DOM updates.
+
+```
+
+---
+
+```
+const throttle = (callback, delay) => {
+  let throttleTimeout = null;
+
+  return (...args) => {
+    // If the throttleTimeout is set, it means the callback is currently being throttled.
+    if (throttleTimeout) {
+      return;
+    }
+
+    // Set the throttleTimeout.
+    throttleTimeout = setTimeout(() => {
+      // Clear the throttleTimeout.
+      throttleTimeout = null;
+
+      // Call the callback.
+      callback(...args);
+    }, delay);
+  };
+};
+
+// Example usage:
+
+const handleClick = () => {
+  console.log('Button clicked!');
+};
+
+// Throttle the handleClick function to only be called once every 1000 milliseconds.
+const throttledHandleClick = throttle(handleClick, 1000);
+
+// Add an event listener to the button.
+document.querySelector('#button').addEventListener('click', throttledHandleClick);
+
+In this example, the throttle function takes two arguments: the callback function to be throttled and the delay in milliseconds. The throttle function returns a new function that will only call the callback function once every delay milliseconds.
+The throttledHandleClick function is then used as the event listener for the button's click event. This means that the handleClick function will only be called once every 1000 milliseconds, even if the button is clicked multiple times in a short period of time.
+Throttling can be a useful technique for improving the performance and responsiveness of web applications. By throttling functions that are called frequently, you can reduce the amount of work that needs to be done and improve the overall user experience.
+```
+
+**Generator function in JavaScript**
+
+```
+Generator functions can be used to implement a variety of algorithms, such as lazy evaluation, infinite sequences, and iterators. They are a powerful tool that can help you to write more efficient and concise code.
+
+function* idMaker() {
+  var index = 0;
+  while (true) {
+    yield index++;
+  }
+}
+
+// Create a new generator object
+const generator = idMaker();
+
+// Get the first value from the generator
+console.log(generator.next().value); // 0
+
+// Get the second value from the generator
+console.log(generator.next().value); // 1
+
+// Get the third value from the generator
+console.log(generator.next().value); // 2
+
+This generator function will generate an infinite sequence of numbers, starting from 0. The yield keyword is used to pause the execution of the function and return the current value. The next() method can then be used to resume the execution of the function and get the next value.
+```
+
+**Asynchronous Operations with Generator Functions**
+
+```
+One of the main advantages of generator functions is their ability to handle asynchronous operations with ease. Traditionally, asynchronous tasks in JavaScript were managed using callbacks or promises, which could lead to callback hell or complex promise chains. Generator functions, in combination with yield and next(), offer a more intuitive way to write asynchronous code.
+
+To perform asynchronous operations within a generator function, we need to use a helper function called yield with a promise. This helper function handles the resolution of the promise and resumes the generator function automatically.
+
+fetching data asynchronously using generator functions:
+function fetchData(url) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(`Data fetched from ${url}`);
+    }, 2000);
+  });
+}
+
+function* fetchDataGenerator() {
+  const data1 = yield fetchData('https://api.example.com/data1');
+  console.log(data1);
+  const data2 = yield fetchData('https://api.example.com/data2');
+  console.log(data2);
+  const data3 = yield fetchData('https://api.example.com/data3');
+  console.log(data3);
+}
+
+const iterator = fetchDataGenerator();
+const promise = iterator.next().value;
+promise.then((data) => {
+  iterator.next(data1).value.then((data) => {
+    iterator.next(data2).value.then((data) => {
+      iterator.next(data3);
+    });
+  });
+});
+
+In the above example, we have a generator function fetchDataGenerator() that yields promises obtained from the fetchData() function. Each yielded promise is resolved inside a then() block, and the resulting data is passed back to the generator function using next().
+```
+
+**Iterating Over Generator Functions**
+
+```
+Generator functions can also be used to create custom iterators. An iterator is an object that implements the iterator protocol, which requires the presence of a next() method that returns an object with the properties value and done.
+
+Here’s an example of a generator function used as a custom iterator:
+function* counter() {
+  let count = 1;
+  while (true) {
+    yield count++;
+  }
+}
+
+const iterator = counter();
+console.log(iterator.next()); // Output: { value: 1, done: false }
+console.log(iterator.next()); // Output: { value: 2, done: false }
+console.log(iterator.next()); // Output: { value: 3, done: false }
+
+Benefits of Generator Functions"
+Simpler Asynchronous Code: Generator functions provide a cleaner and more sequential way to handle asynchronous operations compared to a traditional callback or promise-based approaches.
+
+Lazy Evaluation: Generator functions allow for lazy evaluation of data streams. They produce values on demand, reducing memory usage and improving performance when dealing with large datasets.
+
+Custom Iterators: Generator functions simplify the creation of custom iterators, making it easier to iterate over custom data structures or implement unique traversal patterns.
+
+Stateful Execution: Generator functions retain their state between invocations, allowing for resumable computation and maintaining context across multiple function calls.
+```
+
+**event loop in javascript**
+
+```
+The event loop in JavaScript is a mechanism that allows the runtime to execute asynchronous code. It is a single-threaded loop that continuously checks for events to be processed. When an event is found, the event loop executes the associated callback function.
+
+The event loop is what allows JavaScript to be responsive and interactive. Without the event loop, JavaScript would be a single-threaded language that could only execute one task at a time.
+
+Here is a simplified example of how the event loop works:
+// Create a function to handle a click event
+function handleClick() {
+  console.log('You clicked the button!');
+}
+
+// Add an event listener to the button
+document.querySelector('button').addEventListener('click', handleClick);
+
+// Start the event loop
+while (true) {
+  // Check for events to be processed
+  const event = eventQueue.shift();
+
+  // If there is an event, execute the associated callback function
+  if (event) {
+    event.callback();
+  }
+}
+In this example, the handleClick() function is added as an event listener to the button. When the user clicks the button, the handleClick() function is added to the event queue. The event loop then checks for events to be processed. When it finds the handleClick() function in the event queue, it executes the function.
+```
+
+**event loop in javascript**
+
+```
+Let’s look at a simple example to illustrate how this works:
+// First
+console.log('Start');
+
+// Second
+setTimeout(() => {
+  // Fifth: Callback function is not executed until after the delay.
+  console.log('Timeout');
+}, 2000);
+
+// Third
+console.log('End');
+
+In the code above, the output will be:
+Start
+End
+Timeout
+
+Despite setTimeout being written in the code before console.log('End'), "End" is logged before "Timeout". This is because setTimeout is a Web API provided by the browser (not JavaScript itself). When the setTimeout function runs, the browser initiates a timer. Once this timer finishes, the callback function is put into a Task Queue. The JavaScript runtime checks this Task Queue and pushes the callback function into the call stack only when the call stack is empty.
+```
+
+**The Event Loop: A Closer Look**
+
+```
+let’s consider the following example:
+// Define three functions
+function foo() {
+  console.log('Hello'); // 1: Logs 'Hello' immediately
+  setTimeout(bar, 0); // 3: Starts a 0 second timer
+  baz(); // 2: Calls the 'baz' function immediately
+}
+
+function bar() {
+  console.log('World'); // 5: Logs 'World' after 'baz' finishes, despite the 0 second timer
+}
+
+function baz() {
+  console.log('Goodbye'); // 4: Logs 'Goodbye' before 'bar' because 'bar' was offloaded to the browser
+}
+
+foo(); // Starts the 'foo' function
+
+The output of this code will be ‘Hello’, ‘Goodbye’, ‘World’. Even though setTimeout is set to 0, it's placed on the Web API queue and is only executed once all functions in the call stack (the main thread) have been executed.
 ```
