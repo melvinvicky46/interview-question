@@ -525,3 +525,32 @@ export default function AsyncComponent() {
   )
 }
 ```
+
+**To mock an API call using Jest and RTL**
+
+```
+Import the module you want to mock into your test file.
+Use jest.mock() to mock the module.
+Use .mockResolvedValue() to provide a mocked response.
+Use render() to render the component.
+Use screen.getByText() to assert that the component displays the mocked response.
+
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import MyComponent from './MyComponent';
+
+jest.mock('./api');
+api.mockResolvedValue({
+  users: [
+    { name: 'John Doe' },
+    { name: 'Jane Doe' },
+  ],
+});
+
+test('MyComponent should display a list of users', () => {
+  render(<MyComponent />);
+
+  expect(screen.getByText('John Doe')).toBeInTheDocument();
+  expect(screen.getByText('Jane Doe')).toBeInTheDocument();
+});
+```

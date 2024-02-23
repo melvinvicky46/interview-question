@@ -75,7 +75,7 @@ const target = { a: 1, b: 2 };
 Object.hasOwn(target, 'a'); //true
 
 // Object.is() determines whether two values are the same value.
-console.log(Object.is(1, 1)); //false
+console.log(Object.is(1, 1)); //true
 console.log(Object.is({ a: 1, b: 2 }, { a: 1, b: 2 })); //false
 
 // Object.keys()
@@ -214,6 +214,24 @@ const flatten = (arr) => {
 }
 console.log(flatten(arr))
 // [1, 2, 3, 4, 5, 6, 8, 9]
+
+-----------------------------------------
+
+function flatten(arr) {
+  return arr.reduce((acc, item) => {
+    if (Array.isArray(item)) {
+      return acc.concat(flatten(item));
+    } else {
+      return acc.concat(item);
+    }
+  }, []);
+}
+
+// Flatten the array to any depth
+const flattened = flatten(arr);
+
+// Log the flattened array
+console.log(flattened);
 ```
 
 9. **Find the number of Occurrences of elements in an array**
@@ -394,6 +412,23 @@ let result = cars.reduce((acc, current) => {
 
 const result = cars.group(({ make }) => make);
 console.log(result)
+
+```
+
+**Group By Prototype**
+
+```
+Array.prototype.groupBy = function(fn) {
+    const result = {};
+    this.forEach(item => {
+        const key = fn(item);
+        if (!result[key]) {
+            result[key] = [];
+        }
+        result[key].push(item);
+    });
+    return result;
+};
 ```
 
 17. **Difference between substring and substr in JavaScript**
@@ -1042,6 +1077,41 @@ var a = 10;
 fun2();
 
 // Output 10
+```
+
+**Understanding JavaScript closures**
+
+```
+In JavaScript, a closure is a function that captures the lexical scope in which it was declared, allowing it to access and manipulate variables from an outer scope even after that scope has been closed.
+
+Here’s how closures work:
+
+Lexical scoping: JavaScript uses lexical scoping, meaning a function's access to variables is determined by its physical location within the source code.
+
+Function creation: When a function is created, it keeps a reference to its lexical scope. This scope contains all the local variables that were in-scope at the time the closure was created.
+
+Maintaining state: Closures are often used to maintain state in a secure way because the variables captured by the closure are not accessible outside the function.
+
+const createCounter = () => {
+  let count = 0;
+  return () => {
+    count += 1;
+    return count;
+  };
+};
+
+const counter = createCounter();
+console.log(counter()); // Outputs: 1
+console.log(counter()); // Outputs: 2
+
+<!-- Why use closures? -->
+Data encapsulation: Closures provide a way to create private variables and functions that can't be accessed from outside the closure. This is useful for hiding implementation details and maintaining state in an encapsulated way.
+
+Functional programming: Closures are fundamental in functional programming paradigms, where they are used to create functions that can be passed around and invoked later, retaining access to the scope in which they were created, e.g. partial applications or currying.
+
+Event handlers and callbacks: In JavaScript, closures are often used in event handlers and callbacks to maintain state or access variables that were in scope when the handler or callback was defined.
+
+Module patterns: Closures enable the module pattern in JavaScript, allowing the creation of modules with private and public parts.
 ```
 
 49. **What is an event delegation**
@@ -1904,6 +1974,9 @@ you can add the async attribute to your <script> elements
   <script async src="main.js"></script>
   ...
 </head>
+In <script async>, the script will be fetched in parallel to HTML parsing and executed as soon as it is available (potentially before HTML parsing completes) and it will not necessarily be executed in the order in which it appears in the HTML document. Use async when the script is independent of any other scripts on the page, for example, analytics.
+
+In <script defer>, the script will be fetched in parallel to HTML parsing and executed when the document has been fully parsed, but before firing DOMContentLoaded. If there are multiple of them, each deferred script is executed in the order they appeared in the HTML document.
 
 
 *Breaking down long tasks
@@ -2662,4 +2735,292 @@ function baz() {
 foo(); // Starts the 'foo' function
 
 The output of this code will be ‘Hello’, ‘Goodbye’, ‘World’. Even though setTimeout is set to 0, it's placed on the Web API queue and is only executed once all functions in the call stack (the main thread) have been executed.
+```
+
+**Hoisting**
+
+```
+Hoisting is a mechanism in JavaScript that moves all variable and function declarations to the top of their scope before code execution. This means that functions and variables can be used before they are declared.
+
+<!-- function hoisting -->
+greet("John");
+
+function greet(name) {
+  console.log(`Hello, ${name}!`);
+}
+
+<!-- Example -->
+// Function Declaration
+console.log(foo); // [Function: foo]
+foo(); // 'FOOOOO'
+function foo() {
+  console.log('FOOOOO');
+}
+console.log(foo); // [Function: foo]
+
+// Function Expression
+console.log(bar); // undefined
+bar(); // Uncaught TypeError: bar is not a function
+var bar = function () {
+  console.log('BARRRR');
+};
+console.log(bar); // [Function: bar]
+
+
+Only declarations are hoisted, not assignments. This means that the following code will not work:
+console.log(name); // ReferenceError: name is not defined
+var name = "John";
+
+Variables declared with let or const are hoisted WITHOUT a default initialization. So accessing them before the line they were declared throws ReferenceError: Cannot access 'variable' before initialization.
+
+But variables declared with var are hoisted WITH a default initialization of undefined. So accessing them before the line they were declared returns undefined.
+```
+
+**let vs var**
+
+```
+In JavaScript, both let and var are used to declare variables. The main difference between let and var is the scope of the variables they create: Variables declared by let are only available inside the block where they're defined, while variables declared by var are available throughout the function in which they're declared.
+
+function greet() {
+  var name = 'John';
+  let age = 30;
+  console.log(name); // 'John'
+  console.log(age); // 30
+}
+
+greet();
+
+console.log(name); // ReferenceError: name is not defined
+console.log(age); // ReferenceError: age is not defined
+
+Another difference between let and var is that variables declared with let cannot be redeclared in the same scope. This means that you cannot do something like this:
+let name = 'John';
+let name = 'Mary'; // Error: Identifier 'name' has already been declared
+
+However, you can redeclare variables declared with var:
+var name = 'John';
+var name = 'Mary'; // No error
+```
+
+**Simple Rules to ‘this’ in Javascript**
+
+```
+1. If the new keyword is used when calling the function, this inside the function is a brand new object.
+function ConstructorExample() {
+    console.log(this);
+    this.value = 10;
+    console.log(this);
+}
+new ConstructorExample();
+// -> {}
+// -> { value: 10 }
+
+2. If apply, call, or bind are used to call a function, this inside the function is the object that is passed in as the argument.
+function fn() {
+    console.log(this);
+}
+var obj = {
+    value: 5
+};
+var boundFn = fn.bind(obj);
+boundFn();     // -> { value: 5 }
+fn.call(obj);  // -> { value: 5 }
+fn.apply(obj); // -> { value: 5 }
+
+3. If a function is called as a method — that is, if dot notation is used to invoke the function — this is the object that the function is a property of. In other words, when a dot is to the left of a function invocation, this is the object to the left of the dot.
+var obj = {
+    value: 5,
+    printThis: function() {
+        console.log(this);
+    }
+};
+obj.printThis(); // -> { value: 5, printThis: ƒ }
+
+4. If a function is invoked as a free function invocation, meaning it was invoked without any of the conditions present above, this is the global object.
+function fn() {
+    console.log(this);
+}
+// If called in browser:
+fn(); // -> Window {stop: ƒ, open: ƒ, alert: ƒ, ...}
+
+5. If the function is an ES2015 arrow function, it ignores all the rules above and receives the this value of its surrounding scope at the time it’s created. To determine this, go one line above the arrow function’s creation and see what the value of this is there. It will be the same in the arrow function.
+const obj = {
+    value: 'abc',
+    createArrowFn: function() {
+        return () => console.log(this);
+    }
+};
+const arrowFn = obj.createArrowFn();
+arrowFn();
+
+var obj = {
+    value: 'hi',
+    printThis: function() {
+        console.log(this);
+    }
+};
+var print = obj.printThis;
+obj.printThis(); // -> {value: "hi", printThis: ƒ}
+print(); // -> Window {stop: ƒ, open: ƒ, alert: ƒ, ...}
+```
+
+**Polyfills for Array.flat**
+
+```
+if (!Array.prototype.myFlat) {
+  Array.prototype.myFlat = function () {
+    const output = [];
+    function flattenArray(arr) {
+      for (let i = 0; i < arr.length; i++) {
+        if (Array.isArray(arr[i])) {
+          flattenArray(arr[i]);
+        } else {
+          output.push(arr[i]);
+        }
+      }
+      return output;
+    }
+    const returnValue = flattenArray(this);
+    return returnValue;
+  };
+}
+
+const inputArray = [0, 1, 2, [3, 4, [5, 6]], 7];
+console.log(inputArray.myFlat());
+
+```
+
+**Polyfill for Promises**
+
+```
+function PromisePolyFill(executor) {
+  let onResolve, onReject;
+  let fulfilled = false,
+    rejected = false,
+    called = false,
+    value;
+
+  function resolve(v) {
+    fulfilled = true;
+    value = v;
+
+    if (typeof onResolve === "function") {
+      onResolve(value);
+      called = true;
+    }
+  }
+
+  function reject(reason) {
+    rejected = true;
+    value = reason;
+
+    if (typeof onReject === "function") {
+      onReject(value);
+      called = true;
+    }
+  }
+
+  this.then = function (callback) {
+    onResolve = callback;
+
+    if (fulfilled && !called) {
+      called = true;
+      onResolve(value);
+    }
+    return this;
+  };
+
+  this.catch = function (callback) {
+    onReject = callback;
+
+    if (rejected && !called) {
+      called = true;
+      onReject(value);
+    }
+    return this;
+  };
+
+  try {
+    executor(resolve, reject);
+  } catch (error) {
+    reject(error);
+  }
+}
+
+PromisePolyFill.resolve = (val) =>
+  new PromisePolyFill(function executor(resolve, _reject) {
+    resolve(val);
+  });
+
+PromisePolyFill.reject = (reason) =>
+  new PromisePolyFill(function executor(resolve, reject) {
+    reject(reason);
+  });
+
+PromisePolyFill.all = (promises) => {
+  let fulfilledPromises = [],
+    result = [];
+
+  function executor(resolve, reject) {
+    promises.forEach((promise, index) =>
+      promise
+        .then((val) => {
+          fulfilledPromises.push(true);
+          result[index] = val;
+
+          if (fulfilledPromises.length === promises.length) {
+            return resolve(result);
+          }
+        })
+        .catch((error) => {
+          return reject(error);
+        })
+    );
+  }
+  return new PromisePolyFill(executor);
+};
+```
+
+**What is progressive rendering?**
+
+```
+Progressive rendering is the name given to techniques used to improve the performance of a webpage (in particular, improve perceived load time) to render content for display as quickly as possible.
+
+Lazy loading of images
+Images on the page are not loaded all at once. The image is only loaded when the user scrolls into/near the part of the page that displays the image.
+
+<img loading="lazy"> is a modern way to instruct the browser to defer loading of images that are outside of the screen until the user scrolls near them.
+Use JavaScript to watch the scroll position and load the image when the image is about to come on screen (by comparing the coordinates of the image with the scroll position).
+
+Prioritizing visible content (or above-the-fold rendering)
+Include only the minimum CSS/content/scripts necessary for the amount of page that would be rendered in the users browser first to display as quickly as possible, you can then use deferred scripts or listen for the DOMContentLoaded/load event to load in other resources and content.
+
+Async HTML fragments
+Flushing parts of the HTML to the browser as the page is constructed on the back end.
+```
+
+**What is the definition of a higher-order function?**
+
+```
+A higher-order function is any function that takes one or more functions as arguments, which it uses to operate on some data, and/or returns a function as a result. Higher-order functions are meant to abstract some operation that is performed repeatedly. The classic example of this is map, which takes an array and a function as arguments. map then uses this function to transform each item in the array, returning a new array with the transformed data. Other popular examples in JavaScript are forEach, filter, and reduce. A higher-order function doesn't just need to be manipulating arrays as there are many use cases for returning a function from another function. Function.prototype.bind is one such example in JavaScript.
+```
+
+**Micro and Macro task queue**
+
+```
+In JavaScript, the event loop is the mechanism that handles asynchronous programming. It consists of two queues: the macrotask queue and the microtask queue.
+Macrotasks are tasks that are executed one at a time, in the order they are queued. They include things like setTimeout, setInterval, and event listeners.
+Microtasks are tasks that have a higher priority than macrotasks. They are executed after each macrotask, but before the next macrotask is started. Microtasks include things like promises, process.nextTick(), and MutationObserver callbacks.
+The reason for the two queues is to give microtasks a higher priority. This is because microtasks are often used for things like handling user input and updating the UI. It is important that these tasks are executed as soon as possible, so that the user experience is not affected.
+Here is an example of how the two queues work:
+setTimeout(() => {
+  console.log('macrotask');
+}, 0);
+
+Promise.resolve().then(() => {
+  console.log('microtask');
+});
+
+// microtask will be executed first
+// macrotask will be executed second
 ```

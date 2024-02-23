@@ -264,3 +264,47 @@ const obj: Props = { a: 5 };
 
 const obj2: Required<Props> = { a: 5 };
 ```
+
+**unknown vs any vs never typescript**
+
+```
+any:
+The any type is a catch-all type that can be assigned any value. It is the least restrictive type in TypeScript.
+
+unknown:
+The unknown type is a type that represents any value that is not known to TypeScript. It is more restrictive than the any type, but less restrictive than any other type.
+if we want to perform any operation on unknown type then we have to add additional checks.
+let name: string;
+name = "Melvin";
+
+if(name === "string") {
+  console.log(name);
+}
+
+
+never:
+The never type is a type that represents values that never occur. It is the most restrictive type in TypeScript.
+never is used when we have exhausted all possible value and we don’t have anything to assign.
+
+
+
+// any type
+let x: any;
+x = 1; // valid
+x = "hello"; // valid
+x = true; // valid
+
+// unknown type
+let y: unknown;
+y = 1; // valid
+y = "hello"; // valid
+y = true; // valid
+// y.toUpperCase(); // error: Object is of type 'unknown'.
+
+// never type
+function foo(): never {
+  throw new Error("This function never returns");
+}
+
+// foo(); // error: Function never returns.
+```
