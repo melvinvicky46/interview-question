@@ -344,3 +344,90 @@ Output: {"error": "Not Equal"}
 Input: func = () => expect(5).notToBe(null)
 Output: {"value": true}
 ```
+
+**Two Sum Problem**
+
+```
+function twoSum(nums, target) {
+  const numMap = {};
+  for (let i = 0; i < nums.length; i++) {
+    const complement = target - nums[i];
+    if (numMap.hasOwn(complement)) {
+      return [numMap[complement], i];
+    }
+    numMap[nums[i]] = i;
+  }
+}
+
+Input: nums = [2,7,11,15], target = 9
+Output: [0,1]
+
+<!-- OR -->
+function twoSum(nums, target) {
+  for (let i = 0; i < nums.length; i++) {
+    for (let j = i + 1; j < nums.length; j++) {
+      if (nums[i] + nums[j] === target) {
+        return [i, j];
+      }
+    }
+  }
+}
+
+```
+
+**CombinationSum**
+
+```
+var combinationSum = function(candidates, target) {
+    // Create an array dp to store combinations for each target sum
+    const dp = new Array(target + 1).fill().map(() => []);
+    dp[0] = [[]];
+    // Iterate through the candidates
+    for (const candidate of candidates) {
+        // For each candidate, iterate through the dp array to build combinations
+        for (let i = candidate; i <= target; i++) {
+            for (const combination of dp[i - candidate]) {
+                dp[i].push([...combination, candidate]);
+            }
+        }
+    }
+    return dp[target];
+};
+
+Input: candidates = [2, 3, 6, 7], target = 7 Output: [[2, 2, 3], [7]]
+```
+
+-------------------- Interview Questions ------------------------------
+
+**Given an integer array nums and an integer val, remove all occurrences of val in nums in-place**
+
+```
+var removeElement = function(nums, val) {
+    let k = 0
+    for (let i = 0; i < nums.length; i++) {
+        if (nums[i] !== val){
+            nums[k] = nums[i]
+            k++
+        }
+    }
+    return k
+};
+Input: nums = [3,2,2,3], val = 3
+removeElement(nums, val)
+
+Output: 2
+```
+
+**Merge Sorted Array**
+
+```
+var merge = function(nums1, m, nums2, n) {
+    nums1.splice(m, n, ...nums2)
+    nums1.sort((a,b) => a - b)
+};
+
+Input: nums1 = [1,2,3,0,0,0], m = 3, nums2 = [2,5,6], n = 3
+merge(nums1, m, nums2, n)
+
+Output: [1,2,2,3,5,6]
+```
