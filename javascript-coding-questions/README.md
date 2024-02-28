@@ -1543,7 +1543,7 @@ async function asyncFunction() {
 asyncFunction();
 ```
 
-65. **Difference Between Promise.all, Promise.allSettled, Promise.any, Promise.race**
+65. **Difference Between Promise.all, Promise.allSettled, Promise.any, Promise.race, Promise.event**
 
 ```
 const promise1 = Promise.resolve(3);
@@ -1571,6 +1571,19 @@ Promises.any([promise1, promise2, promise3]).then(values => console.log(values))
 // Promise.race
 Promises.race([promise1, promise2, promise3]).then(values => console.log(values))
 // It will return the fastest promise which is either resolved or rejected
+
+// Promise.event
+The Promise.event() function is a utility function that allows you to create a promise from an event. This can be useful for situations where you need to wait for an event to occur before continuing with your code.
+The Promise.event() function takes two arguments: the event target and the event name. The event target is the object that will be emitting the event, and the event name is the name of the event that you want to wait for.
+The Promise.event() function will return a promise that will be resolved when the event is emitted. If the event is not emitted before the promise times out, the promise will be rejected.
+
+const button = document.querySelector('button');
+
+const promise = Promise.event(button, 'click');
+
+promise.then(() => {
+  // Do something when the button is clicked.
+});
 ```
 
 66. **Why To Use JavaScript Async/Await Over Promises**
