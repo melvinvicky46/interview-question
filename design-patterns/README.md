@@ -43,9 +43,12 @@ existing objects.
 
 ```
 <!-- Singleton Pattern -->
-Singleton is a design pattern that ensures that a class has only one immutable instance. Said simply, the singleton pattern consists of an object that can't be copied or modified. It's often useful when we want to have some immutable single point of truth for our application.
+Singleton is a design pattern that ensures that a class has only one immutable instance. Said simply, the singleton pattern
+consists of an object that can't be copied or modified. It's often useful when we want to have some immutable single point of
+truth for our application.
 
-Let's say for example we want to have all of our app's configuration in a single object. And we want to disallow any duplication or modification of that object.
+Let's say for example we want to have all of our app's configuration in a single object. And we want to disallow any duplication
+or modification of that object.
 
 Two ways of implementing this pattern are using object literals and classes:
 Using an object literal:
@@ -74,9 +77,11 @@ const instance = new Config()
 Object.freeze(instance)
 
 <!-- Factory Method Pattern -->
-The Factory method pattern provides an interface for creating objects that can be modified after creation. The cool thing about this is that the logic for creating our objects is centralized in a single place, simplifying and better organizing our code.
+The Factory method pattern provides an interface for creating objects that can be modified after creation. The cool thing about
+this is that the logic for creating our objects is centralized in a single place, simplifying and better organizing our code.
 
-This pattern is used a lot and can also be implemented in two different ways, via classes or factory functions (functions that return an object).
+This pattern is used a lot and can also be implemented in two different ways, via classes or factory functions (functions that
+return an object).
 Using classes:
 class Alien {
     constructor (name, phrase) {
@@ -108,7 +113,8 @@ console.log(alien1.phrase) // output "I'm Ali the alien!"
 alien1.fly() // output "Zzzzzziiiiiinnnnnggggg"
 
 <!-- Builder Pattern -->
-The Builder pattern is used to create objects in "steps". Normally we will have functions or methods that add certain properties or methods to our object.
+The Builder pattern is used to create objects in "steps". Normally we will have functions or methods that add certain properties
+or methods to our object.
 
 The cool thing about this pattern is that we separate the creation of properties and methods into different entities.
 // We declare our objects
