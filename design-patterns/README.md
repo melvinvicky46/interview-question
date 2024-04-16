@@ -163,3 +163,4 @@ console.log(bug1.phrase) // Your debugger doesn't work with me!
 console.log(bug1.attack()) // Pim Pam Pum!
 console.log(bug1.flyAway()) // Flyyyy like an eagle!
 ```
+
