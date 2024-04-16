@@ -1,34 +1,42 @@
 **What Are Design Patterns?**
 
 ```
-These patterns are not algorithms or specific implementations. They are more like ideas, opinions, and abstractions that can be useful in certain situations to solve a particular kind of problem.
+These patterns are not algorithms or specific implementations. They are more like ideas, opinions, and abstractions that can be
+useful in certain situations to solve a particular kind of problem.
 
-The specific implementation of the patterns may vary depending on many different factors. But what's important is the concepts behind them, and how they might help us achieve a better solution for our problem.
+The specific implementation of the patterns may vary depending on many different factors. But what's important is the concepts
+behind them, and how they might help us achieve a better solution for our problem.
 ```
 
 **Design patterns**
 
 ```
 <!-- Singleton pattern: -->
-This pattern ensures that only one instance of a class is ever created. This can be useful for classes that manage global resources, such as a database connection pool.
+This pattern ensures that only one instance of a class is ever created. This can be useful for classes that manage global
+resources, such as a database connection pool.
 
 <!-- Observer pattern: -->
-This pattern allows objects to be notified of changes to other objects. This can be useful for implementing things like user interfaces that need to update when data changes.
+This pattern allows objects to be notified of changes to other objects. This can be useful for implementing things like user
+interfaces that need to update when data changes.
 
 <!-- Prototype pattern: -->
-This pattern allows new objects to be created from existing objects without having to know the specific class of the existing object. This can be useful for implementing things like object hierarchies.
+This pattern allows new objects to be created from existing objects without having to know the specific class of the existing
+object. This can be useful for implementing things like object hierarchies.
 
 <!-- Factory pattern: -->
-This pattern allows objects to be created without having to specify the exact class of the object. This can be useful for implementing things like object pools.
+This pattern allows objects to be created without having to specify the exact class of the object. This can be useful for
+implementing things like object pools.
 
 <!-- Command pattern: -->
-This pattern allows requests to be encapsulated as objects. This can be useful for implementing things like undo/redo functionality.
+This pattern allows requests to be encapsulated as objects. This can be useful for implementing things like undo/redo
+functionality.
 
 <!-- Module pattern: -->
 This pattern allows code to be encapsulated into modules. This can be useful for organizing code and making it easier to reuse.
 
 <!-- Decorator pattern: -->
-This pattern allows objects to be extended without modifying their class. This can be useful for adding new functionality to existing objects.
+This pattern allows objects to be extended without modifying their class. This can be useful for adding new functionality to
+existing objects.
 ```
 
 **Creational Design Patterns**
