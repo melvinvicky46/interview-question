@@ -3037,3 +3037,26 @@ Promise.resolve().then(() => {
 // microtask will be executed first
 // macrotask will be executed second
 ```
+
+**Convert 12 hours format to 24 hours format using javascript**
+```
+function convertTo24HourFormat(time12) {
+  const [time, modifier] = time12.split(' ');
+  let [hours, minutes] = time.split(':');
+  
+  if (hours === '12') {
+    hours = '00';
+  }
+  
+  if (modifier === 'PM') {
+    hours = parseInt(hours, 10) + 12;
+  }
+
+  return `${hours}:${minutes}`;
+}
+
+// Example usage
+const time12 = '01:30 PM';
+const time24 = convertTo24HourFormat(time12);
+console.log(time24); // Output: "13:30"
+```
