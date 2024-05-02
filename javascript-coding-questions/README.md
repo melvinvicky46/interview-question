@@ -27,7 +27,7 @@
 
 [1, 2, 3, 4, 5].filter((item) => item > 2) //[3, 4, 5]
 
-[1, 2, 3, 4, 5].reduce((acc, cur) => acc + cur, 10) //15
+[1, 2, 3, 4, 5].reduce((acc, cur) => acc + cur, 10) //25
 
 [1, 2, 3, 4, 5].findLast((item) => item > 2); //5
 
