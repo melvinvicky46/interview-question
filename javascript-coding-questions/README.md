@@ -237,18 +237,21 @@ console.log(flattened);
 9. **Find the number of Occurrences of elements in an array**
 
 ```
-const tempArr = [2, 3, 1, 1, 2, 3, 1, 3, 4, 4, 2, 1, 4];
-const count = {};
-for (const ele of tempArr) {
-  if (count[ele]) {
-    count[ele] = count[ele] + 1;
-  } else {
-    count[ele] = 1;
-  }
-  // OR
-  // count[ele] = count[ele] ? count[ele] + 1 : 1;
+function countOccurrences(arr) {
+  const occurrences = {};
+
+  // Iterate through the array
+  arr.forEach(function (element) {
+    // Increment the count of the current element
+    occurrences[element] = (occurrences[element] || 0) + 1;
+  });
+
+  console.log(occurrences);
 }
-console.log(count); // {1: 4, 2: 3, 3: 3, 4: 3}
+
+var arr = [1, 2, 3, 4, 1, 2, 3, 4, 5, 1];
+var result = countOccurrences(arr);
+console.log(result); //{1: 3, 2: 2, 3: 2, 4: 2, 5: 1}
 ```
 
 10. **Add all the zero to end of the array**
@@ -641,6 +644,33 @@ console.log(end-start); //time taken to run the method
 28. **Find the Pivot element of the given Array**
 
 ```
+
+function findPivot(arr) {
+    var totalSum = arr.reduce((acc, curr) => acc + curr, 0); // Calculate the total sum of the array
+    var leftSum = 0; // Initialize the left sum
+    
+    for (var i = 0; i < arr.length; i++) {
+        // Update the left sum by adding the current element
+        leftSum += arr[i];
+        
+        // Check if the current element is the pivot
+        if (leftSum === totalSum - leftSum) {
+            return arr[i]; // Return the pivot element
+        }
+    }
+    
+    return -1; // If no pivot is found, return -1
+}
+
+var arr = [1, 7, 3, 6, 5, 6];
+var pivot = findPivot(arr);
+if (pivot !== -1) {
+    console.log("Pivot element:", pivot);
+} else {
+    console.log("No pivot element found.");
+}
+
+--------------------------------------------------------------
 function findPivot(arr) {
   let leftSum = 0;
   let rightSum = arr.reduce((acc, currValue) => acc + currValue, 0);
