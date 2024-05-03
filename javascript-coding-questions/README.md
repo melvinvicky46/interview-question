@@ -3060,3 +3060,40 @@ const time12 = '01:30 PM';
 const time24 = convertTo24HourFormat(time12);
 console.log(time24); // Output: "13:30"
 ```
+
+**Error codes in JavaScript**
+```
+SyntaxError: This error occurs when the JavaScript engine encounters syntax errors in the code, such as missing parentheses, brackets, or semicolons. The error code associated with SyntaxError is usually 1001.
+
+ReferenceError: This error occurs when trying to access a variable or function that doesn't exist. The error code associated with ReferenceError is usually 1002.
+
+TypeError: This error occurs when an operation is performed on a value of the wrong type. For example, trying to call a non-function as a function or accessing properties of undefined or null. The error code associated with TypeError is usually 1003.
+
+InternalError: This error occurs when an internal error in the JavaScript engine is encountered. It's relatively rare and often indicates a serious issue with the engine itself. The error code associated with InternalError is usually 1007.
+```
+
+**JavaScript error codes**
+```
+4xx Client Error Codes:
+400 Bad Request: The server cannot or will not process the request due to something that is perceived to be a client error 
+
+401 Unauthorized: Similar to 403 Forbidden, but specifically indicates that authentication is required and has failed or has not yet been provided.
+
+403 Forbidden: The client does not have access rights to the content, so the server is refusing to give the requested resource.
+
+404 Not Found: The server cannot find the requested resource. This error can be caused by mistyped URLs, broken links, or the resource being moved or deleted.
+
+429 Too Many Requests: The user has sent too many requests in a given amount of time. Intended for use with rate limiting schemes.
+
+5xx Server Error Codes:
+500 Internal Server Error: This status code indicates that something has gone wrong on the server's end, but the server cannot be more specific about what the exact problem is
+
+501 Not Implemented: The server either does not recognize the request method or lacks the ability to fulfill the request.
+
+502 Bad Gateway: The server, while acting as a gateway or proxy, received an invalid response from an inbound server it accessed while attempting to fulfill the request.
+
+503 Service Unavailable: This status code indicates that the server is currently unable to handle the request due to temporary overload or maintenance of the server.
+
+504 Gateway Timeout: The server, while acting as a gateway or proxy, did not receive a timely response from an upstream server it needed to access in order to complete the request.
+
+```
