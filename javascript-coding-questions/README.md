@@ -15,7 +15,7 @@
 
 [1, 2, 3, 4, 5].includes(1) //true
 
-[1, 2, 3, 4, 5].some((item) => item < 2) //true
+[1, 2, 3, 4, 5].some((item) => item < 2) //true 45
 
 [1, 2, 3, 4, 5].find((item) => item > 2) //3
 
@@ -108,7 +108,7 @@ const arr = ["a", "b", "a", "c", "a"];
 const indexes = [];
 
 arr.forEach((element, index) => {
-  if (element === "a") {s
+  if (element === "a") {
     indexes.push(index);
   }
 });
