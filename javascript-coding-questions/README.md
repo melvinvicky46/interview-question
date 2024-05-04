@@ -587,6 +587,28 @@ for (const value of arr) {
 }
 console.log(uniqueArr); // [1, 2, 3, 4, 5, 6]
 
+// remove duplicates from both arrays
+function removeDuplicates(arr) {
+    return arr.filter((element, index) => arr.indexOf(element) === index);
+}
+
+function mergeUnique(arr1, arr2) {
+    // Remove duplicates from both arrays
+    const uniqueArr1 = removeDuplicates(arr1);
+    const uniqueArr2 = removeDuplicates(arr2);
+    
+    // Merge unique elements from both arrays
+    const mergedArray = [...uniqueArr1, ...uniqueArr2];
+    
+    return mergedArray;
+}
+
+// Example usage:
+const arr1 = [1, 2, 2, 3, 4];
+const arr2 = [3, 4, 5, 5, 6];
+const mergedArray = mergeUnique(arr1, arr2);
+console.log(mergedArray); // Output: [1, 2, 3, 4, 5, 6]
+
 ```
 
 26. **Convert an Array into Object**
@@ -1663,13 +1685,13 @@ console.log(randomNumber); // 6
 ```
 const str = "Hello, world!";
 const uniqueStr = new Set(str).join("");
-console.log(uniqueStr); // "Hellowrdl!"
+console.log(uniqueStr); // "Helo, wrd!"
 
 OR
 
 const str = "Hello, world!";
 const uniqueStr = str.split("").filter((char, index, arr) => arr.indexOf(char) === index).join("");
-console.log(uniqueStr); // "Hellowrdl!"
+console.log(uniqueStr); // "Helo, wrd!"
 
 OR
 
@@ -1680,7 +1702,7 @@ str.split("").forEach((char) => {
     uniqueStr.push(char);
   }
 });
-console.log(uniqueStr.join("")); // "Hellowrdl!"
+console.log(uniqueStr.join("")); // "Helo, wrd!"
 ```
 
 69. **Finding the First Non-repeating Character in a String**

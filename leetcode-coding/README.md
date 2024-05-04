@@ -395,6 +395,48 @@ var combinationSum = function(candidates, target) {
 };
 
 Input: candidates = [2, 3, 6, 7], target = 7 Output: [[2, 2, 3], [7]]
+
+-------------------
+
+function combinationSum(candidates, target) {
+    const result = [];
+
+    // Define recursive function to find combinations
+    function backtrack(startIndex, currentCombination, currentSum) {
+        // Base case: If current sum equals target, add current combination to result
+        if (currentSum === target) {
+            result.push([...currentCombination]);
+            return;
+        }
+        
+        // If current sum exceeds target or we have processed all candidates, stop
+        if (currentSum > target || startIndex === candidates.length) {
+            return;
+        }
+
+        // Try all candidates starting from startIndex
+        for (let i = startIndex; i < candidates.length; i++) {
+            // Add current candidate to current combination
+            currentCombination.push(candidates[i]);
+            // Recursively call backtrack function with updated combination and sum
+            backtrack(i, currentCombination, currentSum + candidates[i]);
+            // Remove current candidate from current combination to backtrack
+            currentCombination.pop();
+        }
+    }
+
+    // Start backtracking with an empty combination and sum 0
+    backtrack(0, [], 0);
+
+    return result;
+}
+
+// Example usage:
+const candidates = [2, 3, 6, 7];
+const target = 7;
+const result = combinationSum(candidates, target);
+console.log(result); // Output: [[2, 2, 3], [7]]
+
 ```
 
 -------------------- Interview Questions ------------------------------
