@@ -996,7 +996,7 @@ function isPalindrome(str){
   return true;
 }
 
-console.log(isPalindrome(str1)); // false
+console.log(isPalindrome(str1)); // true
 
 OR
 
@@ -1017,16 +1017,16 @@ function isPalindrome(str) {
 ```
 function countZeros(num) {
   let count = 0;
+
   while (num > 0) {
-    if (num % 10 === 0) {
-      count++;
-    }
-    num = Math.floor(num / 10);
+    count += Math.floor(num / 10);
+    num = num / 10;
   }
   return count;
 }
+
 const num2 = 12000;
-console.log(countZeros(num2)); //3
+console.log(countZeros(num2)); //1333
 
 ```
 
