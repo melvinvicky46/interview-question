@@ -15,7 +15,7 @@
 
 [1, 2, 3, 4, 5].includes(1) //true
 
-[1, 2, 3, 4, 5].some((item) => item < 2) //true 45
+[1, 2, 3, 4, 5].some((item) => item < 2) //true
 
 [1, 2, 3, 4, 5].find((item) => item > 2) //3
 
@@ -300,19 +300,35 @@ const array = [2, 3, 4, 5, 6, 7, 8, 9];
 const newArr = array.filter(num => num % 2 === 0).concat(array.filter(num => num % 2 !== 0));
 console.log(newArr); // [2, 4, 6, 8, 3, 5, 7, 9]
 
-// OR
-const array = [2, 3, 4, 5, 6, 7, 8, 9];
-let i = -1, j = 0;
-let temp;
-while (array[j] % 2 === 0) {
-  i++;
-  temp = array[i];
-  array[i] = array[j];
-  array[j] = temp;
-}
-j++;
+//OR
+function segregateEvenOdd(arr) {
+    let left = 0; // Pointer for the leftmost even number
+    let right = arr.length - 1; // Pointer for the rightmost odd number
 
-console.log(array); // [2, 4, 6, 8, 3, 5, 7, 9]
+    while (left < right) {
+        // Find the next even number from the left
+        while (arr[left] % 2 === 0 && left < right) {
+            left++;
+        }
+
+        // Find the next odd number from the right
+        while (arr[right] % 2 !== 0 && left < right) {
+            right--;
+        }
+
+        // Swap the even and odd numbers
+        if (left < right) {
+            [arr[left], arr[right]] = [arr[right], arr[left]];
+            left++;
+            right--;
+        }
+    }
+}
+
+// Example usage:
+const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+segregateEvenOdd(arr);
+console.log(arr); // Output: [2, 4, 6, 8, 5, 3, 7, 1, 9]
 ```
 
 12. **Rearrange Array such that Even Index elements are Smaller and Odd Index Elements are Greater**
@@ -931,6 +947,19 @@ function sum(a) {
 sum(10)(3,12);
 
 // Nested/multiple arguments
+
+function curry(fn) {
+  return function curried(...args) {
+    if (args.length === fn.length) {
+      return fn(...args);
+    } else {
+      return (...moreArgs) => curried(...args, ...moreArgs);
+    }
+  };
+}
+
+// OR
+
 function curry(func) {
   return function curried(...args) {
     if (args.length >= func.length) {
