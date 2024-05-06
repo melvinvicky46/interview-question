@@ -42,7 +42,7 @@
     <input type="checkbox" id="subscribe" name="subscribe">
 
     <label for="subscribe">Subscribe to newsletter</label><br><br>
-    <a href="https://www.example.com" onclick="checkCheckbox()">Visit Example Website</a><br><br>
+    <a href="javascript:void(0);" onclick="checkCheckbox()">Visit Example Website</a><br><br>
     <button type="submit">Submit</button><br><br>
 
     <label for="cars">Choose a car:</label>
