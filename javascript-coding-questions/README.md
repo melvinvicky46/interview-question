@@ -3151,3 +3151,71 @@ InternalError: This error occurs when an internal error in the JavaScript engine
 504 Gateway Timeout: The server, while acting as a gateway or proxy, did not receive a timely response from an upstream server it needed to access in order to complete the request.
 
 ```
+
+**Handle 10 parallel asynchronous calls without impacting the main thread**
+```
+// Function to perform an asynchronous operation (simulated with setTimeout)
+function fetchData(url) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve(`Data from ${url}`);
+        }, Math.random() * 2000); // Simulating network delay
+    });
+}
+
+async function fetchParallel() {
+    // Array of URLs to fetch data from
+    const urls = [
+        'https://example.com/data1',
+        'https://example.com/data2',
+        // Add more URLs here
+    ];
+
+    // Start all requests in parallel
+    const promises = urls.map(url => fetchData(url));
+
+    // Wait for all promises to resolve
+    const results = await Promise.all(promises);
+
+    // Handle results
+    results.forEach(result => {
+        console.log(result);
+        // You can process each result here
+    });
+}
+
+// Call the function to fetch data in parallel
+fetchParallel();
+
+```
+
+**If one of three parallel promises fails, how would you handle printing the data from the remaining two promises**
+```
+async function fetchParallel() {
+    const urls = [
+        'https://example.com/data1',
+        'https://example.com/data2',
+        'https://example.com/data3', // Let's assume this URL fails
+        // Add more URLs here
+    ];
+
+    const promises = urls.map(url => fetchData(url));
+
+    try {
+        const results = await Promise.all(promises);
+        results.forEach(result => {
+            console.log(result);
+            // Process each successful result here
+        });
+    } catch (error) {
+        console.error('An error occurred:', error);
+        // If one promise fails, continue processing the successful results
+        const successfulResults = error.results.filter(result => result !== undefined);
+        successfulResults.forEach(result => {
+            console.log(result);
+            // Process each successful result here
+        });
+    }
+}
+
+```
