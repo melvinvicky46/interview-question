@@ -3219,3 +3219,282 @@ async function fetchParallel() {
 }
 
 ```
+
+Sure! Here are a few coding questions involving the `filter` method in JavaScript:
+
+**Question 1: Filter Array of Numbers**
+Given an array of numbers, write a function to filter out all numbers greater than a specified value.
+
+```javascript
+function filterNumbers(arr, threshold) {
+    return arr.filter(num => num <= threshold);
+}
+
+const numbers = [10, 20, 30, 40, 50];
+const threshold = 30;
+console.log(filterNumbers(numbers, threshold)); // Output: [10, 20, 30]
+```
+
+**Question 2: Filter Array of Objects**
+Given an array of objects representing people with their ages, write a function to filter out all people younger than a specified age.
+
+```javascript
+function filterPeopleByAge(people, minAge) {
+    return people.filter(person => person.age >= minAge);
+}
+
+const people = [
+    { name: 'Alice', age: 25 },
+    { name: 'Bob', age: 30 },
+    { name: 'Charlie', age: 20 }
+];
+const minAge = 25;
+console.log(filterPeopleByAge(people, minAge)); // Output: [{ name: 'Alice', age: 25 }, { name: 'Bob', age: 30 }]
+```
+
+**Question 3: Filter Array of Strings**
+Given an array of strings, write a function to filter out all strings containing a specific substring.
+
+```javascript
+function filterStrings(arr, substring) {
+    return arr.filter(str => str.includes(substring));
+}
+
+const strings = ['apple', 'banana', 'orange', 'kiwi', 'grape'];
+const substring = 'an';
+console.log(filterStrings(strings, substring)); // Output: ['banana', 'orange']
+```
+
+**Question 4: Filter Array of Arrays**
+Given an array of arrays, write a function to filter out all arrays containing a specific element.
+
+```javascript
+function filterArrays(arr, element) {
+    return arr.filter(subarr => subarr.includes(element));
+}
+
+const arrays = [[1, 2, 3], ['a', 'b', 'c'], [4, 5, 6]];
+const element = 'a';
+console.log(filterArrays(arrays, element)); // Output: [['a', 'b', 'c']]
+```
+
+These examples demonstrate various use cases of the `filter` method in JavaScript, allowing you to filter arrays based on different criteria.
+
+Certainly! Here are some coding questions involving the `map` method in JavaScript:
+
+**Question 1: Double Each Element**
+Given an array of numbers, write a function to create a new array where each element is double the corresponding element in the original array.
+
+```javascript
+function doubleArray(arr) {
+    return arr.map(num => num * 2);
+}
+
+const numbers = [1, 2, 3, 4, 5];
+console.log(doubleArray(numbers)); // Output: [2, 4, 6, 8, 10]
+```
+
+**Question 2: Capitalize Each Word**
+Given an array of strings representing words, write a function to create a new array where each word is capitalized.
+
+```javascript
+function capitalizeWords(arr) {
+    return arr.map(word => word.charAt(0).toUpperCase() + word.slice(1));
+}
+
+const words = ['apple', 'banana', 'orange', 'kiwi', 'grape'];
+console.log(capitalizeWords(words)); // Output: ['Apple', 'Banana', 'Orange', 'Kiwi', 'Grape']
+```
+
+**Question 3: Convert Temperatures**
+Given an array of temperatures in Celsius, write a function to convert each temperature to Fahrenheit.
+
+```javascript
+function celsiusToFahrenheit(temperatures) {
+    return temperatures.map(celsius => celsius * 9/5 + 32);
+}
+
+const celsiusTemperatures = [0, 10, 20, 30, 40];
+console.log(celsiusToFahrenheit(celsiusTemperatures)); // Output: [32, 50, 68, 86, 104]
+```
+
+**Question 4: Extract Specific Property**
+Given an array of objects, each representing a person with `name` and `age` properties, write a function to create a new array containing only the names of the people.
+
+```javascript
+function extractNames(people) {
+    return people.map(person => person.name);
+}
+
+const people = [
+    { name: 'Alice', age: 25 },
+    { name: 'Bob', age: 30 },
+    { name: 'Charlie', age: 20 }
+];
+console.log(extractNames(people)); // Output: ['Alice', 'Bob', 'Charlie']
+```
+
+These examples demonstrate various use cases of the `map` method in JavaScript, allowing you to transform arrays based on different criteria.
+
+
+Sure! Here are some coding questions involving the `reduce` method in JavaScript:
+
+**Question 1: Sum of Array Elements**
+Given an array of numbers, write a function to calculate the sum of all elements in the array using the `reduce` method.
+
+```javascript
+function sumArray(arr) {
+    return arr.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+}
+
+const numbers = [1, 2, 3, 4, 5];
+console.log(sumArray(numbers)); // Output: 15
+```
+
+**Question 2: Flatten Array of Arrays**
+Given an array of arrays, write a function to flatten the array using the `reduce` method.
+
+```javascript
+function flattenArray(arr) {
+    return arr.reduce((accumulator, currentValue) => accumulator.concat(currentValue), []);
+}
+
+const arrays = [[1, 2], [3, 4], [5, 6]];
+console.log(flattenArray(arrays)); // Output: [1, 2, 3, 4, 5, 6]
+```
+
+**Question 3: Count Occurrences of Elements**
+Given an array of elements, write a function to count the occurrences of each element and return an object with the counts using the `reduce` method.
+
+```javascript
+function countOccurrences(arr) {
+    return arr.reduce((accumulator, currentValue) => {
+        accumulator[currentValue] = (accumulator[currentValue] || 0) + 1;
+        return accumulator;
+    }, {});
+}
+
+const elements = ['apple', 'banana', 'apple', 'orange', 'banana', 'kiwi', 'banana'];
+console.log(countOccurrences(elements)); // Output: { apple: 2, banana: 3, orange: 1, kiwi: 1 }
+```
+
+**Question 4: Group Elements by Property**
+Given an array of objects, each representing a person with `name` and `age` properties, write a function to group the people by their age using the `reduce` method.
+
+```javascript
+function groupPeopleByAge(people) {
+    return people.reduce((accumulator, currentValue) => {
+        const age = currentValue.age;
+        accumulator[age] = accumulator[age] || [];
+        accumulator[age].push(currentValue.name);
+        return accumulator;
+    }, {});
+}
+
+const people = [
+    { name: 'Alice', age: 25 },
+    { name: 'Bob', age: 30 },
+    { name: 'Charlie', age: 25 },
+    { name: 'David', age: 30 }
+];
+console.log(groupPeopleByAge(people));
+// Output: { 25: ['Alice', 'Charlie'], 30: ['Bob', 'David'] }
+```
+
+These examples demonstrate various use cases of the `reduce` method in JavaScript, allowing you to aggregate and transform arrays based on different criteria.
+
+
+**Coding on Closures**
+Certainly! Here are some coding questions involving closures in JavaScript:
+
+**Question 1: Counter using Closure**
+Write a function that returns another function, which when invoked, increments and returns a counter value.
+
+```javascript
+function createCounter() {
+    let counter = 0;
+    return function() {
+        return ++counter;
+    };
+}
+
+const counter = createCounter();
+console.log(counter()); // Output: 1
+console.log(counter()); // Output: 2
+console.log(counter()); // Output: 3
+```
+
+**Question 2: Private Variable using Closure**
+Write a function that returns an object with two methods `get()` and `set(value)`, which allow you to get and set a private variable.
+
+```javascript
+function createPrivateVariable() {
+    let privateVar;
+
+    return {
+        get: function() {
+            return privateVar;
+        },
+        set: function(value) {
+            privateVar = value;
+        }
+    };
+}
+
+const pv = createPrivateVariable();
+console.log(pv.get()); // Output: undefined
+pv.set(10);
+console.log(pv.get()); // Output: 10
+pv.set(20);
+console.log(pv.get()); // Output: 20
+```
+
+**Question 3: Function Factory**
+Write a function that takes a parameter and returns a function which, when invoked, adds the parameter to the argument passed to the returned function.
+
+```javascript
+function addFactory(num) {
+    return function(value) {
+        return num + value;
+    };
+}
+
+const addFive = addFactory(5);
+console.log(addFive(10)); // Output: 15
+console.log(addFive(20)); // Output: 25
+
+const addTen = addFactory(10);
+console.log(addTen(10)); // Output: 20
+console.log(addTen(20)); // Output: 30
+```
+
+**Question 4: Memoization using Closure**
+Write a function that memoizes the result of another function by storing the computed result in a closure.
+
+```javascript
+function memoize(func) {
+    const cache = {};
+    return function(arg) {
+        if (cache[arg]) {
+            return cache[arg];
+        } else {
+            const result = func(arg);
+            cache[arg] = result;
+            return result;
+        }
+    };
+}
+
+function factorial(n) {
+    if (n === 0 || n === 1) {
+        return 1;
+    }
+    return n * factorial(n - 1);
+}
+
+const memoizedFactorial = memoize(factorial);
+console.log(memoizedFactorial(5)); // Output: 120
+console.log(memoizedFactorial(5)); // Output: 120 (result fetched from cache)
+```
+
+These examples demonstrate how closures can be used to create private variables, implement function factories, and memoize function results in JavaScript.
