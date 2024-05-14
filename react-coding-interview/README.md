@@ -4230,4 +4230,102 @@ export default MeasureWidthWithLayoutEffect;
 
 In this example, `useLayoutEffect` is used instead of `useEffect`. This ensures that the width measurement is performed synchronously before the browser paints changes to the screen, resulting in a more accurate measurement of the element's width. This can be particularly useful in situations where the width of the element affects the layout or visual appearance of the UI.
 
+**Implement a custom debounce function. And when you the click the button in a quick succession it should only update the state and localStorage at the last click**
+To update the `localStorage` only at the last click after a series of quick successive clicks, you can utilize a combination of a debounce function and a mechanism to track the last click. Here's how you can implement it in React:
 
+```jsx
+import React, { useState } from 'react';
+
+function App() {
+  const [clickCount, setClickCount] = useState(0);
+
+  // Function to update state and localStorage
+  const updateStateAndLocalStorage = () => {
+    console.log('Updating state and localStorage');
+    // Your state update logic here
+    // Update localStorage
+    localStorage.setItem('clickCount', clickCount.toString());
+  };
+
+  // Debounce function implementation
+  const debounce = (func, delay) => {
+    let timerId;
+    return function(...args) {
+      clearTimeout(timerId);
+      timerId = setTimeout(() => {
+        func.apply(this, args);
+      }, delay);
+    };
+  };
+
+  // Debounced version of the function
+  const debouncedUpdate = debounce(updateStateAndLocalStorage, 500);
+
+  // Event handler for button click
+  const handleClick = () => {
+    setClickCount(prevCount => prevCount + 1);
+    // Call the debounced function
+    debouncedUpdate();
+  };
+
+  return (
+    <div>
+      <button onClick={handleClick}>Click Me</button>
+      <p>Button clicked {clickCount} times</p>
+    </div>
+  );
+}
+
+export default App;
+```
+
+In this implementation, the `updateStateAndLocalStorage` function is debounced using the `debounce` function. The `handleClick` function increments the click count and calls the debounced update function. This ensures that if the button is clicked multiple times in quick succession, the `localStorage` will only be updated once, and it will reflect the click count at the time of the last click.
+
+**Implement a button component that should increase a count on each click. If we refresh the page it should retain the last value.**
+To implement a button component that increases a count on each click and retains the last value even after page refresh, you can use React state along with the `localStorage` API to persist the count. Here's how you can do it:
+
+```jsx
+import React, { useState, useEffect } from 'react';
+
+const ButtonComponent = () => {
+  // State to store the count
+  const [count, setCount] = useState(0);
+
+  // Function to handle button click
+  const handleClick = () => {
+    setCount(prevCount => prevCount + 1);
+  };
+
+  // Load count from localStorage on component mount
+  useEffect(() => {
+    const storedCount = localStorage.getItem('count');
+    if (storedCount) {
+      setCount(parseInt(storedCount));
+    }
+  }, []);
+
+  // Update localStorage whenever count changes
+  useEffect(() => {
+    localStorage.setItem('count', count.toString());
+  }, [count]);
+
+  return (
+    <div>
+      <button onClick={handleClick}>Click Me</button>
+      <p>Button clicked {count} times</p>
+    </div>
+  );
+};
+
+export default ButtonComponent;
+```
+
+In this implementation:
+
+- We use React state (`count`) to keep track of the count.
+- On component mount, we use the `useEffect` hook with an empty dependency array to load the count from `localStorage`. If a count is found in `localStorage`, we set it as the initial state value.
+- We have another `useEffect` hook that watches for changes in the `count` state. Whenever the `count` changes, it updates the value in `localStorage`.
+- The button's `onClick` handler (`handleClick`) increments the count.
+- The count is displayed in a paragraph element below the button.
+
+With this setup, the count will persist even if the page is refreshed, as it's stored in `localStorage`.

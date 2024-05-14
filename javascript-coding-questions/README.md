@@ -3498,3 +3498,117 @@ console.log(memoizedFactorial(5)); // Output: 120 (result fetched from cache)
 ```
 
 These examples demonstrate how closures can be used to create private variables, implement function factories, and memoize function results in JavaScript.
+
+**Implement a custom debounce function. And when you the click the button in a quick succession it should only update the state and localStorage at the last click**
+Sure, here's a simple implementation of a custom debounce function in JavaScript:
+
+```javascript
+function debounce(func, delay) {
+  let timerId;
+  return function(...args) {
+    clearTimeout(timerId);
+    timerId = setTimeout(() => {
+      func.apply(this, args);
+    }, delay);
+  };
+}
+```
+
+Now, let's say you have a button with an event listener and you want to debounce the function that gets called when the button is clicked. Here's how you can use the debounce function:
+
+```javascript
+const button = document.getElementById('myButton');
+const delay = 500; // Adjust the delay as needed
+
+function handleClick() {
+  console.log('Button clicked');
+  // Update state and localStorage here
+}
+
+const debouncedHandleClick = debounce(handleClick, delay);
+
+button.addEventListener('click', debouncedHandleClick);
+```
+
+This setup ensures that if the button is clicked multiple times in quick succession, the `handleClick` function will only be called after the specified delay (500 milliseconds in this example). Adjust the delay according to your requirements.
+
+**Create an iterator method that accepts an array and returns a new method that will return the next array value on each invocation.**
+You can achieve the same functionality using a generator function, which simplifies the process of creating iterators in JavaScript. Here's how you can implement it using a generator function:
+
+```javascript
+function* createIterator(array) {
+    for (let i = 0; i < array.length; i++) {
+        yield array[i]; // Yield each element of the array
+    }
+}
+
+// Example usage
+const myArray = [1, 2, 3, 4, 5];
+const iterator = createIterator(myArray);
+
+console.log(iterator.next().value); // Output: 1
+console.log(iterator.next().value); // Output: 2
+console.log(iterator.next().value); // Output: 3
+console.log(iterator.next().value); // Output: 4
+console.log(iterator.next().value); // Output: 5
+console.log(iterator.next().value); // Output: undefined
+```
+
+In this example:
+- The `createIterator` function is defined as a generator function using the `function*` syntax.
+- Inside the generator function, a `for` loop is used to iterate over each element of the array.
+- The `yield` keyword is used to yield (return) each element of the array one by one as the generator is iterated.
+- Each time the `next()` method is called on the iterator returned by `createIterator`, it returns an object with a `value` property containing the next value from the array until all elements have been iterated, after which it returns `{ value: undefined, done: true }`.
+
+
+**Implement a function that retries a promise a specified number of times with a delay between each attempt.**
+You can implement a function that retries a promise a specified number of times with a delay between each attempt. Here's how you can do it:
+
+```javascript
+function retryPromise(promiseFunc, retries, delay) {
+    return new Promise((resolve, reject) => {
+        function attempt(count) {
+            promiseFunc()
+                .then(resolve) // Resolve the promise if successful
+                .catch(error => {
+                    if (count < retries) {
+                        // Retry the promise after the delay
+                        setTimeout(() => attempt(count + 1), delay);
+                    } else {
+                        // Reject the promise if all retries are exhausted
+                        reject(error);
+                    }
+                });
+        }
+        
+        // Start the first attempt
+        attempt(0);
+    });
+}
+
+// Example usage:
+const fetchUserData = () => {
+    return new Promise((resolve, reject) => {
+        // Simulate a network request
+        setTimeout(() => {
+            // Resolve the promise with mock user data
+            resolve({ id: 1, name: 'John' });
+        }, 1000);
+    });
+};
+
+// Retry fetching user data up to 3 times with a delay of 500 milliseconds between each attempt
+retryPromise(fetchUserData, 3, 500)
+    .then(userData => {
+        console.log('User data:', userData);
+    })
+    .catch(error => {
+        console.error('Failed to fetch user data:', error);
+    });
+```
+
+In this example:
+- The `retryPromise` function takes three parameters: `promiseFunc` (a function that returns a promise), `retries` (the number of retries), and `delay` (the delay between each retry).
+- Inside the function, we define an `attempt` function that recursively retries the promise up to the specified number of retries.
+- If the promise is resolved successfully, we resolve the outer promise with the result.
+- If an error occurs, we check if the number of retries has been exhausted. If not, we retry the promise after the specified delay. If all retries are exhausted, we reject the outer promise with the error.
