@@ -3562,6 +3562,7 @@ In this example:
 
 
 **Implement a function that retries a promise a specified number of times with a delay between each attempt.**
+
 You can implement a function that retries a promise a specified number of times with a delay between each attempt. Here's how you can do it:
 
 ```javascript
