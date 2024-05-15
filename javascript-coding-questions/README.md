@@ -3500,37 +3500,65 @@ console.log(memoizedFactorial(5)); // Output: 120 (result fetched from cache)
 These examples demonstrate how closures can be used to create private variables, implement function factories, and memoize function results in JavaScript.
 
 **Implement a custom debounce function. And when you the click the button in a quick succession it should only update the state and localStorage at the last click**
-Sure, here's a simple implementation of a custom debounce function in JavaScript:
 
+Sure, here's a full example including HTML, CSS, and JavaScript:
+
+HTML:
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Debounce Button Click</title>
+  <style>
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <button id="myButton" onclick="handleClick()">Click Me</button>
+
+  <script src="script.js"></script>
+</body>
+</html>
+```
+
+JavaScript (script.js):
 ```javascript
 function debounce(func, delay) {
-  let timerId;
-  return function(...args) {
-    clearTimeout(timerId);
-    timerId = setTimeout(() => {
-      func.apply(this, args);
+  let timer;
+  return function() {
+    const context = this;
+    const args = arguments;
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      func.apply(context, args);
     }, delay);
   };
 }
-```
 
-Now, let's say you have a button with an event listener and you want to debounce the function that gets called when the button is clicked. Here's how you can use the debounce function:
-
-```javascript
 const button = document.getElementById('myButton');
-const delay = 500; // Adjust the delay as needed
+let clickCount = 0;
 
 function handleClick() {
-  console.log('Button clicked');
-  // Update state and localStorage here
+  clickCount++;
+  console.log("Button clicked! Click count:", clickCount);
 }
 
-const debouncedHandleClick = debounce(handleClick, delay);
+const debouncedHandleClick = debounce(() => {
+  // Update localStorage with the final click count
+  localStorage.setItem('clickCount', clickCount);
+  console.log("Updating localStorage with click count:", clickCount);
+}, 200);
 
 button.addEventListener('click', debouncedHandleClick);
 ```
 
-This setup ensures that if the button is clicked multiple times in quick succession, the `handleClick` function will only be called after the specified delay (500 milliseconds in this example). Adjust the delay according to your requirements.
+This example includes a button in HTML, some basic CSS for styling, and JavaScript for the debounce function, button click event handling, and updating `localStorage` at the last click.
 
 **Create an iterator method that accepts an array and returns a new method that will return the next array value on each invocation.**
 You can achieve the same functionality using a generator function, which simplifies the process of creating iterators in JavaScript. Here's how you can implement it using a generator function:
