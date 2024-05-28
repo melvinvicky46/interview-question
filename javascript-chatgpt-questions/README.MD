@@ -2228,3 +2228,113 @@ Both `Array.prototype.reduce()` and `Array.prototype.reduceRight()` are higher-o
 
 In summary, while `reduce()` and `reduceRight()` are similar in functionality, their differences in iteration direction and initial value handling make them suitable for different use cases. Choose the appropriate method based on the desired iteration direction and initial value requirements of your application.
 
+Generator functions in JavaScript provide an easy way to create iterators. They allow you to define an iterative algorithm by writing a single function that can pause and resume its execution. There are several ways to write generator functions in JavaScript. Here are some of the common approaches:
+
+1. **Function Declaration:**
+   - You can declare a generator function using the `function*` syntax followed by the function name. Inside the function body, you can use the `yield` keyword to pause the execution and return values to the iterator.
+
+    ```javascript
+    function* myGenerator() {
+      yield 1;
+      yield 2;
+      yield 3;
+    }
+
+    const gen = myGenerator();
+    console.log(gen.next().value); // Output: 1
+    console.log(gen.next().value); // Output: 2
+    console.log(gen.next().value); // Output: 3
+    ```
+
+2. **Function Expression:**
+   - You can also define a generator function using a function expression with the `function*` syntax. This allows you to create anonymous generator functions or assign them to variables.
+
+    ```javascript
+    const myGenerator = function* () {
+      yield 1;
+      yield 2;
+      yield 3;
+    };
+
+    const gen = myGenerator();
+    console.log(gen.next().value); // Output: 1
+    console.log(gen.next().value); // Output: 2
+    console.log(gen.next().value); // Output: 3
+    ```
+
+3. **Arrow Function:**
+   - Generator functions can also be defined using arrow function syntax with the `function*` keyword. This allows for concise syntax, especially for single-line generator functions.
+
+    ```javascript
+    const myGenerator = function* () {
+      yield 1;
+      yield 2;
+      yield 3;
+    };
+
+    const gen = myGenerator();
+    console.log(gen.next().value); // Output: 1
+    console.log(gen.next().value); // Output: 2
+    console.log(gen.next().value); // Output: 3
+    ```
+
+4. **Generator Method in Object:**
+   - You can define a generator method inside an object using the `function*` syntax. This allows you to create iterator-like behavior for objects.
+
+    ```javascript
+    const myObject = {
+      * myGenerator() {
+        yield 1;
+        yield 2;
+        yield 3;
+      }
+    };
+
+    const gen = myObject.myGenerator();
+    console.log(gen.next().value); // Output: 1
+    console.log(gen.next().value); // Output: 2
+    console.log(gen.next().value); // Output: 3
+    ```
+
+5. **Generator Function as Iterator:**
+   - Generator functions can be used as custom iterators by implementing the `Symbol.iterator` method. This allows the generator function to be used with the `for...of` loop and other iterable methods.
+
+    ```javascript
+    function* myGenerator() {
+      yield 1;
+      yield 2;
+      yield 3;
+    }
+
+    const gen = myGenerator();
+    for (const value of gen) {
+      console.log(value);
+    }
+    // Output:
+    // 1
+    // 2
+    // 3
+    ```
+
+These are some of the common ways to write generator functions in JavaScript. Each approach has its advantages, and the choice depends on the specific use case and coding style preferences.
+
+
+Throttle and debounce are two techniques commonly used in web development to improve performance and optimize user experience, particularly in scenarios where frequent and potentially expensive operations are involved, such as event handling, AJAX requests, or UI updates. 
+
+Here's a brief explanation of each technique and its typical use cases:
+
+1. **Throttle:**
+   - Throttling limits the rate at which a function can be executed, ensuring that it is not invoked more than once within a specified time interval.
+   - Use Case: Throttling is useful when you want to limit the frequency of execution of a function, especially in scenarios where rapid invocations may overwhelm system resources or cause unnecessary processing. For example:
+     - Scroll events: Throttling the scroll event handler to reduce the frequency of UI updates triggered by scrolling.
+     - Resize events: Throttling the window resize event handler to optimize performance when resizing the browser window.
+     - Key press events: Throttling keyboard input event handlers to prevent excessive processing of keystrokes.
+
+2. **Debounce:**
+   - Debouncing ensures that a function is only executed after a certain delay has elapsed since the last invocation. If the function is invoked again within the delay period, the timer is reset.
+   - Use Case: Debouncing is useful when you want to ensure that a function is only executed after a period of inactivity, particularly in scenarios where rapid or frequent invocations are likely but you only want to respond to the final invocation. For example:
+     - Search input: Debouncing the search input event handler to delay executing the search query until the user has finished typing.
+     - Auto-save feature: Debouncing the input change event handler in a form to delay triggering the auto-save function until the user has stopped typing.
+     - Resize events: Debouncing the window resize event handler to delay UI updates until the user has finished resizing the browser window.
+
+In summary, throttle and debounce techniques are used to control the frequency and timing of function execution, optimizing performance and enhancing user experience in scenarios involving event handling, asynchronous operations, and UI updates. Throttling is suitable for limiting the rate of function invocation, while debouncing is suitable for delaying function execution until a period of inactivity has elapsed.

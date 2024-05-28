@@ -824,6 +824,24 @@ function findMissingNumber(arr) {
 
 console.log(findMissingNumber([1, 4, 5, 7])) // [2, 3, 6]
 console.log(findMissingNumber([5, 2, 6, 1, 3, 10])) //[4, 7, 8, 9]
+
+--------------------
+
+function firstMissingPositive(nums) {
+    const numSet = new Set(nums);
+    let smallestPositive = 1;
+    
+    while (numSet.has(smallestPositive)) {
+        smallestPositive++;
+    }
+    
+    return smallestPositive;
+}
+
+// Example usage:
+const nums = [1, 2, 0];
+console.log(firstMissingPositive(nums)); // Output: 3
+
 ```
 
 35. **Swap First & Last Character of a String In JavaScript**
@@ -3641,3 +3659,4 @@ In this example:
 - Inside the function, we define an `attempt` function that recursively retries the promise up to the specified number of retries.
 - If the promise is resolved successfully, we resolve the outer promise with the result.
 - If an error occurs, we check if the number of retries has been exhausted. If not, we retry the promise after the specified delay. If all retries are exhausted, we reject the outer promise with the error.
+
