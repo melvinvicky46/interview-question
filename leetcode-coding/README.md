@@ -881,3 +881,293 @@ In this implementation:
 - Inside the `minCoins` function, we check the base cases: if the amount is `0`, no coins are needed; if the amount is negative, it cannot be made up by any combination of coins.
 - We iterate through each coin denomination, recursively call `minCoins` for the remaining amount after using the current coin, and update the minimum number of coins needed.
 - Finally, we return the result of `minCoins(amount)` as the fewest number of coins needed to make up the given amount.
+
+You can solve this problem using a similar approach to the three sum problem, but with some modifications to keep track of the closest sum to the target. Here's how you can implement it in JavaScript:
+
+```javascript
+function threeSumClosest(nums, target) {
+    // Sort the array to use two pointers approach
+    nums.sort((a, b) => a - b);
+    let closestSum = Infinity;
+
+    for (let i = 0; i < nums.length - 2; i++) {
+        let left = i + 1;
+        let right = nums.length - 1;
+
+        while (left < right) {
+            const sum = nums[i] + nums[left] + nums[right];
+
+            // Update the closest sum if the current sum is closer to the target
+            if (Math.abs(sum - target) < Math.abs(closestSum - target)) {
+                closestSum = sum;
+            }
+
+            // If the sum is greater than the target, move the right pointer to the left
+            if (sum > target) {
+                right--;
+            } 
+            // If the sum is less than the target, move the left pointer to the right
+            else {
+                left++;
+            }
+        }
+    }
+
+    return closestSum;
+}
+
+// Example usage:
+const nums = [-1, 2, 1, -4];
+const target = 1;
+console.log(threeSumClosest(nums, target)); // Output: 2 (closest sum is -1 + 2 + 1 = 2)
+```
+
+In this implementation:
+
+- We sort the array to use the two pointers approach, where one pointer starts from the beginning of the array (`i`), and the other pointer starts from the end of the array (`left` and `right`).
+- We iterate through the array using `i` as the starting point.
+- Inside the loop, we use two pointers (`left` and `right`) to find two numbers that, when combined with `nums[i]`, result in a sum closest to the target.
+- We update the `closestSum` variable whenever we find a sum that is closer to the target than the current closest sum.
+- Finally, we return the `closestSum` as the result.
+
+To group anagrams together, you can use a hashmap where the keys are sorted versions of each word, and the values are arrays of words that are anagrams of each other. Here's how you can implement it in JavaScript:
+
+```javascript
+function groupAnagrams(strs) {
+    const anagramsMap = new Map();
+
+    // Iterate through each word in the array
+    for (const str of strs) {
+        // Sort the characters of the word to create a key for the hashmap
+        const sortedStr = str.split('').sort().join('');
+
+        // If the key exists in the hashmap, add the word to the corresponding array
+        if (anagramsMap.has(sortedStr)) {
+            anagramsMap.get(sortedStr).push(str);
+        } 
+        // If the key doesn't exist, create a new array with the word as the first element
+        else {
+            anagramsMap.set(sortedStr, [str]);
+        }
+    }
+
+    // Convert the values of the hashmap to an array and return
+    return Array.from(anagramsMap.values());
+}
+
+// Example usage:
+const strs = ["eat", "tea", "tan", "ate", "nat", "bat"];
+console.log(groupAnagrams(strs));
+```
+
+In this implementation:
+
+- We create a hashmap `anagramsMap` to store the groups of anagrams.
+- We iterate through each word in the input array `strs`.
+- For each word, we sort its characters to create a key for the hashmap. Words with the same sorted characters will have the same key.
+- If the key already exists in the hashmap, we add the word to the corresponding array. Otherwise, we create a new array with the word as the first element and set it as the value for the key in the hashmap.
+- Finally, we convert the values of the hashmap to an array and return it. Each array represents a group of anagrams.
+
+To group anagrams together, you can use a hashmap where the keys are sorted versions of each word, and the values are arrays of words that are anagrams of each other. Here's how you can implement it in JavaScript:
+
+```javascript
+function groupAnagrams(strs) {
+    const anagramsMap = new Map();
+
+    // Iterate through each word in the array
+    for (const str of strs) {
+        // Sort the characters of the word to create a key for the hashmap
+        const sortedStr = str.split('').sort().join('');
+
+        // If the key exists in the hashmap, add the word to the corresponding array
+        if (anagramsMap.has(sortedStr)) {
+            anagramsMap.get(sortedStr).push(str);
+        } 
+        // If the key doesn't exist, create a new array with the word as the first element
+        else {
+            anagramsMap.set(sortedStr, [str]);
+        }
+    }
+
+    // Convert the values of the hashmap to an array and return
+    return Array.from(anagramsMap.values());
+}
+
+// Example usage:
+const strs = ["eat", "tea", "tan", "ate", "nat", "bat"];
+console.log(groupAnagrams(strs));
+```
+
+In this implementation:
+
+- We create a hashmap `anagramsMap` to store the groups of anagrams.
+- We iterate through each word in the input array `strs`.
+- For each word, we sort its characters to create a key for the hashmap. Words with the same sorted characters will have the same key.
+- If the key already exists in the hashmap, we add the word to the corresponding array. Otherwise, we create a new array with the word as the first element and set it as the value for the key in the hashmap.
+- Finally, we convert the values of the hashmap to an array and return it. Each array represents a group of anagrams.
+
+You can achieve this by first sorting the array and then finding the maximum difference between two successive elements. Here's how you can implement it in JavaScript:
+
+```javascript
+function maximumGap(nums) {
+    const n = nums.length;
+    
+    // If the array contains less than two elements, return 0
+    if (n < 2) {
+        return 0;
+    }
+    
+    // Sort the array
+    nums.sort((a, b) => a - b);
+    
+    let maxDifference = 0;
+    
+    // Find the maximum difference between two successive elements
+    for (let i = 1; i < n; i++) {
+        const diff = nums[i] - nums[i - 1];
+        maxDifference = Math.max(maxDifference, diff);
+    }
+    
+    return maxDifference;
+}
+
+// Example usage:
+const nums = [3, 6, 9, 1];
+console.log(maximumGap(nums)); // Output: 3 (the maximum difference is between 6 and 9)
+```
+
+In this implementation:
+
+- We first check if the array contains less than two elements. If so, we return 0 because there are no successive elements to compare.
+- We sort the array in ascending order.
+- We iterate through the sorted array and calculate the difference between each pair of successive elements. We update the `maxDifference` variable to store the maximum difference found so far.
+- Finally, we return the `maxDifference`, which represents the maximum difference between two successive elements in the sorted array.
+
+
+You can solve this problem using the sliding window technique. Here's how you can implement it in JavaScript:
+
+```javascript
+function lengthOfLongestSubstring(s) {
+    const n = s.length;
+    const charIndexMap = new Map(); // Map to store the index of each character
+    let maxLength = 0;
+    let left = 0; // Left pointer of the sliding window
+
+    // Iterate through each character in the string
+    for (let right = 0; right < n; right++) {
+        const char = s[right];
+
+        // If the character is already seen and its index is greater than or equal to the left pointer,
+        // move the left pointer to the right of the previous occurrence of the character
+        if (charIndexMap.has(char) && charIndexMap.get(char) >= left) {
+            left = charIndexMap.get(char) + 1;
+        }
+
+        // Update the index of the current character in the map
+        charIndexMap.set(char, right);
+
+        // Update the maximum length of the substring
+        maxLength = Math.max(maxLength, right - left + 1);
+    }
+
+    return maxLength;
+}
+
+// Example usage:
+const s = "abcabcbb";
+console.log(lengthOfLongestSubstring(s)); // Output: 3 (the longest substring without repeating characters is "abc")
+```
+
+In this implementation:
+
+- We use a sliding window approach where we maintain a window `[left, right]` that contains a substring without repeating characters.
+- We use a hashmap `charIndexMap` to store the index of each character encountered in the string.
+- We iterate through the string using the right pointer of the sliding window.
+- If we encounter a character that is already seen and its index is within the current window, we move the left pointer of the window to the right of the previous occurrence of the character.
+- We update the index of the current character in the map.
+- We update the maximum length of the substring (`maxLength`) based on the size of the current window.
+- Finally, we return `maxLength`, which represents the length of the longest substring without repeating characters.
+
+Another solution to find the longest palindromic substring is to use the expand around center approach. Here's how you can implement it in JavaScript:
+
+```javascript
+function longestPalindrome(s) {
+    if (!s || s.length === 0) return "";
+
+    let start = 0;
+    let end = 0;
+
+    // Function to expand around a center and find the longest palindrome
+    function expandAroundCenter(left, right) {
+        while (left >= 0 && right < s.length && s[left] === s[right]) {
+            left--;
+            right++;
+        }
+        return right - left - 1;
+    }
+
+    // Iterate through each character in the string as potential center
+    for (let i = 0; i < s.length; i++) {
+        const len1 = expandAroundCenter(i, i); // Center is a single character
+        const len2 = expandAroundCenter(i, i + 1); // Center is between two characters
+        const len = Math.max(len1, len2);
+        
+        // Update start and end indices if a longer palindrome is found
+        if (len > end - start) {
+            start = i - Math.floor((len - 1) / 2);
+            end = i + Math.floor(len / 2);
+        }
+    }
+
+    return s.substring(start, end + 1);
+}
+
+// Example usage:
+const s = "babad";
+console.log(longestPalindrome(s)); // Output: "bab" or "aba"
+```
+
+In this implementation:
+
+- We define a function `expandAroundCenter` that takes two indices `left` and `right` as input and expands around the center to find the longest palindrome.
+- We iterate through each character in the string `s`.
+- For each character, we call `expandAroundCenter` twice: once with the center being the character itself (`len1`), and once with the center being between the current character and the next one (`len2`).
+- We update the start and end indices of the longest palindrome found so far if a longer palindrome is discovered.
+- Finally, we return the longest palindromic substring found using the start and end indices.
+
+You can solve this problem using the naive string matching algorithm, also known as the "brute force" approach. Here's how you can implement it in JavaScript:
+
+```javascript
+function strStr(haystack, needle) {
+    const n = haystack.length;
+    const m = needle.length;
+
+    if (m === 0) return 0; // Edge case: empty needle
+
+    for (let i = 0; i <= n - m; i++) {
+        let j;
+        for (j = 0; j < m; j++) {
+            if (haystack[i + j] !== needle[j]) {
+                break;
+            }
+        }
+        if (j === m) {
+            return i; // Found needle at index i in haystack
+        }
+    }
+
+    return -1; // Needle not found
+}
+
+// Example usage:
+const haystack = "hello";
+const needle = "ll";
+console.log(strStr(haystack, needle)); // Output: 2 (needle "ll" found at index 2 in haystack "hello")
+```
+
+In this implementation:
+
+- We iterate through each character in the `haystack` string using a loop.
+- For each character position `i`, we check if the substring of length `needle.length` starting from position `i` matches the `needle` string character by character.
+- If we find a match, we return the index `i`.
+- If we reach the end of the loop without finding a match, we return `-1` indicating that the `needle` is not part of the `haystack`.
