@@ -4329,3 +4329,119 @@ In this implementation:
 - The count is displayed in a paragraph element below the button.
 
 With this setup, the count will persist even if the page is refreshed, as it's stored in `localStorage`.
+
+
+
+Sure, here's a complete example of how you can implement a debounce function in ReactJS:
+
+```jsx
+import React, { useState } from 'react';
+
+const DebounceExample = () => {
+  const [inputValue, setInputValue] = useState('');
+  const [debouncedValue, setDebouncedValue] = useState('');
+
+  // Debounce function
+  const debounce = (func, delay) => {
+    let timeoutId;
+    return (...args) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func(...args), delay);
+    };
+  };
+
+  // Update the debounced value after 500ms of user inactivity
+  const debouncedInputChange = debounce((value) => {
+    setDebouncedValue(value);
+  }, 500);
+
+  // Handle input change
+  const handleInputChange = (event) => {
+    const { value } = event.target;
+    setInputValue(value);
+    // Call the debounced function with the current input value
+    debouncedInputChange(value);
+  };
+
+  return (
+    <div>
+      <h2>Debounce Example</h2>
+      <input
+        type="text"
+        placeholder="Type something..."
+        value={inputValue}
+        onChange={handleInputChange}
+      />
+      <p>Debounced Value: {debouncedValue}</p>
+    </div>
+  );
+};
+
+export default DebounceExample;
+```
+
+In this example, we're using the `useState` hook to manage the input value and the debounced value. We've also created a `debounce` function that takes a function and a delay as arguments and returns a new function that will execute the original function only after the specified delay has passed with no further invocations. 
+
+We then use this `debounce` function to create a debounced version of the `handleInputChange` function, which updates the `debouncedValue` state after 500ms of user inactivity. This prevents the original function from being called too frequently while the user is typing.
+
+
+In React, you can pass data from a child component to a parent component using callbacks. Here's how you can achieve this using functional components:
+
+ParentComponent.js:
+
+```jsx
+import React, { useState } from 'react';
+import ChildComponent from './ChildComponent';
+
+const ParentComponent = () => {
+  const [dataFromChild, setDataFromChild] = useState('');
+
+  const handleDataFromChild = (data) => {
+    setDataFromChild(data);
+  };
+
+  return (
+    <div>
+      <h2>Parent Component</h2>
+      <p>Data from Child: {dataFromChild}</p>
+      <ChildComponent sendDataToParent={handleDataFromChild} />
+    </div>
+  );
+};
+
+export default ParentComponent;
+```
+
+ChildComponent.js:
+
+```jsx
+import React, { useState } from 'react';
+
+const ChildComponent = ({ sendDataToParent }) => {
+  const [dataToSend, setDataToSend] = useState('');
+
+  const handleChange = (e) => {
+    setDataToSend(e.target.value);
+  };
+
+  const sendDataToParentHandler = () => {
+    sendDataToParent(dataToSend);
+  };
+
+  return (
+    <div>
+      <h3>Child Component</h3>
+      <input type="text" value={dataToSend} onChange={handleChange} />
+      <button onClick={sendDataToParentHandler}>Send Data to Parent</button>
+    </div>
+  );
+};
+
+export default ChildComponent;
+```
+
+In this example, the ParentComponent maintains the state `dataFromChild` to store the data received from the ChildComponent. It passes a callback function `handleDataFromChild` to the ChildComponent as a prop.
+
+The ChildComponent maintains its own state `dataToSend` to store the data entered by the user. When the user clicks the "Send Data to Parent" button, it invokes the `sendDataToParentHandler` function, which calls the callback function `sendDataToParent` passed from the parent component, passing along the data entered by the user.
+
+Thus, the data flows from the ChildComponent to the ParentComponent through the callback mechanism.

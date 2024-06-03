@@ -308,3 +308,165 @@ function foo(): never {
 
 // foo(); // error: Function never returns.
 ```
+
+Type aliases and interfaces are both used to define custom types in TypeScript, but they have some differences in how they can be used and extended.
+
+### Type Aliases:
+
+1. **Simple Aliasing**: Type aliases allow you to create a new name for any type, including primitives, union types, tuples, and more complex types.
+   
+    ```typescript
+    type Name = string;
+    type Age = number;
+    type Person = { name: Name; age: Age };
+    ```
+
+2. **Union Types**: Type aliases are flexible and can be used to create aliases for union types.
+   
+    ```typescript
+    type Result = string | number;
+    ```
+
+3. **Intersection Types**: Type aliases can also be used to define intersection types.
+   
+    ```typescript
+    type Action = { type: string } & { payload: any };
+    ```
+
+4. **Readability and Code Maintenance**: Type aliases can make code more readable and maintainable by providing descriptive names for complex types or for reusing types.
+
+### Interfaces:
+
+1. **Object Shape**: Interfaces are specifically used to define the structure of objects. They can describe the shape of an object by specifying properties and their types.
+   
+    ```typescript
+    interface Person {
+        name: string;
+        age: number;
+    }
+    ```
+
+2. **Extending**: Interfaces support extending other interfaces, allowing for the composition of multiple interfaces into a single one.
+   
+    ```typescript
+    interface Shape {
+        color: string;
+    }
+
+    interface Square extends Shape {
+        sideLength: number;
+    }
+    ```
+
+3. **Declaration Merging**: Interfaces support declaration merging, meaning you can spread the definition of an interface across multiple declarations in the same scope.
+
+    ```typescript
+    interface User {
+        name: string;
+    }
+
+    interface User {
+        age: number;
+    }
+
+    // This results in a single merged interface:
+    // interface User {
+    //     name: string;
+    //     age: number;
+    // }
+    ```
+
+4. **Implementing**: Interfaces can be implemented by classes, ensuring that the class adheres to the structure specified by the interface.
+
+    ```typescript
+    interface Printable {
+        print(): void;
+    }
+
+    class Document implements Printable {
+        print() {
+            console.log("Printing document...");
+        }
+    }
+    ```
+
+### Choosing Between Type Aliases and Interfaces:
+
+- **Use Type Aliases**:
+  - For creating simple types, especially for primitive types, union types, and tuples.
+  - When you want to create descriptive names for complex types.
+  - For defining intersection types.
+
+- **Use Interfaces**:
+  - When defining the shape of objects.
+  - For extending other interfaces.
+  - When you need declaration merging or want to define contracts for classes.
+
+In practice, the choice between type aliases and interfaces often comes down to personal preference and specific use cases. They can often be used interchangeably, but understanding their differences can help in making more informed design decisions.
+
+
+Sure, let's create a simple example to illustrate the usage of namespaces in TypeScript:
+
+Suppose we have a project where we want to organize functionality related to geometry calculations. We can create a namespace called `Geometry` to encapsulate various geometric shapes and operations:
+
+```typescript
+// geometry.ts
+
+namespace Geometry {
+    export interface Point {
+        x: number;
+        y: number;
+    }
+
+    export function distanceBetweenPoints(p1: Point, p2: Point): number {
+        const dx = p2.x - p1.x;
+        const dy = p2.y - p1.y;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    export class Circle {
+        constructor(public center: Point, public radius: number) {}
+
+        circumference(): number {
+            return 2 * Math.PI * this.radius;
+        }
+
+        area(): number {
+            return Math.PI * this.radius * this.radius;
+        }
+    }
+}
+```
+
+In this example:
+
+- We define a namespace `Geometry` using the `namespace` keyword.
+- Inside the namespace, we declare an interface `Point` representing a 2D point with `x` and `y` coordinates.
+- We define a function `distanceBetweenPoints` that calculates the distance between two points.
+- We define a class `Circle` representing a circle with properties for its center (a `Point`) and radius.
+- The `Circle` class has methods to calculate its circumference and area.
+
+Now, let's use this namespace in another file:
+
+```typescript
+// main.ts
+
+/// <reference path="geometry.ts" />
+
+const point1: Geometry.Point = { x: 0, y: 0 };
+const point2: Geometry.Point = { x: 3, y: 4 };
+
+const distance = Geometry.distanceBetweenPoints(point1, point2);
+console.log("Distance between points:", distance);
+
+const circle = new Geometry.Circle({ x: 0, y: 0 }, 5);
+console.log("Circumference of the circle:", circle.circumference());
+console.log("Area of the circle:", circle.area());
+```
+
+In `main.ts`:
+
+- We reference the `geometry.ts` file using a triple-slash directive (`/// <reference path="geometry.ts" />`) to ensure that TypeScript understands the `Geometry` namespace.
+- We use the `Geometry` namespace to create points, calculate the distance between them, and work with circles.
+
+This example demonstrates how namespaces in TypeScript can be used to organize related functionality and prevent naming conflicts, making the codebase more modular and maintainable.
