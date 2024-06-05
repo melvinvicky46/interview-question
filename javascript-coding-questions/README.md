@@ -1282,7 +1282,7 @@ function get(object, path, defaultValue = 'Error') {
     let current = object;
 
     for (let i = 0; i < keys.length; i++) {
-      if (current[strArr[i]] === undefined || current[strArr[i]] === null) {
+      if (current[keys[i]] === undefined || current[keys[i]] === null) {
         return defaultValue;
       }
 
