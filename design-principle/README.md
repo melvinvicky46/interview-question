@@ -128,6 +128,45 @@ In this example, both `Rectangle` and `Square` have methods to set the width and
 
 The Liskov Substitution Principle suggests that inheritance hierarchies should be designed in such a way that subclasses can be substituted for their base classes without altering the correctness of the program. In this case, `Square` should not inherit from `Rectangle`, or the inheritance should be redefined so that `Square` does not override the behavior of `Rectangle`.
 
+The correct way to adhere to the Liskov Substitution Principle in this scenario would be to avoid having `Square` inherit from `Rectangle`, as it introduces complications in maintaining the expected behavior of both classes. Instead, you could consider a different design approach, such as using composition or a different inheritance hierarchy.
+
+Here's a revised approach using composition:
+
+```javascript
+class Rectangle {
+  constructor(width, height) {
+    this.width = width;
+    this.height = height;
+  }
+
+  getArea() {
+    return this.width * this.height;
+  }
+}
+
+class Square {
+  constructor(size) {
+    this.size = size;
+  }
+
+  getArea() {
+    return this.size * this.size;
+  }
+}
+
+function calculateArea(shape) {
+  return shape.getArea();
+}
+
+const rectangle = new Rectangle(4, 5);
+const square = new Square(4);
+
+console.log(calculateArea(rectangle)); // Output: 20
+console.log(calculateArea(square));    // Output: 16
+```
+
+In this example, `Rectangle` and `Square` are separate classes, each with its own implementation of `getArea()`. The `calculateArea` function accepts any object that has a `getArea()` method, allowing it to work with both rectangles and squares without any issues related to inheritance. This approach maintains the integrity of each class and adheres to the principles of composition over inheritance.
+
 # Interface segregation principle
 This principle is related to interfaces and focuses on breaking large interfaces into smaller ones. For example, suppose you are going to driving school to learn how to drive a car, and they give you a large set of instructions on driving cars, trucks, and trains. Since you only need to learn to drive a car, you do not need all the other information. The driving school should divide the instructions and just give you the instructions specific to cars.
 
