@@ -69,25 +69,64 @@ mgtSalary.addSalaryRate(4, 'developer', 250);
 console.log('Salary : ', mgtSalary.calculateSalaries(4, 100));
 
 #Liskov Substitution Principle (L)
-In simple terms, the Liskov principle states that we should not replace a parent class with its subclasses if they create unexpected behaviors in the application.
+The Liskov Substitution Principle (LSP) is a fundamental concept in object-oriented programming, particularly in the context of the SOLID principles. It states that objects of a superclass should be replaceable with objects of its subclasses without affecting the correctness of the program.
 
-For example, consider a class named Animal, which includes a function named eat().
-class Animal{
-  eat() {
-    console.log("Animal Eats")
+Here's a simple example in JavaScript to illustrate the Liskov Substitution Principle:
+
+Suppose we have a `Rectangle` class and a `Square` class that extends `Rectangle`. According to LSP, we should be able to substitute a `Square` object for a `Rectangle` object without breaking the behavior that is expected from a `Rectangle`.
+
+```javascript
+class Rectangle {
+  constructor(width, height) {
+    this.width = width;
+    this.height = height;
+  }
+
+  setWidth(width) {
+    this.width = width;
+  }
+
+  setHeight(height) {
+    this.height = height;
+  }
+
+  getArea() {
+    return this.width * this.height;
   }
 }
 
-Now I will extend the Animal class to a new class named Bird with a function named fly().
-class Bird extends Animal{
-  fly() {
-    console.log("Bird Flies")
+class Square extends Rectangle {
+  constructor(size) {
+    super(size, size);
+  }
+
+  setWidth(width) {
+    super.setWidth(width);
+    super.setHeight(width);
+  }
+
+  setHeight(height) {
+    super.setWidth(height);
+    super.setHeight(height);
   }
 }
 
-var parrot = new Bird();
-parrot.eat();
-parrot.fly();
+function calculateArea(rectangle) {
+  rectangle.setWidth(4);
+  rectangle.setHeight(5);
+  return rectangle.getArea();
+}
+
+const rectangle = new Rectangle(4, 5);
+const square = new Square(4);
+
+console.log(calculateArea(rectangle)); // Output: 20
+console.log(calculateArea(square));    // Output: 16
+```
+
+In this example, both `Rectangle` and `Square` have methods to set the width and height, and to calculate the area. However, the implementation of `setWidth` and `setHeight` in the `Square` class violates the LSP. Although it ensures the square's integrity (ensuring width and height are always the same), it contradicts the behavior expected from the `Rectangle` class.
+
+The Liskov Substitution Principle suggests that inheritance hierarchies should be designed in such a way that subclasses can be substituted for their base classes without altering the correctness of the program. In this case, `Square` should not inherit from `Rectangle`, or the inheritance should be redefined so that `Square` does not override the behavior of `Rectangle`.
 
 # Interface segregation principle
 This principle is related to interfaces and focuses on breaking large interfaces into smaller ones. For example, suppose you are going to driving school to learn how to drive a car, and they give you a large set of instructions on driving cars, trucks, and trains. Since you only need to learn to drive a car, you do not need all the other information. The driving school should divide the instructions and just give you the instructions specific to cars.
