@@ -2573,6 +2573,82 @@ console.log(myWeakMap.get({ name: 'John' })); // Output: undefined
 
 ```
 
+Certainly! Let's explore a practical use case for both `WeakMap()` and `WeakSet()`:
+
+**Use Case for WeakMap():**
+
+Imagine you're developing a web application where you need to associate additional data with DOM elements. One common scenario is managing event listeners. You want to add event listeners to DOM elements but don't want to create memory leaks by accidentally keeping references to these elements longer than necessary.
+
+```javascript
+// WeakMap to associate data with DOM elements
+let eventListeners = new WeakMap();
+
+function addEventListener(element, eventName, handler) {
+    if (!eventListeners.has(element)) {
+        eventListeners.set(element, new Map());
+    }
+    let elementEvents = eventListeners.get(element);
+    elementEvents.set(eventName, handler);
+    element.addEventListener(eventName, handler);
+}
+
+function removeEventListener(element, eventName) {
+    if (eventListeners.has(element)) {
+        let elementEvents = eventListeners.get(element);
+        if (elementEvents.has(eventName)) {
+            let handler = elementEvents.get(eventName);
+            element.removeEventListener(eventName, handler);
+            elementEvents.delete(eventName);
+        }
+        if (elementEvents.size === 0) {
+            eventListeners.delete(element);
+        }
+    }
+}
+
+// Usage example
+let button = document.getElementById('myButton');
+function handleClick() {
+    console.log('Button clicked!');
+}
+addEventListener(button, 'click', handleClick);
+
+// Later, if button is removed from DOM or no longer needed:
+removeEventListener(button, 'click');
+```
+
+In this example, we use a `WeakMap()` named `eventListeners` to associate event handlers with DOM elements. Since `eventListeners` is a `WeakMap`, it won't prevent the associated DOM elements from being garbage collected if they are removed from the DOM or no longer needed elsewhere in the code.
+
+**Use Case for WeakSet():**
+
+Consider a scenario where you need to keep track of objects that are being observed by a monitoring system. However, you want to ensure that if an object is no longer used elsewhere in the application, it can be garbage collected.
+
+```javascript
+let monitoringSet = new WeakSet();
+
+function startMonitoring(object) {
+    monitoringSet.add(object);
+    // Start monitoring object...
+}
+
+function stopMonitoring(object) {
+    monitoringSet.delete(object);
+    // Stop monitoring object...
+}
+
+// Usage example
+let obj1 = {};
+let obj2 = {};
+
+startMonitoring(obj1);
+startMonitoring(obj2);
+
+// Later, if obj1 is no longer needed:
+stopMonitoring(obj1);
+```
+
+In this example, we use a `WeakSet()` named `monitoringSet` to keep track of objects being monitored. When an object is added to `monitoringSet`, it is weakly referenced, allowing it to be garbage collected if there are no other strong references to it. This ensures that the monitoring system doesn't inadvertently prevent objects from being cleaned up by the garbage collector when they are no longer needed.
+
 **Debouncing in JavaScript**
 
 ```
