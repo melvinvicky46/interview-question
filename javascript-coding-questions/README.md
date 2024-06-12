@@ -496,6 +496,22 @@ Array.prototype.myFilter = function() {
 }
 
 [10, 2, 3, 5, 6, 9, 8].myFilter(current => current % 2 === 0);
+
+--------------------
+
+Array.prototype.myFilter = function(cb) {
+  let newArr = [];
+  for(let i=0; i< this.length; i++) {
+     if(cb(this[i], i, this)) {
+       newArr.push(this[i]);
+     }
+  }
+  return newArr;
+}
+
+const nums = [1, 2, 3, 4, 5, 6];
+const evenNums = nums.myFilter(x => x % 2);
+console.log(evenNums); // [2, 4, 6]
 ```
 
 20. **Polyfill For map() Method In JavaScript**
@@ -510,6 +526,20 @@ Array.prototype.myMap = function(callback) {
 }
 
 [10, 2, 3, 5, 6, 9, 8].myMap(current => current * 2);
+
+----------------------
+
+  Array.prototype.myMap = function(cb) {
+    let newArr = [];
+    for(let i=0; i< this.length; i++) {
+      newArr.push(cb(this[i], i, this));
+    }
+    return newArr;
+  };
+
+  const nums = [1, 2, 3, 4, 5];
+  const multiplyByTwo = nums.myMap(x => x * 2);
+  console.log(multiplyByTwo); // [2, 4, 6, 8, 10]
 ```
 
 21. **Polyfill to sum the given array using reduce function in JavaScript**
@@ -536,6 +566,21 @@ Array.prototype.myReduce = function (callback, initialVal) {
 
 const sumArray = [10, 20, 30, 40];
 sumArray.myReduce(sum, 0);
+
+-------------------------------
+
+Array.prototype.myReduce = function(cb, initialValue) {
+    let accumulator = initialValue;
+    for(let i=0; i< this.length; i++) {
+        accumulator = accumulator ? cb(accumulator, this[i], i, this) : this[i];
+    }
+    return accumulator;
+}
+  const nums = [1, 2, 3, 4, 5, 6];
+  const sum = nums.myReduce((acc, curr, i, arr) => {
+    return acc += curr
+  }, 0);
+  console.log(sum); // 21
 ```
 
 22. **Polyfill to check if the given string or not in JavaScript**
@@ -1702,12 +1747,14 @@ console.log(arrList); // [1, 2, 3, 4, 20]
 
 ```
 function numofZeros(num) {
-  let count = 0;
-  while (num > 0) {
-    count += Math.floor(num / 10);
-    num = num / 10;
+  let countZeros = 0;
+
+  for (let num = 1; num <= 2014; num++) {
+    const numStr = num.toString();
+    countZeros += numStr.split("0").length - 1;
   }
-  return count;
+
+  return countZeros;
 }
 
 console.log(numofZeros(2014)); //223
@@ -2726,6 +2773,20 @@ document.querySelector('#button').addEventListener('click', throttledHandleClick
 In this example, the throttle function takes two arguments: the callback function to be throttled and the delay in milliseconds. The throttle function returns a new function that will only call the callback function once every delay milliseconds.
 The throttledHandleClick function is then used as the event listener for the button's click event. This means that the handleClick function will only be called once every 1000 milliseconds, even if the button is clicked multiple times in a short period of time.
 Throttling can be a useful technique for improving the performance and responsiveness of web applications. By throttling functions that are called frequently, you can reduce the amount of work that needs to be done and improve the overall user experience.
+
+const throttle = (func, limit) => {
+  let inThrottle;
+  return (...args) => {
+    if (!inThrottle) {
+      func.apply(this, args);
+      inThrottle = true;
+      setTimeout(() => (inThrottle = false), limit);
+    }
+  };
+};
+window.addEventListener("scroll", () => {
+  throttle(handleScrollAnimation, 100);
+});
 ```
 
 **Generator function in JavaScript**
