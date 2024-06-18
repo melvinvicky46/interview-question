@@ -1073,6 +1073,68 @@ function isPalindrome(str) {
   // Check if the original string and the reversed string are equal.
   return cleanedStr === reversedStr;
 }
+
+OR 
+
+function isPalindrome(str) {
+    // Convert the string to lowercase to handle case sensitivity
+    str = str.toLowerCase();
+    
+    // Initialize pointers
+    let left = 0;
+    let right = str.length - 1;
+    
+    // Iterate until pointers meet
+    while (left <= right) {
+        // Check if characters are alphanumeric
+        if (!isAlphaNumeric(str[left])) {
+            left++;
+        } else if (!isAlphaNumeric(str[right])) {
+            right--;
+        } else {
+            // Compare characters
+            if (str[left] !== str[right]) {
+                return false; // Not a palindrome
+            }
+            // Move pointers
+            left++;
+            right--;
+        }
+    }
+    
+    return true; // Palindrome
+}
+
+// Helper function to check if a character is alphanumeric
+function isAlphaNumeric(char) {
+    return /^[0-9a-zA-Z]+$/.test(char);
+}
+
+
+OR 
+
+function isPalindrome(str) {
+    // Convert the string to lowercase to handle case sensitivity
+    str = str.toLowerCase();
+    
+    // Initialize pointers
+    let left = 0;
+    let right = str.length - 1;
+    
+    // Iterate until pointers meet
+    while (left < right) {
+        // Compare characters
+        if (str[left] !== str[right]) {
+            return false; // Not a palindrome
+        }
+        // Move pointers towards the center
+        left++;
+        right--;
+    }
+    
+    return true; // Palindrome
+}
+
 ```
 
 44. **Check number of zeros**
@@ -3797,3 +3859,121 @@ In this example:
 - If the promise is resolved successfully, we resolve the outer promise with the result.
 - If an error occurs, we check if the number of retries has been exhausted. If not, we retry the promise after the specified delay. If all retries are exhausted, we reject the outer promise with the error.
 
+**Sum of digits of number**
+```
+function sumOfDigits(num) {
+  let sum = 0;
+  while (num > 0) {
+    sum += num % 10
+    num = Math.floor(num / 10)
+  }
+  return num
+}
+
+console.log(sumOfDigits(1287)) // 18 
+```
+
+**Sum of all natural number**
+```
+function sumOfNaturalNum(num) {
+  let sum = 0;
+  for(let i = 0; i <= num; i++) {
+    sum += i;
+  }
+  return sum;
+}
+
+sumOfNaturalNum(5) //15
+```
+
+**Count number of digits in a number**
+```
+function countDigits(num) {
+  let count = 0;
+  do {
+    count++;
+    num = Math.floor(num / 10);
+  } while (num > 0);
+  return count;
+}
+
+console.log(countDigits(231));
+```
+
+**Palindrome of a number**
+```
+function isPalindrome(num) {
+  let tempNum = num,
+    reverseNum = 0;
+  while (tempNum > 0) {
+    const lastDigit = tempNum % 10;
+    reverseNum = reverseNum * 10 + lastDigit;
+    tempNum = Math.floor(tempNum / 10);
+  }
+  return num === reverseNum;
+}
+
+console.log(isPalindrome(23132)); //true
+
+```
+
+**Fibonacci series**
+```
+function fibonacci(num) {
+  if (num < 2) {
+    return 1;
+  }
+  let prev = 0,
+    cur = 1,
+    next;
+  for (let i = 2; i <= num; i++) {
+    next = prev + cur;
+    prev = cur;
+    cur = next;
+  }
+  return next;
+}
+
+console.log(fibonacci(6)); // 0 1 1 2 3 5 8
+
+-------------------------
+
+function fibonacci(num) {
+  if(n < 2) {
+    return n
+  }
+  return fibonacci(n - 1) + fibonacci(n - 2)
+}
+
+```
+
+**Find the missing number**
+```
+function findMissingNum(num) {
+  let sum = 0;
+  for (let i = 0; i < num.length; i++) {
+    sum += num[i];
+  }
+
+  const sumSeq = num.length * ((num.length + 1) / 2) - sum;
+  return sumSeq;
+}
+
+console.log(findMissingNum([6, 4, 3, 2, 1, 0])); // 5
+
+```
+
+**Find the sum of numbers**
+```
+function findSum(arr) {
+  if(arr.length === 0) {
+    return 0
+  }
+  return arr[arr.length - 1] + findSum(arr.slice(0, arr.length - 1))
+
+  //OR
+  const lastElement = arr.pop();
+  return lastElement + findSum(arr);
+}
+
+```
