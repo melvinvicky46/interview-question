@@ -202,21 +202,6 @@ getUserId(10); // [10] --> Object
 ```
 const arr = [1, 2, [3, 4, [5, 6, [8, 9]]]];
 
-const flatten = (arr) => {
-  const result = [];
-  arr.forEach((element) => {
-    if (Array.isArray(element)) {
-      result.push(...flatten(element))
-    } else {
-      result.push(element);
-    }
-  })
-}
-console.log(flatten(arr))
-// [1, 2, 3, 4, 5, 6, 8, 9]
-
------------------------------------------
-
 function flatten(arr) {
   return arr.reduce((acc, item) => {
     if (Array.isArray(item)) {
@@ -232,6 +217,54 @@ const flattened = flatten(arr);
 
 // Log the flattened array
 console.log(flattened);
+
+------------------------------------------
+
+const nestedArray = [1, [2, [3, 4], 5], 6, [7, 8]];
+
+function flattenArray(arr) {
+  const flattened = [];
+
+  for (let i = 0; i < arr.length; i++) {
+    const current = arr[i];
+    if (Array.isArray(current)) {
+      // If current element is an array, flatten it recursively
+      for (let j = 0; j < current.length; j++) {
+        arr.push(current[j]);
+      }
+    } else {
+      // If current element is not an array, push it to flattened array
+      flattened.push(current);
+    }
+  }
+
+  return flattened;
+}
+
+const flattenedArray = flattenArray(nestedArray);
+console.log(flattenedArray); // Output: [1, 2, 3, 4, 5, 6, 7, 8]
+
+----------------
+
+const arr = [1, 2, [3, 4, [5, 6, [8, 9]]]];
+
+const flatten = (arr) => {
+  const flattened = [];
+
+  while (arr.length) {
+    const next = arr.pop();
+    if (Array.isArray(next)) {
+      arr.push(...next);
+    } else {
+      flattened.unshift(next);
+    }
+  }
+  return flattened;
+};
+
+console.log(flatten(arr));
+
+
 ```
 
 9. **Find the number of Occurrences of elements in an array**
@@ -3977,3 +4010,63 @@ function findSum(arr) {
 }
 
 ```
+
+To sort an array of strings ignoring case without using built-in methods like `sort()` or `toLowerCase()`, you can implement a custom sorting algorithm. One efficient approach is to use a technique similar to the bubble sort algorithm, but adapted to perform case-insensitive comparisons. Here’s how you can achieve this:
+
+```javascript
+// Example array of strings
+const originalArray = ['Apple', 'banana', 'Orange', 'grape', 'kiwi'];
+
+// Custom case-insensitive sort function without built-in methods
+const customSort = (arr) => {
+  // Clone the array to avoid mutation
+  const clonedArray = arr.slice();
+
+  // Custom case-insensitive comparison function
+  const compareStrings = (str1, str2) => {
+    const lowerStr1 = str1.toLowerCase();
+    const lowerStr2 = str2.toLowerCase();
+    if (lowerStr1 < lowerStr2) return -1;
+    if (lowerStr1 > lowerStr2) return 1;
+    return 0;
+  };
+
+  // Bubble sort algorithm adapted for case-insensitive comparison
+  for (let i = 0; i < clonedArray.length - 1; i++) {
+    for (let j = 0; j < clonedArray.length - 1 - i; j++) {
+      if (compareStrings(clonedArray[j], clonedArray[j + 1]) > 0) {
+        // Swap elements if they are in the wrong order
+        const temp = clonedArray[j];
+        clonedArray[j] = clonedArray[j + 1];
+        clonedArray[j + 1] = temp;
+      }
+    }
+  }
+
+  return clonedArray;
+};
+
+// Sort the originalArray without mutating it and without built-in methods
+const sortedArray = customSort(originalArray);
+
+// Output the sorted array (originalArray remains unchanged)
+console.log('Original Array:', originalArray);
+console.log('Sorted Array:', sortedArray);
+```
+
+### Explanation:
+
+1. **Custom Sort Function**: `customSort` takes an array `arr` as input and clones it (`const clonedArray = arr.slice()`) to avoid mutating the original array (`originalArray`).
+
+2. **Custom Comparison Function**: `compareStrings` is defined within `customSort` to perform case-insensitive comparisons between two strings. It converts both strings to lowercase using `toLowerCase()` and then compares them using standard comparison operators.
+
+3. **Bubble Sort Algorithm**: The sorting algorithm used here is a simple bubble sort adapted to use `compareStrings` for comparisons:
+   - It iterates over the array multiple times (`for` loops).
+   - For each pair of adjacent elements (`clonedArray[j]` and `clonedArray[j + 1]`), it uses `compareStrings` to determine if they are in the correct order.
+   - If they are not, it swaps them (`const temp = clonedArray[j]; clonedArray[j] = clonedArray[j + 1]; clonedArray[j + 1] = temp;`).
+
+4. **Immutable Approach**: The original array (`originalArray`) is never modified. Instead, the function returns a sorted copy (`clonedArray`).
+
+5. **Output**: Finally, the sorted array (`sortedArray`) is logged to the console, demonstrating that `originalArray` remains unchanged.
+
+This implementation ensures that the array is sorted in a case-insensitive manner without relying on built-in methods like `sort()` or `toLowerCase()`, providing a pure JavaScript approach to sorting strings.
