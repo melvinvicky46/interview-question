@@ -285,6 +285,29 @@ function countOccurrences(arr) {
 var arr = [1, 2, 3, 4, 1, 2, 3, 4, 5, 1];
 var result = countOccurrences(arr);
 console.log(result); //{1: 3, 2: 2, 3: 2, 4: 2, 5: 1}
+
+---------------------
+
+const array = [1, 2, 2, 3, 4, 1, 5, 2, 4, 4];
+
+function countOccurrences(arr) {
+  const occurrences = {};
+
+  for (let i = 0; i < arr.length; i++) {
+    const element = arr[i];
+    if (occurrences[element]) {
+      occurrences[element] += 1;
+    } else {
+      occurrences[element] = 1;
+    }
+  }
+
+  return occurrences;
+}
+
+const result = countOccurrences(array);
+console.log(result);
+
 ```
 
 10. **Add all the zero to end of the array**
