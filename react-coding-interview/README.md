@@ -5139,3 +5139,90 @@ In this example:
 - We use `useEffect` with an empty dependency array to fetch the data when the component mounts.
 - Inside the `fetchData` function, we make an asynchronous call to the API, parse the JSON response, and update the `data` state with the fetched data.
 - We then map over the `data` array and render the `Header`, `SubHeader`, `Title`, and `Image` components for each item in the data array.
+
+
+Sure, here's a React component that implements the timer functionality as per your requirements:
+
+```jsx
+import React, { useState, useEffect } from 'react';
+
+const Timer = () => {
+  const [timer, setTimer] = useState(0);
+  const [isRunning, setIsRunning] = useState(false);
+
+  useEffect(() => {
+    let interval;
+
+    if (isRunning) {
+      interval = setInterval(() => {
+        setTimer((prevTimer) => prevTimer + 1);
+      }, 1000);
+    } else {
+      clearInterval(interval);
+    }
+
+    return () => clearInterval(interval);
+  }, [isRunning]);
+
+  const handleStartStop = () => {
+    setIsRunning((prevIsRunning) => !prevIsRunning);
+  };
+
+  const handleReset = () => {
+    setTimer(0);
+    setIsRunning(false);
+  };
+
+  return (
+    <div style={{ textAlign: 'center', marginTop: '20px' }}>
+      <h2>Timer: {timer}</h2>
+      <button onClick={handleStartStop}>{isRunning ? 'Stop' : 'Start'}</button>
+      <button onClick={handleReset}>Reset</button>
+    </div>
+  );
+};
+
+export default Timer;
+```
+
+### Explanation:
+
+1. **useState Hooks**: 
+   - `timer`: Manages the current timer value.
+   - `isRunning`: Tracks whether the timer is running or stopped.
+
+2. **useEffect Hook**: 
+   - Starts an interval (`setInterval`) when `isRunning` is true, which increments the `timer` state every second (1000ms).
+   - Clears the interval when `isRunning` is false, effectively pausing the timer.
+
+3. **handleStartStop Function**:
+   - Toggles the `isRunning` state between `true` and `false` when the corresponding button is clicked. This starts or stops the timer.
+
+4. **handleReset Function**:
+   - Resets the `timer` state to 0 and stops the timer (`isRunning` is set to false).
+
+5. **Rendering**:
+   - Displays the current value of `timer`.
+   - Shows a "Start" or "Stop" button based on the `isRunning` state.
+   - Provides a "Reset" button to reset the timer to 0.
+
+### Usage:
+
+To use this component in your React application, simply import and include the `Timer` component in your desired location:
+
+```jsx
+import React from 'react';
+import Timer from './Timer';
+
+const App = () => {
+  return (
+    <div>
+      <Timer />
+    </div>
+  );
+};
+
+export default App;
+```
+
+This `Timer` component will now display and operate according to the specified requirements: starting, stopping, and resetting the timer as described.

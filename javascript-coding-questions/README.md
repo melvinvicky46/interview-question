@@ -363,12 +363,12 @@ function segregateEvenOdd(arr) {
 
     while (left < right) {
         // Find the next even number from the left
-        while (arr[left] % 2 === 0 && left < right) {
+        if (arr[left] % 2 === 0 && left < right) {
             left++;
         }
 
         // Find the next odd number from the right
-        while (arr[right] % 2 !== 0 && left < right) {
+        if (arr[right] % 2 !== 0 && left < right) {
             right--;
         }
 
@@ -391,7 +391,6 @@ console.log(arr); // Output: [2, 4, 6, 8, 5, 3, 7, 1, 9]
 
 ```
 const array = [2, 3, 4, 5, 6, 7, 8, 9];
-const index = 0;
 let temp;
 function rearrangeOrder(array, len) {
   for (let i = 0; i < len-1; i++) {
@@ -487,6 +486,35 @@ let result = cars.reduce((acc, current) => {
 
 const result = cars.group(({ make }) => make);
 console.log(result)
+
+// OR
+
+const cars = [
+  { make: "audi", model: "r8", year: 2012, quantity: 2 },
+  { make: "audi", model: "v7", year: 2013, quantity: 5 },
+  { make: "benz", model: "q8", year: 2014, quantity: 23 },
+  { make: "benz", model: "r8", year: 2015, quantity: 20 },
+  { make: "bmw", model: "q7", year: 2017, quantity: 22 },
+];
+
+const groupBy = (arr, fn) => {
+  const result = {};
+  for (let i = 0; i < arr.length; i++) {
+    const current = arr[i];
+    const key = fn(current);
+
+    if (!result[key]) {
+      result[key] = [];
+    }
+
+    result[key].push(current);
+  }
+
+  return result;
+};
+
+console.log(groupBy(cars, (vehicle) => vehicle.make));
+
 
 ```
 
@@ -3991,6 +4019,24 @@ function fibonacci(num) {
 }
 
 console.log(fibonacci(6)); // 0 1 1 2 3 5 8
+
+// OR
+
+var fibonacci_series = function (n) 
+{
+  if (n===1) 
+  {
+    return [0, 1];
+  } 
+  else 
+  {
+    var s = fibonacci_series(n - 1);
+    s.push(s[s.length - 1] + s[s.length - 2]);
+    return s;
+  }
+};
+
+ console.log(fibonacci_series(8)); 
 
 -------------------------
 
