@@ -4139,3 +4139,66 @@ console.log('Sorted Array:', sortedArray);
 5. **Output**: Finally, the sorted array (`sortedArray`) is logged to the console, demonstrating that `originalArray` remains unchanged.
 
 This implementation ensures that the array is sorted in a case-insensitive manner without relying on built-in methods like `sort()` or `toLowerCase()`, providing a pure JavaScript approach to sorting strings.
+
+
+**the sum of minimum and maximum elements of all sub-array of size B.**
+A = [2, 5, -1, 7, -3, -1, -2] 
+B = 4
+ 
+Explanation:
+Subarrays of size 4 are : 
+    [2, 5, -1, 7],   min + max = -1 + 7 = 6
+    [5, -1, 7, -3],  min + max = -3 + 7 = 4      
+    [-1, 7, -3, -1], min + max = -3 + 7 = 4
+    [7, -3, -1, -2], min + max = -3 + 7 = 4   
+Sum of all min & max = 6 + 4 + 4 + 4 = 18
+
+```
+const arr = [2, 5, -1, 7, -3, -1, -2]; // 8 + 4 + 6 + 6
+
+const diff = (arr, target) => {
+  let total = 0;
+  for (let i = 0; i <= arr.length - target; i++) {
+    const subArr = arr.slice(i, i + target);
+    total += findMinMax(subArr);
+  }
+  return total;
+};
+
+function findMinMax(sub) {
+  let min = sub[0],
+    max = sub[0];
+
+  for (let i = 0; i < sub.length; i++) {
+    if (max < sub[i]) {
+      max = sub[i];
+    }
+
+    if (min > sub[i]) {
+      min = sub[i];
+    }
+  }
+
+  if (min < 0) {
+    return max + min;
+  }
+  return max - min;
+}
+
+console.log(diff(arr, 4));
+```
+
+**Alternative sequence**
+```
+const seq = (arr) => {
+  const subArr = [];
+  for (let i = 0; i < arr.length; i++) {
+    subArr.push(arr[i]);
+    subArr.push(arr.pop());
+  }
+  return subArr;
+};
+
+const temp = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+console.log(seq(temp)); //[1, 10, 2, 9, 3, 8, 4, 7, 5, 6]
+```
