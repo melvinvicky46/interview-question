@@ -4202,3 +4202,151 @@ const seq = (arr) => {
 const temp = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 console.log(seq(temp)); //[1, 10, 2, 9, 3, 8, 4, 7, 5, 6]
 ```
+
+
+Object manipulation in JavaScript involves various operations to create, modify, access, iterate, and delete properties of objects. Objects in JavaScript are fundamental data structures that store collections of key-value pairs. Here are some common operations and techniques for object manipulation:
+
+### 1. Creating Objects
+
+#### Using Object Literals
+
+```javascript
+const person = {
+    firstName: 'John',
+    lastName: 'Doe',
+    age: 30,
+    address: {
+        street: '123 Main St',
+        city: 'Anytown'
+    }
+};
+```
+
+#### Using Constructor Functions
+
+```javascript
+function Person(firstName, lastName, age) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.age = age;
+}
+
+const person = new Person('John', 'Doe', 30);
+```
+
+#### Using ES6 Classes
+
+```javascript
+class Person {
+    constructor(firstName, lastName, age) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+    }
+}
+
+const person = new Person('John', 'Doe', 30);
+```
+
+### 2. Accessing and Modifying Properties
+
+#### Dot Notation
+
+```javascript
+console.log(person.firstName);  // Output: John
+person.age = 31;
+```
+
+#### Bracket Notation (useful for dynamic property access)
+
+```javascript
+const propName = 'lastName';
+console.log(person[propName]);  // Output: Doe
+```
+
+### 3. Adding and Deleting Properties
+
+#### Adding Properties
+
+```javascript
+person.email = 'john.doe@example.com';
+```
+
+#### Deleting Properties
+
+```javascript
+delete person.age;
+```
+
+### 4. Iterating Over Object Properties
+
+#### Using `for...in` Loop
+
+```javascript
+for (let key in person) {
+    console.log(`${key}: ${person[key]}`);
+}
+```
+
+#### Using `Object.keys()`
+
+```javascript
+Object.keys(person).forEach(key => {
+    console.log(`${key}: ${person[key]}`);
+});
+```
+
+### 5. Object Methods and Utilities
+
+#### Object.keys()
+
+```javascript
+const keys = Object.keys(person);  // Returns an array of keys
+```
+
+#### Object.values()
+
+```javascript
+const values = Object.values(person);  // Returns an array of values
+```
+
+#### Object.entries()
+
+```javascript
+const entries = Object.entries(person);  // Returns an array of [key, value] pairs
+```
+
+#### Object.assign()
+
+```javascript
+const newObj = Object.assign({}, person);  // Creates a shallow copy of `person`
+```
+
+#### Spread Operator (ES6)
+
+```javascript
+const copiedPerson = { ...person };  // Creates a shallow copy of `person`
+```
+
+### 6. Nested Objects
+
+```javascript
+console.log(person.address.city);  // Output: Anytown
+person.address.city = 'New City';
+```
+
+### 7. Checking for Property Existence
+
+```javascript
+if ('email' in person) {
+    console.log('Email property exists');
+}
+```
+
+### 8. Object Manipulation Best Practices
+
+- **Immutability**: Prefer immutability where possible, especially in shared states or in functional programming contexts.
+- **Deep Cloning**: Use deep cloning techniques (`JSON.parse(JSON.stringify(obj))`, libraries like Lodash `_.cloneDeep()`) for complex nested objects to avoid unintended mutation.
+- **Consistency**: Maintain consistent naming conventions and object structures across your application to facilitate easier maintenance and debugging.
+
+Object manipulation in JavaScript is versatile and foundational to many programming tasks, ranging from simple data storage to complex application state management in frameworks like React and Angular. Understanding these techniques is crucial for effective JavaScript development.

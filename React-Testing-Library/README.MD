@@ -513,3 +513,138 @@ React Testing Library (RTL) provides a variety of methods and utilities for quer
    - **findAllByRole:** Queries elements by their ARIA role attribute asynchronously.
 
 These are just some of the methods provided by React Testing Library (RTL) for querying and interacting with React components in tests. Each method serves a specific purpose and can be used to test components in a user-centric way, focusing on their behavior from the user's perspective.
+
+
+Mocking functions is a common practice in testing to replace actual implementations with controlled behavior or outputs. When using React Testing Library (RTL) with TypeScript, you can mock functions to simulate certain behaviors or responses during testing. Here's how you can mock a function using RTL:
+
+### Mocking a Function in React Testing Library (RTL)
+
+Let's go through a step-by-step example of how to mock a function in RTL:
+
+1. **Create a Component with a Function Dependency:**
+
+   Assume you have a React component (`MyComponent.tsx`) that uses a function (`fetchData`) to fetch data asynchronously.
+
+   ```typescript
+   // MyComponent.tsx
+   import React, { useState, useEffect } from 'react';
+
+   type Data = {
+       id: number;
+       name: string;
+   };
+
+   type Props = {
+       fetchData: () => Promise<Data[]>;
+   };
+
+   const MyComponent: React.FC<Props> = ({ fetchData }) => {
+       const [data, setData] = useState<Data[]>([]);
+
+       useEffect(() => {
+           const fetchDataAsync = async () => {
+               const result = await fetchData();
+               setData(result);
+           };
+           fetchDataAsync();
+       }, [fetchData]);
+
+       return (
+           <div>
+               <h2>Data List</h2>
+               <ul>
+                   {data.map((item) => (
+                       <li key={item.id}>{item.name}</li>
+                   ))}
+               </ul>
+           </div>
+       );
+   };
+
+   export default MyComponent;
+   ```
+
+2. **Writing Tests Using RTL and Jest:**
+
+   Now, let's write a test (`MyComponent.test.tsx`) using RTL and Jest to mock the `fetchData` function and verify the component's behavior based on different scenarios.
+
+   ```typescript
+   // MyComponent.test.tsx
+   import React from 'react';
+   import { render, screen } from '@testing-library/react';
+   import userEvent from '@testing-library/user-event';
+   import MyComponent from './MyComponent';
+
+   // Mock fetchData function
+   const mockFetchData = jest.fn(() => Promise.resolve([
+       { id: 1, name: 'Item 1' },
+       { id: 2, name: 'Item 2' },
+   ]));
+
+   describe('MyComponent', () => {
+       beforeEach(() => {
+           jest.clearAllMocks(); // Clear mock function calls before each test
+       });
+
+       it('renders data fetched from fetchData', async () => {
+           render(<MyComponent fetchData={mockFetchData} />);
+
+           // Wait for data to be fetched and rendered
+           const item1 = await screen.findByText('Item 1');
+           const item2 = screen.getByText('Item 2');
+           expect(item1).toBeInTheDocument();
+           expect(item2).toBeInTheDocument();
+
+           // Ensure fetchData function is called once
+           expect(mockFetchData).toHaveBeenCalledTimes(1);
+       });
+
+       it('handles error when fetchData fails', async () => {
+           // Mock fetchData to simulate failure
+           mockFetchData.mockRejectedValueOnce(new Error('Failed to fetch data'));
+
+           render(<MyComponent fetchData={mockFetchData} />);
+
+           // Ensure error message is rendered
+           const errorMessage = await screen.findByText('Failed to fetch data');
+           expect(errorMessage).toBeInTheDocument();
+
+           // Ensure fetchData function is called once
+           expect(mockFetchData).toHaveBeenCalledTimes(1);
+       });
+
+       it('handles empty data from fetchData', async () => {
+           // Mock fetchData to return empty array
+           mockFetchData.mockResolvedValueOnce([]);
+
+           render(<MyComponent fetchData={mockFetchData} />);
+
+           // Ensure no items are rendered
+           const items = screen.queryAllByRole('listitem');
+           expect(items).toHaveLength(0);
+
+           // Ensure fetchData function is called once
+           expect(mockFetchData).toHaveBeenCalledTimes(1);
+       });
+   });
+   ```
+
+### Explanation:
+
+- **Mocking**: `jest.fn()` is used to create a mock function (`mockFetchData`) that replaces the actual `fetchData` function during testing.
+- **Testing Scenarios**:
+  - **Successful Data Fetch**: Tests that the component renders correctly when `fetchData` returns data.
+  - **Error Handling**: Tests how the component handles errors when `fetchData` fails.
+  - **Empty Data**: Tests how the component behaves when `fetchData` returns an empty array.
+
+- **Clearing Mocks**: `jest.clearAllMocks()` is used in `beforeEach()` to reset the mock function calls before each test, ensuring a clean state.
+
+- **Assertions**: Uses RTL's `screen` queries (`findByText`, `getByText`, etc.) to assert that expected UI elements are rendered based on different scenarios.
+
+### Notes:
+
+- Ensure Jest and RTL are properly set up in your project (`@testing-library/react`, `@testing-library/user-event`).
+- Mocking functions allows you to control behavior and simulate different scenarios (success, failure, empty results) to thoroughly test your components.
+- Adjust the mock function (`mockFetchData`) as needed to simulate specific responses or errors for different test cases.
+
+By following these steps, you can effectively mock functions in RTL tests to validate the behavior and interactions of your React components under various conditions.
