@@ -966,3 +966,128 @@ In summary, while inheritance is useful in some cases, composition offers greate
     - Multiple inheritance allows a class to inherit from more than one superclass, enabling code reuse from multiple sources. However, it can lead to issues such as the diamond problem, where ambiguity arises when a subclass inherits from two classes that have a common ancestor. Candidates should discuss the pros and cons of multiple inheritance and how languages like C++ and Python handle these issues.
 
 These questions cover a range of advanced OOP concepts and principles that experienced candidates should be familiar with in order to demonstrate their proficiency in object-oriented design and programming.
+
+
+Abstract classes and interfaces are both used to define contracts in object-oriented programming, but they serve different purposes and have different characteristics. Here's a breakdown of the key differences between an abstract class and an interface:
+
+### Abstract Class:
+
+1. **Definition**:
+   - An abstract class is a class that cannot be instantiated on its own and is typically used to define a common structure for its subclasses.
+   - It may contain abstract methods (methods without a body) that must be implemented by its subclasses.
+
+2. **Usage**:
+   - Abstract classes are used when you want to provide a default implementation for some methods while leaving other methods to be implemented by subclasses.
+   - They can also contain concrete methods (methods with a body) which are inherited by subclasses.
+
+3. **Inheritance**:
+   - Subclasses extend an abstract class using the `extends` keyword and are required to provide implementations for all abstract methods unless they themselves are declared as abstract.
+   - An abstract class can implement interfaces and provide default implementations for their methods.
+
+4. **Fields and Constructors**:
+   - Abstract classes can have fields (variables) and constructors.
+   - They can have abstract methods, concrete methods, and even final methods (methods that cannot be overridden).
+
+5. **Example**:
+   ```javascript
+   // Abstract class example in JavaScript
+   class Shape {
+     constructor(name) {
+       this.name = name;
+     }
+
+     // Abstract method
+     calculateArea() {
+       throw new Error('Method not implemented');
+     }
+
+     // Concrete method
+     describe() {
+       return `This is a ${this.name}`;
+     }
+   }
+
+   // Concrete subclass extending Shape
+   class Circle extends Shape {
+     constructor(radius) {
+       super('circle');
+       this.radius = radius;
+     }
+
+     // Implementation of abstract method
+     calculateArea() {
+       return Math.PI * this.radius * this.radius;
+     }
+   }
+
+   // Usage
+   const circle = new Circle(5);
+   console.log(circle.describe()); // Output: This is a circle
+   console.log(`Area of circle: ${circle.calculateArea()}`); // Output: Area of circle: 78.53981633974483
+   ```
+
+### Interface:
+
+1. **Definition**:
+   - An interface is a contract that defines a set of methods and properties that a class must implement.
+   - It cannot contain any implementation of methods or fields, only method signatures (names, parameters, and return types).
+
+2. **Usage**:
+   - Interfaces are used to define the capabilities that a class should provide.
+   - They promote loose coupling by allowing unrelated classes to implement the same set of methods defined by the interface.
+
+3. **Implementation**:
+   - A class implements an interface using the `implements` keyword and must provide implementations for all methods defined by the interface.
+   - A class can implement multiple interfaces but can only extend one class (including abstract classes).
+
+4. **Methods**:
+   - Interfaces can only have method declarations, not method bodies. These methods are implicitly abstract and public.
+
+5. **Example**:
+   ```javascript
+   // Interface example in TypeScript (similar to JavaScript)
+   // Interfaces can be simulated using TypeScript syntax
+   class Car {
+     constructor(make, model) {
+       this.make = make;
+       this.model = model;
+     }
+
+     getInfo() {
+       return `${this.make} ${this.model}`;
+     }
+   }
+
+   // Interface definition
+   class Electric {
+     chargeBattery() {
+       console.log('Battery charging...');
+     }
+   }
+
+   // Class implementing the interface
+   class ElectricCar extends Car {
+     constructor(make, model) {
+       super(make, model);
+     }
+
+     // Implementation of interface method
+     chargeBattery() {
+       console.log('Battery charging...');
+     }
+   }
+
+   // Usage
+   const myCar = new ElectricCar('Tesla', 'Model S');
+   console.log(myCar.getInfo()); // Output: Tesla Model S
+   myCar.chargeBattery(); // Output: Battery charging...
+   ```
+
+### Key Differences:
+
+- **Purpose**: Abstract classes are used to provide a common base for related subclasses, whereas interfaces are used to define contracts for unrelated classes.
+- **Implementation**: Abstract classes can have abstract and concrete methods, fields, and constructors, whereas interfaces can only have method declarations.
+- **Multiple Inheritance**: A class can implement multiple interfaces but can only extend one class (abstract or not).
+- **Default Behavior**: Abstract classes can provide default implementations for some methods, while interfaces cannot contain any implementation.
+
+In summary, abstract classes and interfaces serve different roles in defining contracts and structures in object-oriented programming, each with its own strengths and use cases.

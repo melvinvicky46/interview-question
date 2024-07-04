@@ -1848,3 +1848,4 @@ type AdminRoles = Extract<Role, 'Admin' | 'Manager'>;
 In this example, `AdminRoles` is created by extracting types from `Role` that are assignable to `'Admin'` or `'Manager'`, effectively creating a subtype of `Role` with only these two roles included.
 
 Using `Extract<Type, Union>` is valuable in scenarios where you need to work with subsets of union types based on specific conditions or requirements, providing flexibility and improving type safety in TypeScript applications.
+
