@@ -648,3 +648,125 @@ Let's go through a step-by-step example of how to mock a function in RTL:
 - Adjust the mock function (`mockFetchData`) as needed to simulate specific responses or errors for different test cases.
 
 By following these steps, you can effectively mock functions in RTL tests to validate the behavior and interactions of your React components under various conditions.
+
+
+Testing portals using RTL (React Testing Library) requires special consideration because portals render content outside the usual React component tree. This means you need to access the portal content differently in your tests. Here’s a step-by-step guide on how to test components that use portals with RTL:
+
+### Example Component Using Portal
+
+Let's create a simple example where a modal component renders its content using a portal:
+
+**Modal.js**
+
+```jsx
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const Modal = ({ isOpen, onClose, children }) => {
+  if (!isOpen) return null;
+
+  return ReactDOM.createPortal(
+    <div className="modal-overlay">
+      <div className="modal">
+        <button onClick={onClose} className="close-btn">
+          Close
+        </button>
+        {children}
+      </div>
+    </div>,
+    document.body
+  );
+};
+
+export default Modal;
+```
+
+### Writing Tests for Modal Component
+
+Assuming we want to test the `Modal` component using RTL:
+
+**Modal.test.js**
+
+```jsx
+import React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect'; // For custom matchers like toBeInTheDocument
+
+import Modal from './Modal';
+
+describe('Modal component', () => {
+  it('renders modal content when isOpen is true', () => {
+    render(
+      <Modal isOpen={true} onClose={() => {}}>
+        <div data-testid="modal-content">Modal Content</div>
+      </Modal>
+    );
+
+    // Assert that the modal content is rendered in the document
+    expect(screen.getByTestId('modal-content')).toBeInTheDocument();
+  });
+
+  it('does not render modal content when isOpen is false', () => {
+    render(
+      <Modal isOpen={false} onClose={() => {}}>
+        <div data-testid="modal-content">Modal Content</div>
+      </Modal>
+    );
+
+    // Assert that the modal content is not rendered in the document
+    expect(screen.queryByTestId('modal-content')).not.toBeInTheDocument();
+  });
+
+  it('calls onClose when close button is clicked', () => {
+    const handleClose = jest.fn();
+
+    render(
+      <Modal isOpen={true} onClose={handleClose}>
+        <div>Modal Content</div>
+      </Modal>
+    );
+
+    // Click the close button
+    fireEvent.click(screen.getByText('Close'));
+
+    // Assert that onClose handler was called
+    expect(handleClose).toHaveBeenCalled();
+  });
+});
+```
+
+### Explanation:
+
+- **Setup**: Import necessary RTL utilities (`render`, `screen`, `fireEvent`) from `@testing-library/react`.
+- **Render Component**: Use `render` to render the `Modal` component with props (`isOpen`, `onClose`) necessary for testing.
+- **Assertions**:
+  - Use `screen.getByTestId`, `screen.getByText`, etc., to query elements inside the modal content.
+  - Use Jest's `expect` with custom matchers (`toBeInTheDocument`, `not.toBeInTheDocument`) from `@testing-library/jest-dom/extend-expect` to assert the presence or absence of elements in the document.
+
+### Additional Considerations:
+
+- **Accessing Portal Content**: When testing components with portals, ensure you query elements using RTL methods (`screen.getByTestId`, `screen.getByText`, etc.) that search the entire document, not just the component's immediate children.
+  
+- **Event Simulation**: Use `fireEvent` to simulate user interactions like clicks, ensuring that event handlers (`onClose`, etc.) are triggered as expected.
+  
+- **Document Structure**: Portals render content directly into the `document.body`, so you may need to adjust your tests to account for elements outside the normal React component hierarchy.
+
+### Running Tests
+
+Run your tests using Jest:
+
+```bash
+npm test
+```
+
+Jest will execute the tests and verify the behavior of your `Modal` component, including its interaction with portals and event handling.
+
+### Benefits of Using RTL for Portal Testing:
+
+- **Realistic Testing**: RTL encourages testing components as users interact with them, including scenarios involving portals, providing more realistic and comprehensive tests.
+  
+- **Integration Testing**: Ensures components using portals integrate correctly with the rest of the application, handling DOM interactions seamlessly.
+  
+- **Accessibility**: Tests components' accessibility and behavior in different environments, ensuring they work well across various contexts and devices.
+
+By following these guidelines, you can effectively test React components that use portals using RTL, ensuring your application behaves as expected even with complex rendering scenarios.
