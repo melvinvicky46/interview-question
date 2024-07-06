@@ -1849,3 +1849,279 @@ In this example, `AdminRoles` is created by extracting types from `Role` that ar
 
 Using `Extract<Type, Union>` is valuable in scenarios where you need to work with subsets of union types based on specific conditions or requirements, providing flexibility and improving type safety in TypeScript applications.
 
+In TypeScript, type aliases are used to give a name to a type or a combination of types. They are static and cannot be extended in the traditional sense that classes can be extended. However, you can achieve similar functionality by using intersection (`&`) or union (`|`) types to compose new types based on existing type aliases.
+
+### Extending Type Aliases with Intersection Types
+
+You can create a new type alias that combines properties from existing type aliases using intersection (`&`) types.
+
+```typescript
+type Person = {
+    name: string;
+    age: number;
+};
+
+type Employee = {
+    company: string;
+};
+
+type EmployeeWithPerson = Person & Employee;
+
+const employee: EmployeeWithPerson = {
+    name: "John Doe",
+    age: 30,
+    company: "Example Inc."
+};
+
+console.log(employee); // Output: { name: 'John Doe', age: 30, company: 'Example Inc.' }
+```
+
+In this example, `EmployeeWithPerson` is defined as an intersection of `Person` and `Employee`. This allows `EmployeeWithPerson` to have all properties of both `Person` and `Employee`.
+
+### Extending Type Aliases with Union Types
+
+You can also create a new type alias that represents a union (`|`) of existing type aliases.
+
+```typescript
+type Status = "active" | "inactive";
+
+type Employee = {
+    id: number;
+    name: string;
+    status: Status;
+};
+
+type Manager = {
+    teamSize: number;
+};
+
+type ManagerOrEmployee = Employee | Manager;
+
+const person: ManagerOrEmployee = {
+    id: 1,
+    name: "Jane Doe",
+    status: "active",
+    teamSize: 5
+};
+
+console.log(person); // Output: { id: 1, name: 'Jane Doe', status: 'active', teamSize: 5 }
+```
+
+Here, `ManagerOrEmployee` is a union of `Employee` and `Manager`, allowing `person` to be either an `Employee` or a `Manager`.
+
+### Conditional Types for Flexible Type Composition
+
+TypeScript also supports conditional types (`extends` clauses) within mapped types, allowing for more complex type composition based on conditions.
+
+```typescript
+type Animal = {
+    legs: number;
+    sound: string;
+};
+
+type Dog = Animal & {
+    breed: string;
+};
+
+type Cat = Animal & {
+    furColor: string;
+};
+
+type Pet<T extends Animal> = T extends Dog ? "dog" : T extends Cat ? "cat" : "unknown";
+
+const myDog: Pet<Dog> = "dog";
+const myCat: Pet<Cat> = "cat";
+// const myHamster: Pet<{ legs: number }> = "unknown"; // Error: Type '{ legs: number; }' does not satisfy the constraint 'Animal'.
+
+console.log(myDog); // Output: "dog"
+console.log(myCat); // Output: "cat"
+```
+
+In this example, `Pet` is a conditional type that determines if a given type `T` extends `Dog`, `Cat`, or is `unknown`.
+
+### Conclusion
+
+While TypeScript type aliases themselves cannot be extended directly, you can achieve similar effects using intersection types, union types, and conditional types. These features allow you to compose new types from existing ones, providing flexibility and reusability in your type definitions.
+
+
+In TypeScript, `unknown`, `any`, and `never` are distinct types that serve different purposes and provide different levels of type safety and expressiveness. Here's an explanation of each type along with examples:
+
+### `unknown` Type
+
+The `unknown` type represents a type-safe counterpart of `any`. It is used to denote a value whose type is not known at compile-time. You must perform some type of checking or assertion before you can perform operations with values of type `unknown`.
+
+```typescript
+let userInput: unknown;
+let userName: string;
+
+userInput = 5;
+userInput = "Max";
+
+// Type assertion or type checking required before assigning to a more specific type
+if (typeof userInput === "string") {
+    userName = userInput; // OK
+}
+
+// userName = userInput; // Error: Type 'unknown' is not assignable to type 'string'.
+```
+
+In this example, `userInput` is initially assigned a number and then a string. Before assigning `userInput` to `userName`, we check its type using `typeof` to ensure it's a string. This type check is necessary because TypeScript won't allow direct assignment from `unknown` to `string` without such a check.
+
+### `any` Type
+
+The `any` type in TypeScript is the most flexible type. It effectively disables TypeScript's type checking for a particular value, allowing it to be assigned to any other type without causing type errors.
+
+```typescript
+let anyValue: any;
+
+anyValue = 5; // OK
+anyValue = "Max"; // OK
+
+let userName: string = anyValue; // No error, because anyValue is of type 'any'
+
+// Allows access to any properties/methods without type checking
+console.log(anyValue.someProperty); // No type-checking error
+```
+
+Here, `anyValue` can be assigned any type of value (`number`, `string`, `object`, etc.) without any type checking by TypeScript. This flexibility can be convenient but sacrifices type safety.
+
+### `never` Type
+
+The `never` type represents values that never occur. It is typically used to indicate that a function will not return normally (e.g., it throws an error or has an infinite loop).
+
+```typescript
+function throwError(message: string): never {
+    throw new Error(message);
+}
+
+function infiniteLoop(): never {
+    while (true) {
+        // Infinite loop
+    }
+}
+
+function unreachableCode(): never {
+    throw new Error("This function should not be called");
+}
+
+let neverVariable: never;
+
+// Type of 'never' can be assigned to another type, but not vice versa
+let num: number = neverVariable; // Error: Type 'never' is not assignable to type 'number'
+```
+
+In this example:
+- `throwError` is a function that explicitly throws an error, never returning normally.
+- `infiniteLoop` is a function that contains an infinite loop, also never returning normally.
+- `unreachableCode` is a function that throws an error, indicating that its code should never be executed.
+
+### Summary
+
+- **`unknown`:** Type-safe counterpart of `any`, requires type checking/assertions before use.
+- **`any`:** Disables TypeScript's type checking for a particular value, allowing it to be assigned to any type.
+- **`never`:** Represents values that never occur, typically used for functions that never return normally.
+
+Using `unknown` and `never` provides stronger type safety compared to `any`, as they allow TypeScript to catch more errors at compile-time. They help developers write more robust and predictable code by ensuring types are respected and errors are minimized.
+
+
+The TypeScript compiler (`tsc`) is a command-line tool that converts TypeScript code (.ts files) into JavaScript code (.js files) that can be executed in any JavaScript runtime environment (like browsers or Node.js). It brings the benefits of TypeScript's static typing and modern ECMAScript features to JavaScript development.
+
+### Installing TypeScript Compiler
+
+First, you need to install TypeScript globally on your machine using npm (Node Package Manager):
+
+```bash
+npm install -g typescript
+```
+
+Once installed, you can use the `tsc` command to compile TypeScript files.
+
+### Compiling TypeScript Code
+
+Let's go through the details of using the TypeScript compiler with an example.
+
+#### Example TypeScript File
+
+Create a TypeScript file (`example.ts`) with some TypeScript code:
+
+```typescript
+// example.ts
+function greeter(person: string) {
+    return `Hello, ${person}!`;
+}
+
+let user = "Jane Doe";
+console.log(greeter(user));
+```
+
+#### Compiling TypeScript Code
+
+To compile `example.ts` into JavaScript, run the TypeScript compiler (`tsc`) on the command line:
+
+```bash
+tsc example.ts
+```
+
+This command compiles `example.ts` into `example.js` (along with `example.js.map` for source maps if configured). Here's what happens during compilation:
+
+1. **Type Checking:** TypeScript checks for type errors and provides type annotations for variables and function parameters based on TypeScript's static type system.
+
+2. **Transpilation:** TypeScript compiler transpiles TypeScript features (such as arrow functions, classes, async/await, etc.) into equivalent ECMAScript code that can run in any JavaScript environment.
+
+3. **Output Files:** After compilation, you'll see the generated JavaScript (`example.js`) that corresponds to your TypeScript code.
+
+### TypeScript Configuration (`tsconfig.json`)
+
+To configure TypeScript compilation options for your project, you can use a `tsconfig.json` file. This file specifies compiler options, file inclusion/exclusion rules, and other settings.
+
+```json
+// tsconfig.json
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "strict": true,
+    "esModuleInterop": true
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
+}
+```
+
+- **`target`:** Specifies the ECMAScript target version for the compiled JavaScript.
+- **`module`:** Specifies the module system used in the generated JavaScript (e.g., `"commonjs"` for Node.js, `"ESNext"` for modern browsers).
+- **`outDir`:** Specifies the output directory for compiled JavaScript files.
+- **`strict`:** Enables strict type-checking options.
+- **`esModuleInterop`:** Allows compatibility between CommonJS and ES module systems.
+
+### Watching Files
+
+You can also use `tsc` in watch mode to automatically recompile TypeScript files when they change:
+
+```bash
+tsc -w
+```
+
+### Using Compiled JavaScript
+
+After compiling TypeScript to JavaScript, you can include or reference the generated `.js` files in your HTML or Node.js application just like any other JavaScript file:
+
+```html
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TypeScript Example</title>
+    <script src="dist/example.js" defer></script>
+</head>
+<body>
+    <h1>TypeScript Example</h1>
+</body>
+</html>
+```
+
+### Summary
+
+The TypeScript compiler (`tsc`) is a powerful tool that converts TypeScript code into JavaScript, bringing TypeScript's static typing and modern ECMAScript features to JavaScript development. With configuration options and watch mode, `tsc` supports efficient development workflows and ensures TypeScript code is compatible with various JavaScript environments.
