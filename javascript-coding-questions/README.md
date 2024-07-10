@@ -1388,7 +1388,7 @@ const parent = document.getElementById('parent');
 
 parent.addEventListener('click', function(event) {
   if (event.target.tagName === 'BUTTON') {
-    console.log('Button clicked');
+    event.target.classList.toggle('selected');
   }
 });
 
@@ -2058,31 +2058,31 @@ const withoutSort(str) {
 ```
 The bind() method creates a new function and when that new function is called it set this keyword to the first argument which is passed to the bind method
 
-let nameObj = {
-	name: "Tony"
+// Polyfill for bind method
+if (!Function.prototype.bind) {
+    Function.prototype.bind = function(context) {
+        var fn = this; // 'this' refers to the function on which bind is called
+        var args = Array.prototype.slice.call(arguments, 1); // Get arguments after 'context'
+
+        return function() {
+            var newArgs = args.concat(Array.prototype.slice.call(arguments)); // Concatenate bound args with new args
+            return fn.apply(context, newArgs); // Call original function with context and arguments
+        };
+    };
 }
 
-let PrintName = {
-	name: "steve",
-	sayHi: function () {
+// Example usage:
+let obj = {
+    x: 42
+};
 
-		// Here "this" points to nameObj
-		console.log(this.name);
-	}
+function greet(name, age) {
+    console.log(`Hello, ${name}. You are ${age} years old. x is ${this.x}`);
 }
 
-let HiFun = PrintName.sayHi.bind(nameObj);
-HiFun();
+let boundGreet = greet.bind(obj, "Alice");
+boundGreet(30); // Output: Hello, Alice. You are 30 years old. x is 42
 
-// Polyfill for bind()
-Object.prototype.MyBind = function (bindObj, ...args) {
-    bindObj.myMethod = this;
-    return function () {
-        bindObj.myMethod(...args);
-    }
-}
-let HiFun = PrintName.sayHi.MyBind(nameObj, 42);
-HiFun();
 ```
 
 74. **call() method and Polyfill call().**
@@ -2091,27 +2091,26 @@ HiFun();
 The call() method calls the function directly and sets this to the first argument passed to the call method
 call(): and apply() both allow you to call a function with a specific context. This means that you can specify the value of the this keyword inside the function.
 
-let nameObj = {
-	name: "Tony"
+// Polyfill for call method
+if (!Function.prototype.call) {
+    Function.prototype.call = function(context) {
+        context = context || window; // Default context to global object (window in browsers)
+        context.fn = this; // 'this' refers to the function on which call is called
+
+        var args = [];
+        for (var i = 1; i < arguments.length; i++) {
+            args.push('arguments[' + i + ']');
+        }
+
+        // Execute the function with specified context and arguments
+        var result = eval('context.fn(' + args.join(',') + ')');
+
+        delete context.fn; // Clean up by deleting added property on context object
+
+        return result; // Return the result of the function execution
+    };
 }
 
-let PrintName = {
-	name: "steve",
-	sayHi: function (age) {
-		console.log(this.name + " age is " + age);
-	}
-}
-
-PrintName.sayHi.call(nameObj, 42);
-
-// Polyfill for call()
-Object.prototype.MyCall = function (callObj, ...args) {
-    callObj.myMethod = this;
-
-    callObj.myMethod(...args);
-
-}
-PrintName.sayHi.MyCall(nameObj, 42);
 ```
 
 75. **apply() method and Polyfill apply().**
@@ -2120,26 +2119,30 @@ PrintName.sayHi.MyCall(nameObj, 42);
 The apply() method calls the function directly and sets this to the first argument passed to the apply method
 call(): and apply() both allow you to call a function with a specific context. This means that you can specify the value of the this keyword inside the function.
 
-let nameObj = {
-	name: "Tony"
+// Polyfill for apply method
+if (!Function.prototype.apply) {
+    Function.prototype.apply = function(context, argsArray) {
+        context = context || window; // Default context to global object (window in browsers)
+        context.fn = this; // 'this' refers to the function on which apply is called
+
+        var result;
+
+        if (!argsArray) {
+            result = context.fn();
+        } else {
+            var args = [];
+            for (var i = 0; i < argsArray.length; i++) {
+                args.push('argsArray[' + i + ']');
+            }
+            result = eval('context.fn(' + args.join(',') + ')');
+        }
+
+        delete context.fn; // Clean up by deleting added property on context object
+
+        return result; // Return the result of the function execution
+    };
 }
 
-let PrintName = {
-	name: "steve",
-	sayHi: function (...age) {
-		console.log(this.name + " age is " + age);
-	}
-}
-PrintName.sayHi.apply(nameObj, [42]);
-
-// Polyfill for apply()
-Object.prototype.MyApply = function (applyObj, args) {
-    applyObj.myMethod = this;
-
-    applyObj.myMethod(...args);
-
-}
-PrintName.sayHi.MyApply(nameObj, [42]);
 ```
 
 76. **deep and shallow copy.**
@@ -4351,5 +4354,45 @@ if ('email' in person) {
 
 Object manipulation in JavaScript is versatile and foundational to many programming tasks, ranging from simple data storage to complex application state management in frameworks like React and Angular. Understanding these techniques is crucial for effective JavaScript development.
 
+If you want to rearrange the positive and negative items in the array without changing their relative order (i.e., positive numbers stay in their original order, as do negative numbers), you can modify the approach slightly. Here’s how you can do it in JavaScript:
 
+```javascript
+function rearrangePositiveNegative(arr) {
+    let positiveIndex = 0;
 
+    // Move all negative numbers to the end
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i] > 0) {
+          [arr[i], arr[positiveIndex]] = [arr[positiveIndex], arr[i]];
+          positiveIndex++;
+        }
+    }
+    
+    return arr;
+}
+
+// Example usage:
+let arr = [4, -12, 2, 46, -20, -1];
+let rearrangedArr = rearrangePositiveNegative(arr);
+console.log(rearrangedArr); // [4,2,46,-12,-20,-1]
+```
+
+### Explanation:
+- **Initialization**: `positiveIndex` starts at `0`, which tracks the position where the next positive number should be placed.
+- **Loop through the array**: Iterate through each element of the array.
+- **Condition**: If the current element `arr[i]` is negative (`arr[i] < 0`), swap it with the element at `arr[positiveIndex]` and then increment `positiveIndex`.
+- **Result**: This will move all negative numbers to the end of the array while maintaining the relative order of positive numbers.
+
+### Example Walkthrough:
+Given the array `[4, -12, 2, 46, -20, -1]`:
+- Start with `positiveIndex = 0`.
+- Iterate through the array:
+  - For `arr[1] = -12` (negative), swap with `arr[positiveIndex = 0] = 4`:
+    - Resulting array: `[ -12, 4, 2, 46, -20, -1 ]`, `positiveIndex` increments to `1`.
+  - For `arr[4] = -20` (negative), swap with `arr[positiveIndex = 1] = 2`:
+    - Resulting array: `[ -12, -20, 2, 46, 4, -1 ]`, `positiveIndex` increments to `2`.
+  - For `arr[5] = -1` (negative), swap with `arr[positiveIndex = 2] = 2`:
+    - Resulting array: `[ -12, -20, -1, 46, 4, 2 ]`, `positiveIndex` increments to `3`.
+- Final array: `[ -12, -20, -1, 46, 4, 2 ]`.
+
+This approach effectively partitions the array into positive and negative numbers while preserving the relative order of positive numbers and moving all negative numbers to the end.

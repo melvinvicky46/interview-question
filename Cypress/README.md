@@ -1105,3 +1105,47 @@ When writing Cypress tests, especially for applications handling sensitive data,
 
 By considering these security considerations and implementing appropriate security measures, you can mitigate risks and ensure that sensitive data remains protected during Cypress testing activities.
 
+
+In Cypress, `beforeEach()` and `afterEach()` are hooks provided by the Cypress testing framework to set up and tear down test conditions respectively. Here’s how they work:
+
+### beforeEach()
+
+`beforeEach()` is used to run some code before each test case (each `it()` block) in your test suite. This is useful when you need to set up some initial state or perform actions that are required before every test runs.
+
+**Example:**
+
+```javascript
+beforeEach(() => {
+    // Code to run before each test case
+    cy.visit('https://example.com');
+    // Perform other setup actions as needed
+});
+```
+
+In this example, `cy.visit()` is used to visit a webpage before each test case executes. You might use `beforeEach()` to log in a user, reset a database, or prepare any state that your tests rely on.
+
+### afterEach()
+
+`afterEach()` is used to run some code after each test case (each `it()` block) finishes running. This is typically used to clean up after the test, reset state, or perform any necessary teardown actions.
+
+**Example:**
+
+```javascript
+afterEach(() => {
+    // Code to run after each test case
+    cy.clearCookies();
+    // Perform other teardown actions as needed
+});
+```
+
+Here, `cy.clearCookies()` is used to clean up cookies after each test case. You might use `afterEach()` to log out a user, clean up temporary files, or reset any changes made during the test.
+
+### Usage Tips
+
+- **Scope**: `beforeEach()` and `afterEach()` are scoped to the describe block they are defined in. If you have nested describe blocks, these hooks will apply to all test cases within their respective describe blocks.
+  
+- **Chaining**: You can chain commands inside `beforeEach()` and `afterEach()` just like in regular Cypress tests. This allows you to perform complex setups and teardowns if needed.
+
+- **Async Operations**: You can use asynchronous operations inside `beforeEach()` and `afterEach()` by returning a promise or using `async`/`await`.
+
+These hooks are powerful tools in Cypress for managing test setup and teardown in a structured and repeatable way, ensuring that each test starts and ends in a known state.
