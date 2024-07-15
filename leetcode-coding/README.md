@@ -1076,6 +1076,30 @@ function lengthOfLongestSubstring(s) {
 // Example usage:
 const s = "abcabcbb";
 console.log(lengthOfLongestSubstring(s)); // Output: 3 (the longest substring without repeating characters is "abc")
+
+----------------------------------------
+
+function longestSubstring(s) {
+    let maxLength = 0;
+    let maxSubstring = '';
+
+    for (let i = 0; i < s.length; i++) {
+        let currentSubstring = '';
+        for (let j = i; j < s.length; j++) {
+            if (currentSubstring.includes(s[j])) {
+                break;
+            }
+            currentSubstring += s[j];
+        }
+        if (currentSubstring.length > maxLength) {
+            maxLength = currentSubstring.length;
+            maxSubstring = currentSubstring;
+        }
+    }
+
+    return maxSubstring;
+}
+
 ```
 
 In this implementation:
