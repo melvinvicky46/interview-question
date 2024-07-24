@@ -2533,6 +2533,35 @@ In this example:
 
 By using error boundaries in React applications, you can ensure a more robust and resilient user experience by gracefully handling errors and preventing them from propagating up the component tree and crashing the entire application.
 
+
+**Error Boundary in functional component**
+```
+import React, { useState } from 'react';
+
+function ErrorBoundary(props) {
+  const [hasError, setHasError] = useState(false);
+
+  // This function will be called whenever there is an error in the child components
+  const componentDidCatch = (error, errorInfo) => {
+    // You can log the error to an error reporting service
+    console.error('Error caught by ErrorBoundary:', error, errorInfo);
+    // Update state to indicate error
+    setHasError(true);
+  };
+
+  if (hasError) {
+    // Fallback UI when there is an error
+    return <div>Something went wrong!</div>;
+  }
+
+  // Render children normally if no error
+  return props.children;
+}
+
+export default ErrorBoundary;
+
+```
+
 13. **What are portals in React? How can you use portals to render components outside the DOM hierarchy of their parent components?**
 Portals in React provide a way to render a child component at a different location in the DOM hierarchy than its parent component. This allows you to render components outside the normal DOM tree structure of their parent components, which can be useful for implementing UI features like modals, tooltips, and popovers.
 
