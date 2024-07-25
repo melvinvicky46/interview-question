@@ -712,3 +712,243 @@ function ScrollSync() {
 ### Summary
 
 `useLayoutEffect` is useful when you need to perform immediate DOM mutations or read layout information right after a render cycle. It ensures that your code runs synchronously after the DOM has been updated, making it suitable for tasks like measurements, animations, or any operation that depends on the final layout of elements. However, consider its performance implications and use it only when necessary to avoid blocking the browser's rendering pipeline.
+
+
+`useMemo` is a React hook used for memoizing expensive computations so that they are only recomputed when their dependencies have changed. It helps optimize performance by caching the result of a function and returning the cached result when the inputs (dependencies) haven't changed.
+
+### When to Use `useMemo`
+
+You should use `useMemo` when you have a function that:
+- Is computationally expensive.
+- Has dependencies (e.g., state, props) and you want to avoid recalculating its result on every render.
+- Returns a value that can be cached and reused between renders.
+
+### Syntax and Usage
+
+The basic syntax of `useMemo` is:
+
+```jsx
+import React, { useMemo } from 'react';
+
+function MyComponent({ prop1, prop2 }) {
+  const memoizedValue = useMemo(() => computeExpensiveValue(prop1, prop2), [prop1, prop2]);
+
+  return (
+    <div>
+      <p>Memoized Value: {memoizedValue}</p>
+    </div>
+  );
+}
+```
+
+In this example:
+- `computeExpensiveValue` is a function that performs a costly computation based on `prop1` and `prop2`.
+- `useMemo` caches the result of `computeExpensiveValue` and recalculates it only when `prop1` or `prop2` change.
+
+### Examples
+
+#### Example 1: Memoizing a Computation
+
+```jsx
+import React, { useState, useMemo } from 'react';
+
+function FibonacciCalculator({ number }) {
+  const calculateFibonacci = (num) => {
+    if (num <= 1) return num;
+    return calculateFibonacci(num - 1) + calculateFibonacci(num - 2);
+  };
+
+  const fibonacciNumber = useMemo(() => calculateFibonacci(number), [number]);
+
+  return (
+    <div>
+      <p>Fibonacci number at position {number} is: {fibonacciNumber}</p>
+    </div>
+  );
+}
+```
+
+**Explanation**:
+- `FibonacciCalculator` calculates the Fibonacci number at a given position (`number`).
+- `calculateFibonacci` is a recursive function that computes Fibonacci numbers.
+- `useMemo` ensures that `calculateFibonacci` is called only when `number` changes, avoiding unnecessary recomputations.
+
+#### Example 2: Memoizing a Component for Optimization
+
+```jsx
+import React, { useState, useMemo } from 'react';
+
+function ExpensiveComponent({ prop }) {
+  // Assume this component is expensive to render
+  console.log('ExpensiveComponent rendered');
+  
+  return (
+    <div>
+      <p>Expensive Component: {prop}</p>
+    </div>
+  );
+}
+
+function ParentComponent() {
+  const [count, setCount] = useState(0);
+  const memoizedComponent = useMemo(() => <ExpensiveComponent prop={count} />, [count]);
+
+  const incrementCount = () => {
+    setCount(count + 1);
+  };
+
+  return (
+    <div>
+      {memoizedComponent}
+      <button onClick={incrementCount}>Increment Count</button>
+    </div>
+  );
+}
+```
+
+**Explanation**:
+- `ExpensiveComponent` is a hypothetical component that is expensive to render.
+- `ParentComponent` uses `useMemo` to memoize `ExpensiveComponent` so that it only re-renders when `count` changes.
+- This optimizes performance by avoiding re-rendering `ExpensiveComponent` unnecessarily on every render of `ParentComponent`.
+
+### Considerations
+
+- **Performance**: Use `useMemo` judiciously to optimize performance. Memoizing functions or components that are truly expensive to compute/render can significantly improve application responsiveness.
+  
+- **Dependencies**: Ensure that all dependencies that affect the computation or rendering are included in the dependency array of `useMemo`. This ensures the memoized value is updated correctly when dependencies change.
+
+- **Memoization vs. Caching**: `useMemo` is primarily for memoizing the result of a function. It's different from caching data fetched from APIs, which typically involves using other techniques like `useState` with `useEffect`.
+
+### Summary
+
+`useMemo` is a powerful hook in React for optimizing performance by memoizing expensive computations. It caches the result of a function and recalculates it only when necessary dependencies change. By using `useMemo` correctly, you can ensure that your React components are efficient and responsive, especially when dealing with computations or rendering intensive components.
+
+
+`useCallback` is a React hook that is used to memoize functions. It returns a memoized version of the callback function that only changes if one of the dependencies has changed. This optimization is useful to prevent unnecessary renders in child components that rely on the callback.
+
+### When to Use `useCallback`
+
+You should use `useCallback` when you have a function:
+- That gets recreated on every render (e.g., defined inline within a component).
+- That is passed down to child components that rely on reference equality to prevent unnecessary renders.
+- That has dependencies and you want to ensure it doesn't change unless those dependencies change.
+
+### Syntax and Usage
+
+The basic syntax of `useCallback` is:
+
+```jsx
+import React, { useState, useCallback } from 'react';
+
+function MyComponent({ onClick }) {
+  const handleClick = useCallback(() => {
+    onClick('Clicked!');
+  }, [onClick]);
+
+  return (
+    <div>
+      <button onClick={handleClick}>Click Me</button>
+    </div>
+  );
+}
+```
+
+In this example:
+- `handleClick` is a memoized callback function created with `useCallback`.
+- It ensures that `onClick` function reference remains the same unless `onClick` dependency changes (in this case, it won't change unless the `onClick` prop itself changes).
+
+### Examples
+
+#### Example 1: Preventing Unnecessary Re-renders in Child Components
+
+```jsx
+import React, { useState, useCallback } from 'react';
+
+function ChildComponent({ onClick }) {
+  console.log('ChildComponent rendered');
+
+  return (
+    <div>
+      <button onClick={onClick}>Click Me</button>
+    </div>
+  );
+}
+
+function ParentComponent() {
+  const [count, setCount] = useState(0);
+
+  // Define a callback function with useCallback
+  const handleClick = useCallback(() => {
+    setCount(count + 1);
+  }, [count]); // Dependency array ensures handleClick only changes when count changes
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <ChildComponent onClick={handleClick} />
+    </div>
+  );
+}
+```
+
+**Explanation**:
+- `ParentComponent` contains `handleClick`, which increments `count` when the button in `ChildComponent` is clicked.
+- `handleClick` is memoized with `useCallback` with `count` as a dependency. This ensures that `handleClick` doesn't change on every render of `ParentComponent`, preventing unnecessary re-renders of `ChildComponent`.
+
+#### Example 2: Memoizing an API Call Handler
+
+```jsx
+import React, { useState, useCallback } from 'react';
+
+function fetchDataFromApi(searchTerm) {
+  // Mock API call
+  console.log(`Fetching data for: ${searchTerm}`);
+  return Promise.resolve(`Data for ${searchTerm}`);
+}
+
+function DataFetchingComponent() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [data, setData] = useState(null);
+
+  // Memoized handler for fetching data from API
+  const fetchData = useCallback(async () => {
+    const result = await fetchDataFromApi(searchTerm);
+    setData(result);
+  }, [searchTerm]);
+
+  const handleInputChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  return (
+    <div>
+      <input
+        type="text"
+        value={searchTerm}
+        onChange={handleInputChange}
+        placeholder="Enter search term..."
+      />
+      <button onClick={fetchData}>Fetch Data</button>
+      <div>
+        {data && <p>Data: {data}</p>}
+      </div>
+    </div>
+  );
+}
+```
+
+**Explanation**:
+- `DataFetchingComponent` allows users to enter a search term and fetch data from an API when a button is clicked.
+- `fetchData` is memoized with `useCallback`. It ensures that the `fetchData` function reference remains the same unless `searchTerm` changes, preventing unnecessary re-fetching of data on every render.
+
+### Considerations
+
+- **Memoization vs. Performance**: Use `useCallback` judiciously to optimize performance by memoizing functions that are passed down to child components or used as dependencies in other hooks like `useEffect`.
+
+- **Dependencies**: Ensure that all dependencies that affect the behavior of the callback function are included in the dependency array of `useCallback`. This ensures the memoized callback behaves correctly when its dependencies change.
+
+- **Performance Profiling**: Measure the performance impact of `useCallback` to ensure it provides a noticeable optimization and doesn't introduce unnecessary complexity.
+
+### Summary
+
+`useCallback` is a valuable hook in React for optimizing performance by memoizing callback functions. It ensures that functions passed to child components or used within other hooks are stable across renders, reducing unnecessary re-renders and improving application responsiveness. Use `useCallback` to optimize functions that are computationally expensive or rely on dependencies that change infrequently.
