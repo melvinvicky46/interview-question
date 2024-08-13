@@ -655,7 +655,7 @@ function linearSearch(arr, target) {
 // Big-O O(n)
 console.log(linearSearch([2, 1, 4, 5], 4)); //3
 
-// Binary search works only on sorted array
+<!-- Binary search works only on sorted array -->
 function binarySearch(arr, target) {
   let leftIndex = 0,
     rightIndex = arr.length - 1;
@@ -676,7 +676,7 @@ function binarySearch(arr, target) {
 // BigO - O(logn)
 console.log(binarySearch([2, 3, 4, 8, 9], 10)); //-1
 
-// Recursion binary search
+<!-- Recursion binary search -->
 function recursiveBinarySearch(arr, target) {
   return search(arr, target, 0, arr.length - 1);
 }
@@ -700,30 +700,25 @@ console.log(recursiveBinarySearch([1, 2, 3, 4, 5, 6], 3)); // -1
 
 // -------------------- Sorting --------------
 
-function bubbleSort(arr) {}
-
-console.log(bubbleSort([3, 1, 5, 2, 8]));
-
-function formatNumber(number) {
-  // Convert numbers greater than 1 million
-  if (number >= 1000000) {
-    return (number / 1000000).toFixed(1) + "M";
-  }
-  // Convert numbers greater than 1000
-  else if (number >= 1000) {
-    return (number / 1000).toFixed(1) + "k";
-  }
-  // Return unchanged for smaller numbers
-  else {
-    return Math.round(number);
-  }
+<!-- Bubble sort -->
+function bubbleSort(arr) {
+  let swapped;
+  do {
+    swapped = false;
+    for (let i = 0; i < arr.length - 1; i++) {
+      if (arr[i] > arr[i + 1]) {
+        [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
+        swapped = true;
+      }
+    }
+  } while (swapped);
+  return arr;
 }
 
-// Examples
-console.log(formatNumber(523.22)); // Outputs: "500"
-console.log(formatNumber(1500)); // Outputs: "1.5k"
-console.log(formatNumber(1200000)); // Outputs: "1.2M"
-console.log(formatNumber(1234567)); // Outputs: "1.2M"
+console.log(bubbleSort([8, 20, -2, 4, -6]));
+
+
+<!-- Insertion Sort -->
 
 
 ```

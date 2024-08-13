@@ -314,85 +314,86 @@ Type aliases and interfaces are both used to define custom types in TypeScript, 
 ### Type Aliases:
 
 1. **Simple Aliasing**: Type aliases allow you to create a new name for any type, including primitives, union types, tuples, and more complex types.
-   
-    ```typescript
-    type Name = string;
-    type Age = number;
-    type Person = { name: Name; age: Age };
-    ```
+
+   ```typescript
+   type Name = string;
+   type Age = number;
+   type Person = { name: Name; age: Age };
+   ```
 
 2. **Union Types**: Type aliases are flexible and can be used to create aliases for union types.
-   
-    ```typescript
-    type Result = string | number;
-    ```
+
+   ```typescript
+   type Result = string | number;
+   ```
 
 3. **Intersection Types**: Type aliases can also be used to define intersection types.
-   
-    ```typescript
-    type Action = { type: string } & { payload: any };
-    ```
+
+   ```typescript
+   type Action = { type: string } & { payload: any };
+   ```
 
 4. **Readability and Code Maintenance**: Type aliases can make code more readable and maintainable by providing descriptive names for complex types or for reusing types.
 
 ### Interfaces:
 
 1. **Object Shape**: Interfaces are specifically used to define the structure of objects. They can describe the shape of an object by specifying properties and their types.
-   
-    ```typescript
-    interface Person {
-        name: string;
-        age: number;
-    }
-    ```
+
+   ```typescript
+   interface Person {
+     name: string;
+     age: number;
+   }
+   ```
 
 2. **Extending**: Interfaces support extending other interfaces, allowing for the composition of multiple interfaces into a single one.
-   
-    ```typescript
-    interface Shape {
-        color: string;
-    }
 
-    interface Square extends Shape {
-        sideLength: number;
-    }
-    ```
+   ```typescript
+   interface Shape {
+     color: string;
+   }
+
+   interface Square extends Shape {
+     sideLength: number;
+   }
+   ```
 
 3. **Declaration Merging**: Interfaces support declaration merging, meaning you can spread the definition of an interface across multiple declarations in the same scope.
 
-    ```typescript
-    interface User {
-        name: string;
-    }
+   ```typescript
+   interface User {
+     name: string;
+   }
 
-    interface User {
-        age: number;
-    }
+   interface User {
+     age: number;
+   }
 
-    // This results in a single merged interface:
-    // interface User {
-    //     name: string;
-    //     age: number;
-    // }
-    ```
+   // This results in a single merged interface:
+   // interface User {
+   //     name: string;
+   //     age: number;
+   // }
+   ```
 
 4. **Implementing**: Interfaces can be implemented by classes, ensuring that the class adheres to the structure specified by the interface.
 
-    ```typescript
-    interface Printable {
-        print(): void;
-    }
+   ```typescript
+   interface Printable {
+     print(): void;
+   }
 
-    class Document implements Printable {
-        print() {
-            console.log("Printing document...");
-        }
-    }
-    ```
+   class Document implements Printable {
+     print() {
+       console.log("Printing document...");
+     }
+   }
+   ```
 
 ### Choosing Between Type Aliases and Interfaces:
 
 - **Use Type Aliases**:
+
   - For creating simple types, especially for primitive types, union types, and tuples.
   - When you want to create descriptive names for complex types.
   - For defining intersection types.
@@ -404,7 +405,6 @@ Type aliases and interfaces are both used to define custom types in TypeScript, 
 
 In practice, the choice between type aliases and interfaces often comes down to personal preference and specific use cases. They can often be used interchangeably, but understanding their differences can help in making more informed design decisions.
 
-
 Sure, let's create a simple example to illustrate the usage of namespaces in TypeScript:
 
 Suppose we have a project where we want to organize functionality related to geometry calculations. We can create a namespace called `Geometry` to encapsulate various geometric shapes and operations:
@@ -413,28 +413,28 @@ Suppose we have a project where we want to organize functionality related to geo
 // geometry.ts
 
 namespace Geometry {
-    export interface Point {
-        x: number;
-        y: number;
+  export interface Point {
+    x: number;
+    y: number;
+  }
+
+  export function distanceBetweenPoints(p1: Point, p2: Point): number {
+    const dx = p2.x - p1.x;
+    const dy = p2.y - p1.y;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+
+  export class Circle {
+    constructor(public center: Point, public radius: number) {}
+
+    circumference(): number {
+      return 2 * Math.PI * this.radius;
     }
 
-    export function distanceBetweenPoints(p1: Point, p2: Point): number {
-        const dx = p2.x - p1.x;
-        const dy = p2.y - p1.y;
-        return Math.sqrt(dx * dx + dy * dy);
+    area(): number {
+      return Math.PI * this.radius * this.radius;
     }
-
-    export class Circle {
-        constructor(public center: Point, public radius: number) {}
-
-        circumference(): number {
-            return 2 * Math.PI * this.radius;
-        }
-
-        area(): number {
-            return Math.PI * this.radius * this.radius;
-        }
-    }
+  }
 }
 ```
 
@@ -471,46 +471,49 @@ In `main.ts`:
 
 This example demonstrates how namespaces in TypeScript can be used to organize related functionality and prevent naming conflicts, making the codebase more modular and maintainable.
 
-
 Certainly! Let's delve deeper into the details of interfaces and types in TypeScript, covering their capabilities, use cases, and nuances.
 
 ### Interfaces
 
 1. **Definition and Structure**:
+
    - **Purpose**: Interfaces are primarily used to define the structure of objects. They specify the names and types of properties and methods that an object must have to conform to that interface.
    - **Example**:
      ```typescript
      interface Person {
-         name: string;
-         age: number;
-         greet(): void;
+       name: string;
+       age: number;
+       greet(): void;
      }
      ```
    - In this example, `Person` interface mandates that any object implementing it must have `name` (string), `age` (number), and `greet` (function returning void) properties.
 
 2. **Extensibility**:
+
    - Interfaces support inheritance via extends keyword, allowing you to build on existing interfaces.
    - **Example**:
      ```typescript
      interface Employee extends Person {
-         employeeId: number;
-         department: string;
+       employeeId: number;
+       department: string;
      }
      ```
    - Here, `Employee` extends `Person` interface and adds `employeeId` and `department` properties.
 
 3. **Declaration Merging**:
+
    - TypeScript allows you to merge multiple declarations of the same interface into a single definition.
    - This is useful when working with third-party libraries or modularizing your codebase.
    - **Example**:
+
      ```typescript
      interface Shape {
-         color: string;
+       color: string;
      }
 
      interface Shape {
-         width: number;
-         height: number;
+       width: number;
+       height: number;
      }
 
      // Resulting merged interface
@@ -522,6 +525,7 @@ Certainly! Let's delve deeper into the details of interfaces and types in TypeSc
      ```
 
 4. **Compatibility**:
+
    - Interfaces can describe the shape that objects should have at runtime. This is useful for defining contracts that classes or objects must adhere to.
 
 5. **Convention**:
@@ -531,45 +535,51 @@ Certainly! Let's delve deeper into the details of interfaces and types in TypeSc
 ### Types
 
 1. **Definition**:
+
    - **Versatility**: Types in TypeScript are more versatile than interfaces as they can define not only object shapes but also primitive types, union types, tuple types, and more complex structures.
    - **Example**:
+
      ```typescript
      type Point = {
-         x: number;
-         y: number;
+       x: number;
+       y: number;
      };
 
      type ID = string | number;
 
-     type Action = 'create' | 'read' | 'update' | 'delete';
+     type Action = "create" | "read" | "update" | "delete";
      ```
 
 2. **Utility Types**:
+
    - TypeScript provides built-in utility types such as `Partial`, `Pick`, `Record`, `Exclude`, `Extract`, etc., which allow you to manipulate existing types to create new ones easily.
    - **Example**:
      ```typescript
      type PartialPerson = Partial<Person>; // Makes all properties of Person optional
-     type PersonProps = Pick<Person, 'name' | 'age'>; // Selects specific properties from Person
+     type PersonProps = Pick<Person, "name" | "age">; // Selects specific properties from Person
      ```
 
 3. **Literal Types and Union Types**:
+
    - Types can directly represent literal values (`string`, `number`, `boolean`) and can create union types and intersection types using `|` and `&` respectively.
    - **Example**:
+
      ```typescript
-     type Status = 'pending' | 'approved' | 'rejected';
-     type AdminStatus = 'admin' | 'superadmin';
-     
+     type Status = "pending" | "approved" | "rejected";
+     type AdminStatus = "admin" | "superadmin";
+
      type UserRole = Status | AdminStatus;
      ```
 
 4. **Aliasing**:
+
    - Types allow aliasing complex types, making code more readable and maintainable by giving meaningful names to complex structures.
    - **Example**:
      ```typescript
      type Employee = {
-         name: string;
-         age: number;
-         position: string;
+       name: string;
+       age: number;
+       position: string;
      };
      ```
 
@@ -590,144 +600,234 @@ Certainly! Let's delve deeper into the details of interfaces and types in TypeSc
 ### Practical Considerations
 
 - **Interchangeability**: Interfaces and types can often be used interchangeably in TypeScript for defining object shapes. The choice between them often comes down to personal preference or team conventions.
-  
 - **Tooling and IDE Support**: Interfaces are typically more visible in documentation and tools like IntelliSense, which might influence your choice depending on your project's needs.
 
 In summary, both interfaces and types in TypeScript serve to define and shape your data structures and types. Understanding their capabilities and nuances helps you leverage TypeScript's type system effectively in your projects.
 
 Certainly! Here are TypeScript interview questions for experienced developers, each accompanied by an example where applicable:
 
-1. **TypeScript Fundamentals:**
-   - **Question:** Explain the key differences between TypeScript and JavaScript.
-     - **Example:** TypeScript provides static typing through type annotations, interfaces, and advanced type system features, which JavaScript lacks. For instance:
-       ```typescript
-       // TypeScript example
-       function greet(person: string): string {
-           return `Hello, ${person}!`;
-       }
-       console.log(greet('Alice')); // Outputs: Hello, Alice!
+1.  **TypeScript Fundamentals:**
 
-       // Equivalent JavaScript (without TypeScript annotations)
-       function greet(person) {
-           return `Hello, ${person}!`;
-       }
-       console.log(greet('Alice')); // Outputs: Hello, Alice!
-       ```
-   - **Question:** How does TypeScript help with catching errors early in development compared to JavaScript?
-     - **Example:** TypeScript catches type-related errors during compile-time, reducing runtime errors. For example:
-       ```typescript
-       // TypeScript example
-       function add(a: number, b: number): number {
-           return a + b;
-       }
-       console.log(add(2, '3')); // Error: Argument of type 'string' is not assignable to parameter of type 'number'.
+    - **Question:** Explain the key differences between TypeScript and JavaScript.
 
-       // JavaScript equivalent (no type checking)
-       function add(a, b) {
-           return a + b;
-       }
-       console.log(add(2, '3')); // Outputs: '23'
-       ```
+      - **Example:** TypeScript provides static typing through type annotations, interfaces, and advanced type system features, which JavaScript lacks. For instance:
 
-2. **TypeScript Types and Type System:**
-   - **Question:** Describe the various types available in TypeScript. Provide examples of when each type would be useful.
-     - **Example:**
-       ```typescript
-       // Primitive types
-       let name: string = 'Alice';
-       let age: number = 30;
-       let isActive: boolean = true;
+        ```typescript
+        // TypeScript example
+        function greet(person: string): string {
+          return `Hello, ${person}!`;
+        }
+        console.log(greet("Alice")); // Outputs: Hello, Alice!
 
-       // Union types
-       let result: number | string;
-       result = 10; // valid
-       result = 'Hello'; // valid
+        // Equivalent JavaScript (without TypeScript annotations)
+        function greet(person) {
+          return `Hello, ${person}!`;
+        }
+        console.log(greet("Alice")); // Outputs: Hello, Alice!
+        ```
 
-       // Array and tuple types
-       let numbers: number[] = [1, 2, 3];
-       let tuple: [string, number] = ['Alice', 30];
+    - **Question:** How does TypeScript help with catching errors early in development compared to JavaScript?
 
-       // Object types and interfaces
-       interface Person {
-           name: string;
-           age: number;
-       }
-       let person: Person = { name: 'Alice', age: 30 };
+      - **Example:** TypeScript catches type-related errors during compile-time, reducing runtime errors. For example:
 
-       // Type alias
-       type Point = {
-           x: number;
-           y: number;
-       };
-       let point: Point = { x: 10, y: 20 };
-       ```
+        ```typescript
+        // TypeScript example
+        function add(a: number, b: number): number {
+          return a + b;
+        }
+        console.log(add(2, "3")); // Error: Argument of type 'string' is not assignable to parameter of type 'number'.
 
-   - **Question:** Explain the difference between type annotations and type inference in TypeScript.
-     - **Example:**
-       ```typescript
-       // Type annotation
-       let num: number; // explicitly declaring 'num' as a number
-       num = 10;
+        // JavaScript equivalent (no type checking)
+        function add(a, b) {
+          return a + b;
+        }
+        console.log(add(2, "3")); // Outputs: '23'
+        ```
 
-       // Type inference
-       let str = 'Hello'; // TypeScript infers 'str' as type 'string'
-       // str = 10; // Error: Type 'number' is not assignable to type 'string'
-       ```
+2.  **TypeScript Types and Type System:**
 
-3. **Interfaces vs. Types:**
-   - **Question:** When would you choose an interface over a type alias (type)?
-     - **Example:**
-       ```typescript
-       // Interface example
-       interface Shape {
-           color: string;
-           area(): number;
-       }
-       // Type alias example
-       type Point = {
-           x: number;
-           y: number;
-       };
-       ```
-   - **Question:** What are mapped types in TypeScript? Give an example of a mapped type and describe its use case.
-     - **Example:**
-       ```typescript
-       // Mapped type example
-       type ReadOnly<T> = {
-           readonly [P in keyof T]: T[P];
-       };
+    - **Question:** Describe the various types available in TypeScript. Provide examples of when each type would be useful.
 
-       // Usage
-       interface Person {
-           name: string;
-           age: number;
-       }
-       let readOnlyPerson: ReadOnly<Person> = { name: 'Alice', age: 30 };
-       // readOnlyPerson.name = 'Bob'; // Error: Cannot assign to 'name' because it is a read-only property
-       ```
+      - **Example:**
+
+        ```typescript
+        // Primitive types
+        let name: string = "Alice";
+        let age: number = 30;
+        let isActive: boolean = true;
+
+        // Union types
+        let result: number | string;
+        result = 10; // valid
+        result = "Hello"; // valid
+
+        // Array and tuple types
+        let numbers: number[] = [1, 2, 3];
+        let tuple: [string, number] = ["Alice", 30];
+
+        // Object types and interfaces
+        interface Person {
+          name: string;
+          age: number;
+        }
+        let person: Person = { name: "Alice", age: 30 };
+
+        // Type alias
+        type Point = {
+          x: number;
+          y: number;
+        };
+        let point: Point = { x: 10, y: 20 };
+        ```
+
+    - **Question:** Explain the difference between type annotations and type inference in TypeScript.
+
+      - **Example:**
+
+        ```typescript
+        // Type annotation
+        let num: number; // explicitly declaring 'num' as a number
+        num = 10;
+
+        // Type inference
+        let str = "Hello"; // TypeScript infers 'str' as type 'string'
+        // str = 10; // Error: Type 'number' is not assignable to type 'string'
+        ```
+
+3.  **Interfaces vs. Types:**
+
+    - **Question:** When would you choose an interface over a type alias (type)?
+      - **Example:**
+        ```typescript
+        // Interface example
+        interface Shape {
+          color: string;
+          area(): number;
+        }
+        // Type alias example
+        type Point = {
+          x: number;
+          y: number;
+        };
+        ```
+    - **Question:** What are mapped types in TypeScript? Give an example of a mapped type and describe its use case. - **Example:**
+      ```typescript
+      // Mapped type example
+      type ReadOnly<T> = {
+      readonly [P in keyof T]: T[P];
+      };
+
+             // Usage
+             interface Person {
+                 name: string;
+                 age: number;
+             }
+             let readOnlyPerson: ReadOnly<Person> = { name: 'Alice', age: 30 };
+             // readOnlyPerson.name = 'Bob'; // Error: Cannot assign to 'name' because it is a read-only property
+             ```
+
+      Mapped types in TypeScript provide a way to create new types by transforming properties of an existing type. This is useful for scenarios where you need to apply a certain operation to each property of a type, such as making all properties optional, readonly, or applying any other modification.
+
+### Basic Concept
+
+Mapped types are defined using a combination of the `keyof` operator and the `in` keyword. Here's a simple example of how a mapped type works:
+
+```typescript
+type Person = {
+  name: string;
+  age: number;
+};
+
+// Define a mapped type to make all properties optional
+type PartialPerson = {
+  [K in keyof Person]?: Person[K];
+};
+```
+
+In this example:
+
+- `keyof Person` creates a union type of the keys of `Person` (i.e., `"name" | "age"`).
+- `[K in keyof Person]` iterates over each key in `Person`.
+- `Person[K]` refers to the type of each property (i.e., `string` for `"name"` and `number` for `"age"`).
+
+Thus, `PartialPerson` will have the same properties as `Person`, but all of them are optional.
+
+### Use Case Example
+
+Consider a scenario where you have a type for an API response and you want to create a type where all properties are optional, making it useful for scenarios like partial updates.
+
+```typescript
+type ApiResponse = {
+  userId: number;
+  username: string;
+  email: string;
+};
+
+// Create a mapped type to represent an optional version of ApiResponse
+type PartialApiResponse = {
+  [K in keyof ApiResponse]?: ApiResponse[K];
+};
+
+// Usage
+const updateUser: PartialApiResponse = {
+  email: "newemail@example.com",
+};
+```
+
+In this use case:
+
+- `PartialApiResponse` allows you to create an object where any subset of `ApiResponse` properties can be included.
+- This is particularly useful for PATCH requests where you only need to provide a subset of the fields.
+
+### Advanced Usage
+
+Mapped types can also be combined with other utility types and TypeScript features. For example, you can use conditional types to create a mapped type that modifies the properties based on their types:
+
+```typescript
+type ReadOnlyPerson = {
+  readonly [K in keyof Person]: Person[K];
+};
+
+// Usage
+const person: ReadOnlyPerson = {
+  name: "John",
+  age: 30,
+};
+
+// person.name = "Doe"; // Error: Cannot assign to 'name' because it is a read-only property
+```
+
+In this example, `ReadOnlyPerson` makes all properties of `Person` read-only, preventing modification of any property after the object is created.
+
+Mapped types are a powerful feature in TypeScript for creating flexible and reusable types that adapt based on the structure of existing types.
 
 4. **Advanced TypeScript Features:**
+
    - **Question:** What are TypeScript decorators? Provide an example where decorators are used to enhance a class.
+
      - **Example:**
+
        ```typescript
        // Decorator example
        function Log(target: any, key: string, descriptor: PropertyDescriptor) {
-           const originalMethod = descriptor.value;
-           descriptor.value = function (...args: any[]) {
-               console.log(`Calling ${key} with arguments: ${JSON.stringify(args)}`);
-               const result = originalMethod.apply(this, args);
-               console.log(`Method ${key} returned: ${JSON.stringify(result)}`);
-               return result;
-           };
-           return descriptor;
+         const originalMethod = descriptor.value;
+         descriptor.value = function (...args: any[]) {
+           console.log(
+             `Calling ${key} with arguments: ${JSON.stringify(args)}`
+           );
+           const result = originalMethod.apply(this, args);
+           console.log(`Method ${key} returned: ${JSON.stringify(result)}`);
+           return result;
+         };
+         return descriptor;
        }
 
        // Usage
        class Calculator {
-           @Log
-           add(a: number, b: number): number {
-               return a + b;
-           }
+         @Log
+         add(a: number, b: number): number {
+           return a + b;
+         }
        }
 
        const calc = new Calculator();
@@ -738,13 +838,14 @@ Certainly! Here are TypeScript interview questions for experienced developers, e
 
 These examples demonstrate practical use cases and understanding of TypeScript's advanced features, which are crucial for experienced developers in TypeScript-focused roles.
 
-
 Certainly! Here are more TypeScript interview questions for experienced developers, along with examples where applicable:
 
 5. **Advanced TypeScript Features (Continued):**
-   
+
    - **Question:** What are conditional types in TypeScript? Provide a practical example where conditional types would be beneficial.
+
      - **Example:**
+
        ```typescript
        // Conditional type example
        type NonNullable<T> = T extends null | undefined ? never : T;
@@ -752,66 +853,72 @@ Certainly! Here are more TypeScript interview questions for experienced develope
 
        // Usage
        let value: MyNonNullString;
-       value = 'Hello'; // valid
+       value = "Hello"; // valid
        value = null; // Error: Type 'null' is not assignable to type 'string'
        ```
 
    - **Question:** Explain the concept of keyof in TypeScript. Provide an example where keyof is used.
+
      - **Example:**
+
        ```typescript
        // keyof example
        interface Person {
-           name: string;
-           age: number;
-           address: string;
+         name: string;
+         age: number;
+         address: string;
        }
 
        type PersonKey = keyof Person; // Result: 'name' | 'age' | 'address'
 
        // Usage
        function getProperty(obj: Person, key: PersonKey) {
-           return obj[key];
+         return obj[key];
        }
 
        const person: Person = {
-           name: 'Alice',
-           age: 30,
-           address: '123 Main St'
+         name: "Alice",
+         age: 30,
+         address: "123 Main St",
        };
 
-       console.log(getProperty(person, 'name')); // Outputs: 'Alice'
+       console.log(getProperty(person, "name")); // Outputs: 'Alice'
        ```
 
 6. **Module System and TypeScript:**
 
    - **Question:** How does TypeScript handle module systems, such as CommonJS and ES modules? Provide an example of importing and exporting modules in TypeScript.
+
      - **Example:**
+
        ```typescript
        // Exporting module
        // myModule.ts
        export interface User {
-           name: string;
-           age: number;
+         name: string;
+         age: number;
        }
 
        // Importing module
        // app.ts
-       import { User } from './myModule';
+       import { User } from "./myModule";
 
-       let user: User = { name: 'Alice', age: 30 };
+       let user: User = { name: "Alice", age: 30 };
        ```
 
 7. **Error Handling and Debugging in TypeScript:**
 
    - **Question:** How can TypeScript improve error handling and debugging compared to JavaScript?
+
      - **Example:** TypeScript provides clearer error messages during compilation, especially related to type mismatches and potential null/undefined errors.
+
        ```typescript
        // Example of TypeScript catching a type error
        function add(a: number, b: number): number {
-           return a + b;
+         return a + b;
        }
 
-       console.log(add(2, '3')); // Error: Argument of type 'string' is not assignable to parameter of type 'number'.
+       console.log(add(2, "3")); // Error: Argument of type 'string' is not assignable to parameter of type 'number'.
        ```
 
 8. **TypeScript Tooling and Integration:**
@@ -838,136 +945,155 @@ These questions and examples cover a range of topics that are crucial for experi
 Certainly! Here are TypeScript interview questions for experienced developers, each accompanied by an example where applicable:
 
 1. **TypeScript Fundamentals:**
+
    - **Question:** Explain the key differences between TypeScript and JavaScript.
+
      - **Example:** TypeScript provides static typing through type annotations, interfaces, and advanced type system features, which JavaScript lacks. For instance:
+
        ```typescript
        // TypeScript example
        function greet(person: string): string {
-           return `Hello, ${person}!`;
+         return `Hello, ${person}!`;
        }
-       console.log(greet('Alice')); // Outputs: Hello, Alice!
+       console.log(greet("Alice")); // Outputs: Hello, Alice!
 
        // Equivalent JavaScript (without TypeScript annotations)
        function greet(person) {
-           return `Hello, ${person}!`;
+         return `Hello, ${person}!`;
        }
-       console.log(greet('Alice')); // Outputs: Hello, Alice!
+       console.log(greet("Alice")); // Outputs: Hello, Alice!
        ```
+
    - **Question:** How does TypeScript help with catching errors early in development compared to JavaScript?
+
      - **Example:** TypeScript catches type-related errors during compile-time, reducing runtime errors. For example:
+
        ```typescript
        // TypeScript example
        function add(a: number, b: number): number {
-           return a + b;
+         return a + b;
        }
-       console.log(add(2, '3')); // Error: Argument of type 'string' is not assignable to parameter of type 'number'.
+       console.log(add(2, "3")); // Error: Argument of type 'string' is not assignable to parameter of type 'number'.
 
        // JavaScript equivalent (no type checking)
        function add(a, b) {
-           return a + b;
+         return a + b;
        }
-       console.log(add(2, '3')); // Outputs: '23'
+       console.log(add(2, "3")); // Outputs: '23'
        ```
 
 2. **TypeScript Types and Type System:**
+
    - **Question:** Describe the various types available in TypeScript. Provide examples of when each type would be useful.
+
      - **Example:**
+
        ```typescript
        // Primitive types
-       let name: string = 'Alice';
+       let name: string = "Alice";
        let age: number = 30;
        let isActive: boolean = true;
 
        // Union types
        let result: number | string;
        result = 10; // valid
-       result = 'Hello'; // valid
+       result = "Hello"; // valid
 
        // Array and tuple types
        let numbers: number[] = [1, 2, 3];
-       let tuple: [string, number] = ['Alice', 30];
+       let tuple: [string, number] = ["Alice", 30];
 
        // Object types and interfaces
        interface Person {
-           name: string;
-           age: number;
+         name: string;
+         age: number;
        }
-       let person: Person = { name: 'Alice', age: 30 };
+       let person: Person = { name: "Alice", age: 30 };
 
        // Type alias
        type Point = {
-           x: number;
-           y: number;
+         x: number;
+         y: number;
        };
        let point: Point = { x: 10, y: 20 };
        ```
 
    - **Question:** Explain the difference between type annotations and type inference in TypeScript.
+
      - **Example:**
+
        ```typescript
        // Type annotation
        let num: number; // explicitly declaring 'num' as a number
        num = 10;
 
        // Type inference
-       let str = 'Hello'; // TypeScript infers 'str' as type 'string'
+       let str = "Hello"; // TypeScript infers 'str' as type 'string'
        // str = 10; // Error: Type 'number' is not assignable to type 'string'
        ```
 
 3. **Interfaces vs. Types:**
+
    - **Question:** When would you choose an interface over a type alias (type)?
      - **Example:**
        ```typescript
        // Interface example
        interface Shape {
-           color: string;
-           area(): number;
+         color: string;
+         area(): number;
        }
        // Type alias example
        type Point = {
-           x: number;
-           y: number;
+         x: number;
+         y: number;
        };
        ```
    - **Question:** What are mapped types in TypeScript? Give an example of a mapped type and describe its use case.
+
      - **Example:**
+
        ```typescript
        // Mapped type example
        type ReadOnly<T> = {
-           readonly [P in keyof T]: T[P];
+         readonly [P in keyof T]: T[P];
        };
 
        // Usage
        interface Person {
-           name: string;
-           age: number;
+         name: string;
+         age: number;
        }
-       let readOnlyPerson: ReadOnly<Person> = { name: 'Alice', age: 30 };
+       let readOnlyPerson: ReadOnly<Person> = { name: "Alice", age: 30 };
        // readOnlyPerson.name = 'Bob'; // Error: Cannot assign to 'name' because it is a read-only property
        ```
 
 4. **Advanced TypeScript Features:**
+
    - **Question:** What are TypeScript decorators? Provide an example where decorators are used to enhance a class.
+
      - **Example:**
+
        ```typescript
        // Decorator example
        function Log(target: any, key: string, descriptor: PropertyDescriptor) {
-           const originalMethod = descriptor.value;
-           descriptor.value = function (...args: any[]) {
-               console.log(`Calling ${key} with arguments: ${JSON.stringify(args)}`);
-               const result = originalMethod.apply(this, args);
-               console.log(`Method ${key} returned: ${JSON.stringify(result)}`);
-               return result;
-           };
-           return descriptor;
+         const originalMethod = descriptor.value;
+         descriptor.value = function (...args: any[]) {
+           console.log(
+             `Calling ${key} with arguments: ${JSON.stringify(args)}`
+           );
+           const result = originalMethod.apply(this, args);
+           console.log(`Method ${key} returned: ${JSON.stringify(result)}`);
+           return result;
+         };
+         return descriptor;
        }
 
        // Usage
        class Calculator {
-           @Log
-           add(a: number, b: number): number {
-               return a + b;
-           }
+         @Log
+         add(a: number, b: number): number {
+           return a + b;
+         }
        }
 
        const calc = new Calculator();
@@ -989,7 +1115,6 @@ Explicit:
 let foo: string = 'foo' //We are explicitly mentioning the foo as string type
 ```
 
-
 Mapped types in TypeScript allow you to create new types by transforming each property of an existing type in a specific way. They are particularly useful for creating new types that retain the shape of existing types but with modified properties.
 
 Here’s a basic explanation and example of mapped types:
@@ -1000,8 +1125,8 @@ Suppose you have an interface representing a person:
 
 ```typescript
 interface Person {
-    name: string;
-    age: number;
+  name: string;
+  age: number;
 }
 ```
 
@@ -1009,7 +1134,7 @@ Now, let's say you want to create a new type `PersonPartial` where all propertie
 
 ```typescript
 type PersonPartial = {
-    [K in keyof Person]?: Person[K];
+  [K in keyof Person]?: Person[K];
 };
 ```
 
@@ -1024,16 +1149,16 @@ type PersonPartial = {
 ```typescript
 // Original Person object
 const person: Person = {
-    name: "Alice",
-    age: 30
+  name: "Alice",
+  age: 30,
 };
 
 // Creating a PersonPartial object
 const partialPerson: PersonPartial = {
-    name: "Bob"
+  name: "Bob",
 };
 
-console.log(partialPerson); 
+console.log(partialPerson);
 // Output: { name: 'Bob' }
 ```
 
@@ -1043,13 +1168,13 @@ Let's say you want to create a `ReadOnlyPerson` type where all properties of `Pe
 
 ```typescript
 type ReadOnlyPerson = {
-    readonly [K in keyof Person]: Person[K];
+  readonly [K in keyof Person]: Person[K];
 };
 
 // Usage
 const readOnlyPerson: ReadOnlyPerson = {
-    name: "Alice",
-    age: 30
+  name: "Alice",
+  age: 30,
 };
 
 // This will cause a TypeScript error because properties are readonly
@@ -1060,7 +1185,6 @@ readOnlyPerson.name = "Bob";
 
 Mapped types in TypeScript provide a way to create new types based on existing ones, applying transformations such as making properties optional, readonly, or even changing their types. They are powerful tools for enhancing type safety and reusability in your TypeScript codebase.
 
-
 Certainly! Generics in TypeScript allow you to write reusable, type-safe functions and classes. They enable you to create components that can work over a variety of types rather than a single one.
 
 Here's a simple example to illustrate generics in TypeScript:
@@ -1068,18 +1192,19 @@ Here's a simple example to illustrate generics in TypeScript:
 ```typescript
 // Example of a generic function
 function identity<T>(arg: T): T {
-    return arg;
+  return arg;
 }
 
 // Using the generic function with different types
-let output1 = identity<string>("hello");  // output1 is of type string
-let output2 = identity<number>(123);      // output2 is of type number
+let output1 = identity<string>("hello"); // output1 is of type string
+let output2 = identity<number>(123); // output2 is of type number
 
-console.log(output1);  // Output: hello
-console.log(output2);  // Output: 123
+console.log(output1); // Output: hello
+console.log(output2); // Output: 123
 ```
 
 In this example:
+
 - `identity` is a generic function that takes a type parameter `T`.
 - The function `identity<T>` returns an argument of type `T`.
 
@@ -1090,26 +1215,27 @@ Here's another example using a generic class:
 ```typescript
 // Example of a generic class
 class Box<T> {
-    private value: T;
+  private value: T;
 
-    constructor(value: T) {
-        this.value = value;
-    }
+  constructor(value: T) {
+    this.value = value;
+  }
 
-    getValue(): T {
-        return this.value;
-    }
+  getValue(): T {
+    return this.value;
+  }
 }
 
 // Using the generic class with different types
 let box1 = new Box<string>("Hello");
 let box2 = new Box<number>(100);
 
-console.log(box1.getValue());  // Output: Hello
-console.log(box2.getValue());  // Output: 100
+console.log(box1.getValue()); // Output: Hello
+console.log(box2.getValue()); // Output: 100
 ```
 
 In this example:
+
 - `Box<T>` is a generic class that stores a value of type `T`.
 - The constructor and `getValue` method work with the type `T`.
 
@@ -1117,7 +1243,6 @@ When creating `box1` with `new Box<string>("Hello")`, TypeScript infers `T` as `
 
 Generics in TypeScript are powerful because they provide flexibility and type safety, allowing you to write reusable code while maintaining type constraints.
 
-
 Indexed access types in TypeScript allow you to access the type of a property on another type using an index type query. This is particularly useful when you have a type with a known set of keys and you want to create a new type that extracts or transforms properties based on those keys dynamically.
 
 ### Basic Example
@@ -1126,22 +1251,23 @@ Suppose you have an interface `Person`:
 
 ```typescript
 interface Person {
-    name: string;
-    age: number;
-    address: {
-        city: string;
-        postalCode: number;
-    };
+  name: string;
+  age: number;
+  address: {
+    city: string;
+    postalCode: number;
+  };
 }
 ```
 
 Now, if you want to define a type that represents the type of the `name` property of `Person`, you can use indexed access types:
 
 ```typescript
-type PersonName = Person['name'];  // string
+type PersonName = Person["name"]; // string
 ```
 
 In this example:
+
 - `Person['name']` accesses the type of the `name` property in the `Person` interface, which is `string`.
 
 ### Indexed Access Types with Union Types
@@ -1149,7 +1275,7 @@ In this example:
 You can also use indexed access types with union types to create new types that represent multiple properties:
 
 ```typescript
-type PersonInfo = Person['name' | 'age'];  // { name: string; age: number; }
+type PersonInfo = Person["name" | "age"]; // { name: string; age: number; }
 ```
 
 Here, `Person['name' | 'age']` creates a new type that includes only the `name` and `age` properties from the `Person` interface.
@@ -1159,7 +1285,7 @@ Here, `Person['name' | 'age']` creates a new type that includes only the `name` 
 Indexed access types can also access nested properties within objects:
 
 ```typescript
-type PostalCode = Person['address']['postalCode'];  // number
+type PostalCode = Person["address"]["postalCode"]; // number
 ```
 
 Here, `Person['address']['postalCode']` accesses the type of the `postalCode` property within the `address` property of the `Person` interface.
@@ -1167,7 +1293,6 @@ Here, `Person['address']['postalCode']` accesses the type of the `postalCode` pr
 ### Conclusion
 
 Indexed access types provide a flexible way to extract or manipulate types based on the properties of other types. They are especially useful when you need to work with complex nested types or when you want to dynamically access or transform properties of existing types. This feature enhances TypeScript's ability to model and enforce type relationships within your codebase.
-
 
 Indexed access types in TypeScript allow you to access the type of a property on another type using an index type query. This is particularly useful when you have a type with a known set of keys and you want to create a new type that extracts or transforms properties based on those keys dynamically.
 
@@ -1177,22 +1302,23 @@ Suppose you have an interface `Person`:
 
 ```typescript
 interface Person {
-    name: string;
-    age: number;
-    address: {
-        city: string;
-        postalCode: number;
-    };
+  name: string;
+  age: number;
+  address: {
+    city: string;
+    postalCode: number;
+  };
 }
 ```
 
 Now, if you want to define a type that represents the type of the `name` property of `Person`, you can use indexed access types:
 
 ```typescript
-type PersonName = Person['name'];  // string
+type PersonName = Person["name"]; // string
 ```
 
 In this example:
+
 - `Person['name']` accesses the type of the `name` property in the `Person` interface, which is `string`.
 
 ### Indexed Access Types with Union Types
@@ -1200,7 +1326,7 @@ In this example:
 You can also use indexed access types with union types to create new types that represent multiple properties:
 
 ```typescript
-type PersonInfo = Person['name' | 'age'];  // { name: string; age: number; }
+type PersonInfo = Person["name" | "age"]; // { name: string; age: number; }
 ```
 
 Here, `Person['name' | 'age']` creates a new type that includes only the `name` and `age` properties from the `Person` interface.
@@ -1210,7 +1336,7 @@ Here, `Person['name' | 'age']` creates a new type that includes only the `name` 
 Indexed access types can also access nested properties within objects:
 
 ```typescript
-type PostalCode = Person['address']['postalCode'];  // number
+type PostalCode = Person["address"]["postalCode"]; // number
 ```
 
 Here, `Person['address']['postalCode']` accesses the type of the `postalCode` property within the `address` property of the `Person` interface.
@@ -1218,7 +1344,6 @@ Here, `Person['address']['postalCode']` accesses the type of the `postalCode` pr
 ### Conclusion
 
 Indexed access types provide a flexible way to extract or manipulate types based on the properties of other types. They are especially useful when you need to work with complex nested types or when you want to dynamically access or transform properties of existing types. This feature enhances TypeScript's ability to model and enforce type relationships within your codebase.
-
 
 In TypeScript, `Awaited<Type>` is a utility type that allows you to infer the type that a `Promise<Type>` resolves to. This is particularly useful when working with asynchronous functions that return promises, as it helps in automatically determining the resolved type without explicitly specifying it.
 
@@ -1228,21 +1353,22 @@ Let's say you have a function that returns a promise:
 
 ```typescript
 function delay(ms: number): Promise<string> {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve("done");
-        }, ms);
-    });
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve("done");
+    }, ms);
+  });
 }
 ```
 
 Now, if you want to infer the resolved type of the promise returned by `delay`, you can use `Awaited<Type>`:
 
 ```typescript
-type ResolvedType = Awaited<ReturnType<typeof delay>>;  // string
+type ResolvedType = Awaited<ReturnType<typeof delay>>; // string
 ```
 
 Here:
+
 - `ReturnType<typeof delay>` gives us the return type of the `delay` function, which is `Promise<string>`.
 - `Awaited<Type>` infers the type that the `Promise<Type>` resolves to, so `Awaited<Promise<string>>` gives us `string`.
 
@@ -1254,33 +1380,33 @@ Here are a few more examples to illustrate different scenarios:
 
    ```typescript
    interface UserData {
-       name: string;
-       age: number;
+     name: string;
+     age: number;
    }
-   
+
    function fetchUserData(): Promise<UserData> {
-       return new Promise((resolve) => {
-           setTimeout(() => {
-               resolve({ name: "Alice", age: 30 });
-           }, 1000);
-       });
+     return new Promise((resolve) => {
+       setTimeout(() => {
+         resolve({ name: "Alice", age: 30 });
+       }, 1000);
+     });
    }
-   
-   type User = Awaited<ReturnType<typeof fetchUserData>>;  // UserData
+
+   type User = Awaited<ReturnType<typeof fetchUserData>>; // UserData
    ```
 
 2. **Promise that resolves to an array:**
 
    ```typescript
    function fetchNumbers(): Promise<number[]> {
-       return new Promise((resolve) => {
-           setTimeout(() => {
-               resolve([1, 2, 3, 4, 5]);
-           }, 500);
-       });
+     return new Promise((resolve) => {
+       setTimeout(() => {
+         resolve([1, 2, 3, 4, 5]);
+       }, 500);
+     });
    }
-   
-   type NumbersArray = Awaited<ReturnType<typeof fetchNumbers>>;  // number[]
+
+   type NumbersArray = Awaited<ReturnType<typeof fetchNumbers>>; // number[]
    ```
 
 ### Explanation
@@ -1294,7 +1420,6 @@ Here are a few more examples to illustrate different scenarios:
 - `Awaited<Type>` works with any promise type, including those that resolve to primitive types, objects, arrays, etc.
 - It simplifies type inference when working with asynchronous code, ensuring type safety and clarity in your TypeScript projects.
 
-
 In TypeScript, `Partial<Type>` is a utility type that constructs a type with all properties of `Type` set to optional. This means every property of the resulting type can either be of the original type or `undefined`. `Partial<Type>` is quite handy when you want to define or manipulate types where not all properties are required.
 
 ### Example Usage
@@ -1303,12 +1428,12 @@ Let's say you have an interface `Person`:
 
 ```typescript
 interface Person {
-    name: string;
-    age: number;
-    address: {
-        city: string;
-        postalCode: number;
-    };
+  name: string;
+  age: number;
+  address: {
+    city: string;
+    postalCode: number;
+  };
 }
 ```
 
@@ -1333,17 +1458,17 @@ type PartialPerson = Partial<Person>;
 ```typescript
 // Original Person object
 const person: Person = {
-    name: "Alice",
-    age: 30,
-    address: {
-        city: "Wonderland",
-        postalCode: 12345
-    }
+  name: "Alice",
+  age: 30,
+  address: {
+    city: "Wonderland",
+    postalCode: 12345,
+  },
 };
 
 // Creating a PartialPerson object
 const partialPerson: PartialPerson = {
-    name: "Alice"
+  name: "Alice",
 };
 
 console.log(partialPerson);
@@ -1371,7 +1496,6 @@ console.log(partialPerson.address?.city); // Output: undefined
 
 Using `Partial<Type>` is particularly useful in scenarios where you want to progressively build or modify objects, especially when dealing with complex nested structures or optional parameters in functions.
 
-
 In TypeScript, `Required<Type>` is a utility type that constructs a type with all properties of `Type` set to required. This means every property of the resulting type must be present and cannot be `undefined` or `null`.
 
 ### Example Usage
@@ -1380,12 +1504,12 @@ Let's continue using the `Person` interface from the previous examples:
 
 ```typescript
 interface Person {
-    name?: string;
-    age?: number;
-    address?: {
-        city?: string;
-        postalCode?: number;
-    };
+  name?: string;
+  age?: number;
+  address?: {
+    city?: string;
+    postalCode?: number;
+  };
 }
 ```
 
@@ -1410,22 +1534,22 @@ type RequiredPerson = Required<Person>;
 ```typescript
 // Original PartialPerson object
 const partialPerson: Partial<Person> = {
-    name: "Alice"
+  name: "Alice",
 };
 
 // Creating a RequiredPerson object
 const requiredPerson: RequiredPerson = {
-    name: "Alice",  // Error: Property 'name' is optional in type 'Partial<Person>'
+  name: "Alice", // Error: Property 'name' is optional in type 'Partial<Person>'
 };
 
 // Correct way to create a RequiredPerson object
 const correctRequiredPerson: RequiredPerson = {
-    name: "Alice",
-    age: 30,
-    address: {
-        city: "Wonderland",
-        postalCode: 12345
-    }
+  name: "Alice",
+  age: 30,
+  address: {
+    city: "Wonderland",
+    postalCode: 12345,
+  },
 };
 
 console.log(correctRequiredPerson);
@@ -1448,7 +1572,6 @@ console.log(correctRequiredPerson);
 
 Using `Required<Type>` is beneficial when you need to enforce that objects of a particular type have certain properties defined, especially in scenarios where consistency and completeness of data are crucial.
 
-
 In TypeScript, `Readonly<Type>` is a utility type that constructs a new type by making all properties of `Type` readonly. This means once properties are assigned a value, they cannot be reassigned or modified thereafter.
 
 ### Example Usage
@@ -1457,8 +1580,8 @@ Let's define an interface `Person` and use `Readonly<Type>` to create an immutab
 
 ```typescript
 interface Person {
-    name: string;
-    age: number;
+  name: string;
+  age: number;
 }
 
 // Creating a ReadonlyPerson type
@@ -1476,17 +1599,17 @@ type ReadonlyPerson = Readonly<Person>;
 ```typescript
 // Original Person object
 const person: Person = {
-    name: "Alice",
-    age: 30
+  name: "Alice",
+  age: 30,
 };
 
 // Creating a ReadonlyPerson object
 const readonlyPerson: ReadonlyPerson = {
-    name: "Alice",  // Readonly property
-    age: 30        // Readonly property
+  name: "Alice", // Readonly property
+  age: 30, // Readonly property
 };
 
-console.log(readonlyPerson.name);  // Output: Alice
+console.log(readonlyPerson.name); // Output: Alice
 
 // Trying to modify a readonly property will result in a TypeScript error
 // readonlyPerson.name = "Bob";  // Error: Cannot assign to 'name' because it is a read-only property.
@@ -1510,29 +1633,28 @@ console.log(readonlyPerson.name);  // Output: Alice
 
 ```typescript
 interface Configuration {
-    readonly server: {
-        readonly host: string;
-        readonly port: number;
-    };
-    readonly timeout: number;
+  readonly server: {
+    readonly host: string;
+    readonly port: number;
+  };
+  readonly timeout: number;
 }
 
 const config: Readonly<Configuration> = {
-    server: {
-        host: "localhost",
-        port: 8080
-    },
-    timeout: 5000
+  server: {
+    host: "localhost",
+    port: 8080,
+  },
+  timeout: 5000,
 };
 
-console.log(config.server.host);  // Output: localhost
+console.log(config.server.host); // Output: localhost
 
 // Trying to modify a nested readonly property will result in a TypeScript error
 // config.server.host = "example.com";  // Error: Cannot assign to 'host' because it is a read-only property.
 ```
 
 In this example, both `server` and its properties `host` and `port` are readonly, ensuring that neither the server object nor its properties can be mutated after initialization.
-
 
 In TypeScript, `Record<Keys, Type>` is a utility type that represents an object type whose keys are of type `Keys` and whose values are of type `Type`. It is useful for defining and constraining the shape of objects where you know the keys in advance.
 
@@ -1542,8 +1664,8 @@ Let's say you want to define a type for a dictionary where the keys are strings 
 
 ```typescript
 type User = {
-    id: number;
-    email: string;
+  id: number;
+  email: string;
 };
 
 // Define a dictionary where keys are usernames (strings) and values are of type User
@@ -1551,9 +1673,9 @@ type UserDatabase = Record<string, User>;
 
 // Example usage of UserDatabase
 const users: UserDatabase = {
-    "alice": { id: 1, email: "alice@example.com" },
-    "bob": { id: 2, email: "bob@example.com" },
-    "charlie": { id: 3, email: "charlie@example.com" }
+  alice: { id: 1, email: "alice@example.com" },
+  bob: { id: 2, email: "bob@example.com" },
+  charlie: { id: 3, email: "charlie@example.com" },
 };
 ```
 
@@ -1568,17 +1690,24 @@ const users: UserDatabase = {
 
    ```typescript
    // Map days of the week (keys) to their full names (values)
-   type DaysOfWeek = "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday" | "Sunday";
+   type DaysOfWeek =
+     | "Monday"
+     | "Tuesday"
+     | "Wednesday"
+     | "Thursday"
+     | "Friday"
+     | "Saturday"
+     | "Sunday";
    type DaysMap = Record<DaysOfWeek, string>;
 
    const days: DaysMap = {
-       Monday: "Mon",
-       Tuesday: "Tue",
-       Wednesday: "Wed",
-       Thursday: "Thu",
-       Friday: "Fri",
-       Saturday: "Sat",
-       Sunday: "Sun"
+     Monday: "Mon",
+     Tuesday: "Tue",
+     Wednesday: "Wed",
+     Thursday: "Thu",
+     Friday: "Fri",
+     Saturday: "Sat",
+     Sunday: "Sun",
    };
    ```
 
@@ -1587,15 +1716,15 @@ const users: UserDatabase = {
    ```typescript
    // Create a record type dynamically from an array of keys
    function createRecord<T>(keys: string[]): Record<string, T> {
-       const record: Record<string, T> = {};
-       keys.forEach(key => {
-           record[key] = {} as T;  // Initialize with an empty object of type T
-       });
-       return record;
+     const record: Record<string, T> = {};
+     keys.forEach((key) => {
+       record[key] = {} as T; // Initialize with an empty object of type T
+     });
+     return record;
    }
 
    // Example usage
-   const myRecord = createRecord<number>(['a', 'b', 'c']);
+   const myRecord = createRecord<number>(["a", "b", "c"]);
    // myRecord is of type Record<string, number> with keys 'a', 'b', 'c' initialized to 0
    ```
 
@@ -1608,7 +1737,6 @@ const users: UserDatabase = {
 
 - `Record<Keys, Type>` is useful when you know the keys ahead of time and want to enforce type safety on their values. If your keys are dynamic or unknown, you may need to use a different approach such as using generics or intersection types depending on your use case.
 
-
 In TypeScript, `Pick<Type, Keys>` is a utility type that constructs a new type by picking only the specified properties `Keys` from the type `Type`. It allows you to create a subtype based on selecting a subset of properties from an existing type.
 
 ### Example Usage
@@ -1617,14 +1745,14 @@ Let's say you have an interface `Person` with several properties:
 
 ```typescript
 interface Person {
-    name: string;
-    age: number;
-    address: string;
-    phone: string;
+  name: string;
+  age: number;
+  address: string;
+  phone: string;
 }
 
 // Using Pick to create a new type with only selected properties
-type BasicInfo = Pick<Person, 'name' | 'age'>;
+type BasicInfo = Pick<Person, "name" | "age">;
 
 // BasicInfo is equivalent to:
 // {
@@ -1638,16 +1766,16 @@ type BasicInfo = Pick<Person, 'name' | 'age'>;
 ```typescript
 // Original Person object
 const person: Person = {
-    name: "Alice",
-    age: 30,
-    address: "123 Wonderland St.",
-    phone: "555-1234"
+  name: "Alice",
+  age: 30,
+  address: "123 Wonderland St.",
+  phone: "555-1234",
 };
 
 // Creating an object with only selected properties using Pick
 const basicInfo: BasicInfo = {
-    name: person.name,
-    age: person.age
+  name: person.name,
+  age: person.age,
 };
 
 console.log(basicInfo);
@@ -1670,26 +1798,26 @@ You can also use `Pick` with more complex types and combinations:
 
 ```typescript
 interface Car {
-    make: string;
-    model: string;
-    year: number;
-    color: string;
+  make: string;
+  model: string;
+  year: number;
+  color: string;
 }
 
 // Using Pick to create a new type with selected properties
-type CarInfo = Pick<Car, 'make' | 'model' | 'year'>;
+type CarInfo = Pick<Car, "make" | "model" | "year">;
 
 const car: Car = {
-    make: 'Toyota',
-    model: 'Camry',
-    year: 2022,
-    color: 'Silver'
+  make: "Toyota",
+  model: "Camry",
+  year: 2022,
+  color: "Silver",
 };
 
 const carInfo: CarInfo = {
-    make: car.make,
-    model: car.model,
-    year: car.year
+  make: car.make,
+  model: car.model,
+  year: car.year,
 };
 
 console.log(carInfo);
@@ -1700,7 +1828,6 @@ In this example, `CarInfo` is created by picking only `'make'`, `'model'`, and `
 
 Using `Pick<Type, Keys>` is a powerful technique in TypeScript for creating specialized types that precisely match the requirements of your application or function, ensuring clarity and maintainability in your codebase.
 
-
 In TypeScript, `Omit<Type, Keys>` is a utility type that constructs a new type by omitting the specified properties `Keys` from the type `Type`. It essentially creates a subtype that excludes certain properties.
 
 ### Example Usage
@@ -1709,14 +1836,14 @@ Let's use the same `Person` interface from earlier and demonstrate how `Omit` wo
 
 ```typescript
 interface Person {
-    name: string;
-    age: number;
-    address: string;
-    phone: string;
+  name: string;
+  age: number;
+  address: string;
+  phone: string;
 }
 
 // Using Omit to create a new type excluding specified properties
-type PersonalInfo = Omit<Person, 'address' | 'phone'>;
+type PersonalInfo = Omit<Person, "address" | "phone">;
 
 // PersonalInfo is equivalent to:
 // {
@@ -1730,16 +1857,16 @@ type PersonalInfo = Omit<Person, 'address' | 'phone'>;
 ```typescript
 // Original Person object
 const person: Person = {
-    name: "Alice",
-    age: 30,
-    address: "123 Wonderland St.",
-    phone: "555-1234"
+  name: "Alice",
+  age: 30,
+  address: "123 Wonderland St.",
+  phone: "555-1234",
 };
 
 // Creating an object with omitted properties using Omit
 const personalInfo: PersonalInfo = {
-    name: person.name,
-    age: person.age
+  name: person.name,
+  age: person.age,
 };
 
 console.log(personalInfo);
@@ -1762,26 +1889,26 @@ Here's another example using a more complex type:
 
 ```typescript
 interface Product {
-    id: number;
-    name: string;
-    price: number;
-    description: string;
+  id: number;
+  name: string;
+  price: number;
+  description: string;
 }
 
 // Using Omit to create a new type excluding specified properties
-type ProductPreview = Omit<Product, 'description'>;
+type ProductPreview = Omit<Product, "description">;
 
 const product: Product = {
-    id: 1,
-    name: 'Smartphone',
-    price: 599,
-    description: 'A powerful smartphone with advanced features.'
+  id: 1,
+  name: "Smartphone",
+  price: 599,
+  description: "A powerful smartphone with advanced features.",
 };
 
 const productPreview: ProductPreview = {
-    id: product.id,
-    name: product.name,
-    price: product.price
+  id: product.id,
+  name: product.name,
+  price: product.price,
 };
 
 console.log(productPreview);
@@ -1799,10 +1926,10 @@ In TypeScript, `Extract<Type, Union>` is a utility type that constructs a new ty
 Let's demonstrate `Extract<Type, Union>` with a practical example:
 
 ```typescript
-type Animal = 'Dog' | 'Cat' | 'Bird' | 'Snake';
+type Animal = "Dog" | "Cat" | "Bird" | "Snake";
 
 // Extracting types from Animal that are assignable to 'Cat' or 'Snake'
-type Pet = Extract<Animal, 'Cat' | 'Snake'>;
+type Pet = Extract<Animal, "Cat" | "Snake">;
 
 // Pet is equivalent to:
 // 'Cat' | 'Snake'
@@ -1812,10 +1939,12 @@ type Pet = Extract<Animal, 'Cat' | 'Snake'>;
 
 ```typescript
 // Original list of animals
-const animals: Animal[] = ['Dog', 'Cat', 'Bird', 'Snake'];
+const animals: Animal[] = ["Dog", "Cat", "Bird", "Snake"];
 
 // Extracting only 'Cat' and 'Snake' from animals using Extract
-const pets: Pet[] = animals.filter(animal => ['Cat', 'Snake'].includes(animal)) as Pet[];
+const pets: Pet[] = animals.filter((animal) =>
+  ["Cat", "Snake"].includes(animal)
+) as Pet[];
 
 console.log(pets);
 // Output: ['Cat', 'Snake']
@@ -1836,10 +1965,10 @@ console.log(pets);
 Here's another example using a more complex union type:
 
 ```typescript
-type Role = 'Admin' | 'User' | 'Manager' | 'Guest';
+type Role = "Admin" | "User" | "Manager" | "Guest";
 
 // Extracting types from Role that are assignable to 'Admin' or 'Manager'
-type AdminRoles = Extract<Role, 'Admin' | 'Manager'>;
+type AdminRoles = Extract<Role, "Admin" | "Manager">;
 
 // AdminRoles is equivalent to:
 // 'Admin' | 'Manager'
@@ -1857,20 +1986,20 @@ You can create a new type alias that combines properties from existing type alia
 
 ```typescript
 type Person = {
-    name: string;
-    age: number;
+  name: string;
+  age: number;
 };
 
 type Employee = {
-    company: string;
+  company: string;
 };
 
 type EmployeeWithPerson = Person & Employee;
 
 const employee: EmployeeWithPerson = {
-    name: "John Doe",
-    age: 30,
-    company: "Example Inc."
+  name: "John Doe",
+  age: 30,
+  company: "Example Inc.",
 };
 
 console.log(employee); // Output: { name: 'John Doe', age: 30, company: 'Example Inc.' }
@@ -1886,22 +2015,22 @@ You can also create a new type alias that represents a union (`|`) of existing t
 type Status = "active" | "inactive";
 
 type Employee = {
-    id: number;
-    name: string;
-    status: Status;
+  id: number;
+  name: string;
+  status: Status;
 };
 
 type Manager = {
-    teamSize: number;
+  teamSize: number;
 };
 
 type ManagerOrEmployee = Employee | Manager;
 
 const person: ManagerOrEmployee = {
-    id: 1,
-    name: "Jane Doe",
-    status: "active",
-    teamSize: 5
+  id: 1,
+  name: "Jane Doe",
+  status: "active",
+  teamSize: 5,
 };
 
 console.log(person); // Output: { id: 1, name: 'Jane Doe', status: 'active', teamSize: 5 }
@@ -1915,19 +2044,23 @@ TypeScript also supports conditional types (`extends` clauses) within mapped typ
 
 ```typescript
 type Animal = {
-    legs: number;
-    sound: string;
+  legs: number;
+  sound: string;
 };
 
 type Dog = Animal & {
-    breed: string;
+  breed: string;
 };
 
 type Cat = Animal & {
-    furColor: string;
+  furColor: string;
 };
 
-type Pet<T extends Animal> = T extends Dog ? "dog" : T extends Cat ? "cat" : "unknown";
+type Pet<T extends Animal> = T extends Dog
+  ? "dog"
+  : T extends Cat
+  ? "cat"
+  : "unknown";
 
 const myDog: Pet<Dog> = "dog";
 const myCat: Pet<Cat> = "cat";
@@ -1942,7 +2075,6 @@ In this example, `Pet` is a conditional type that determines if a given type `T`
 ### Conclusion
 
 While TypeScript type aliases themselves cannot be extended directly, you can achieve similar effects using intersection types, union types, and conditional types. These features allow you to compose new types from existing ones, providing flexibility and reusability in your type definitions.
-
 
 In TypeScript, `unknown`, `any`, and `never` are distinct types that serve different purposes and provide different levels of type safety and expressiveness. Here's an explanation of each type along with examples:
 
@@ -1959,7 +2091,7 @@ userInput = "Max";
 
 // Type assertion or type checking required before assigning to a more specific type
 if (typeof userInput === "string") {
-    userName = userInput; // OK
+  userName = userInput; // OK
 }
 
 // userName = userInput; // Error: Type 'unknown' is not assignable to type 'string'.
@@ -1991,17 +2123,17 @@ The `never` type represents values that never occur. It is typically used to ind
 
 ```typescript
 function throwError(message: string): never {
-    throw new Error(message);
+  throw new Error(message);
 }
 
 function infiniteLoop(): never {
-    while (true) {
-        // Infinite loop
-    }
+  while (true) {
+    // Infinite loop
+  }
 }
 
 function unreachableCode(): never {
-    throw new Error("This function should not be called");
+  throw new Error("This function should not be called");
 }
 
 let neverVariable: never;
@@ -2011,6 +2143,7 @@ let num: number = neverVariable; // Error: Type 'never' is not assignable to typ
 ```
 
 In this example:
+
 - `throwError` is a function that explicitly throws an error, never returning normally.
 - `infiniteLoop` is a function that contains an infinite loop, also never returning normally.
 - `unreachableCode` is a function that throws an error, indicating that its code should never be executed.
@@ -2022,7 +2155,6 @@ In this example:
 - **`never`:** Represents values that never occur, typically used for functions that never return normally.
 
 Using `unknown` and `never` provides stronger type safety compared to `any`, as they allow TypeScript to catch more errors at compile-time. They help developers write more robust and predictable code by ensuring types are respected and errors are minimized.
-
 
 The TypeScript compiler (`tsc`) is a command-line tool that converts TypeScript code (.ts files) into JavaScript code (.js files) that can be executed in any JavaScript runtime environment (like browsers or Node.js). It brings the benefits of TypeScript's static typing and modern ECMAScript features to JavaScript development.
 
@@ -2047,7 +2179,7 @@ Create a TypeScript file (`example.ts`) with some TypeScript code:
 ```typescript
 // example.ts
 function greeter(person: string) {
-    return `Hello, ${person}!`;
+  return `Hello, ${person}!`;
 }
 
 let user = "Jane Doe";
@@ -2111,14 +2243,14 @@ After compiling TypeScript to JavaScript, you can include or reference the gener
 <!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>TypeScript Example</title>
     <script src="dist/example.js" defer></script>
-</head>
-<body>
+  </head>
+  <body>
     <h1>TypeScript Example</h1>
-</body>
+  </body>
 </html>
 ```
 

@@ -4396,3 +4396,26 @@ Given the array `[4, -12, 2, 46, -20, -1]`:
 - Final array: `[ -12, -20, -1, 46, 4, 2 ]`.
 
 This approach effectively partitions the array into positive and negative numbers while preserving the relative order of positive numbers and moving all negative numbers to the end.
+
+```
+function formatNumber(number) {
+  // Convert numbers greater than 1 million
+  if (number >= 1000000) {
+    return (number / 1000000).toFixed(1) + "M";
+  }
+  // Convert numbers greater than 1000
+  else if (number >= 1000) {
+    return (number / 1000).toFixed(1) + "k";
+  }
+  // Return unchanged for smaller numbers
+  else {
+    return Math.round(number);
+  }
+}
+
+// Examples
+console.log(formatNumber(523.22)); // Outputs: "500"
+console.log(formatNumber(1500)); // Outputs: "1.5k"
+console.log(formatNumber(1200000)); // Outputs: "1.2M"
+console.log(formatNumber(1234567)); // Outputs: "1.2M"
+```
