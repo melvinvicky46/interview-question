@@ -720,5 +720,90 @@ console.log(bubbleSort([8, 20, -2, 4, -6]));
 
 <!-- Insertion Sort -->
 
+function insertionSort(arr) {
+  for (let i = 1; i < arr.length; i++) {
+    let numToInsert = arr[i];
+    let j = i - 1;
+    while (j >= 0 && arr[j] > numToInsert) {
+      arr[j + 1] = arr[j];
+      j = j - 1;
+    }
+    arr[j + 1] = numToInsert;
+  }
+  return arr;
+}
+
+const arr = [8, 20, -2, 4, -6];
+console.log(insertionSort(arr)); //[-6, -2, 4, 8, 20]
+//BigO = O(n^2)
+
+<!-- Quick Sort -->
+function quickSort(arr) {
+  if (arr.length <= 2) {
+    return arr;
+  }
+  let pivot = arr[arr.length - 1];
+  let left = [];
+  let right = [];
+  for (let i = 0; i < arr.length - 1; i++) {
+    if (arr[i] < pivot) {
+      left.push(arr[i]);
+    } else {
+      right.push(arr[i]);
+    }
+  }
+  return [...quickSort(left), pivot, ...quickSort(right)];
+}
+
+const arr = [8, 20, -2, 4, -6];
+console.log(quickSort(arr)); //[-6, -2, 4, 8, 20]
+// O(nlogn)
+
+<!-- Cartesian Product -->
+
+function cartesianProduct(arr1, arr2) {
+  const result = [];
+  for (let i = 0; i < arr1.length; i++) {
+    for (let j = 0; j < arr2.length; j++) {
+      result.push([arr1[i], arr2[j]]);
+    }
+  }
+  return result;
+}
+
+console.log(cartesianProduct([1, 3], [2, 3, 4]));
+// [1, 2], [1, 3], [1, 4], [3, 2], [3, 3], [3, 4]
+
+<!-- Climbing Staircase -->
+
+function staircase(n) {
+  const result = [1, 2];
+  for (let i = 2; i <= n; i++) {
+    result[i] = result[i - 1] + result[i - 2];
+  }
+  return result;
+}
+
+console.log(staircase(5));
+//[1, 2, 3, 5, 8, 13]
+
+<!-- Tower of Hanoi -->
+function towerHanio(n, from, to, using) {
+  if (n === 1) {
+    console.log(`Move disk 1 from ${from} to ${to}`);
+    return;
+  }
+  towerHanio(n - 1, from, using, to);
+  console.log(`Move disk ${n} from ${from} to ${to}`);
+  towerHanio(n - 1, using, to, from);
+}
+
+towerHanio(3, "A", "C", "B");
+// Move disk 1 from A to C
+// Move disk 2 from A to B
+// Move disk 1 from C to B
+// Move disk 3 from A to C
+// Move disk 1 from B to A
+// Move disk 2 from B to C
 
 ```
