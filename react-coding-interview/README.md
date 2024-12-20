@@ -1,3 +1,21 @@
+**EPAM React interview**
+```
+1) Authentication & Authorization: holistic view Frontend,Backend roles, jwt token , etc 
+    Suggestion : Stick to one Approach either OKTA or Cloud Authentication or Simple JWT Auth
+2) Redux Toolkit Query: RTK Query, the hooks approach , query mutation 
+3) Basics of Elektron.js(Specific to "Core Services Team"), Basics of Microfrontend(MFE)
+4) Understanding on Single SPA or Module Federation
+5) Basics on CI/CD Pipeline preferably Azure DevOps, Branching and Deployment Strategy stick to one or two
+6) Unit Tests Jest, React-testing-library
+7) Code Quality , tools Sonar, EsLint
+8) Webpack , practical approach like 
+	How Code Splitting is done 
+	How Optimization is Done
+	Loaders, Plugins why/what/how
+9) SCSS styles , intermediary level
+10) Promises, race condition scenario. Axios, interceptors, common patterns with axios, practical approach. 
+
+```
 **Fetch an API and list the users and sort ascending and descending**
 
 ```
