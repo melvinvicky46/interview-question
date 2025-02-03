@@ -732,6 +732,10 @@ for (const value of arr) {
 }
 console.log(uniqueArr); // [1, 2, 3, 4, 5, 6]
 
+// Remove items which are repeating
+const diff = arr.filter((value, index, self) => self.indexOf(value) === self.lastIndexIf(value));
+console.log(diff); // [1, 2, 3, 4, 5, 6]
+
 // remove duplicates from both arrays
 function removeDuplicates(arr) {
     return arr.filter((element, index) => arr.indexOf(element) === index);
@@ -1077,6 +1081,36 @@ array2.filter(function(val) {
 42. **Currying in JavaScript**
 
 ```
+Currying is a functional programming technique where a function that takes multiple arguments is transformed into a series of functions, each taking one argument at a time.
+
+Why is Currying Required?
+a) Code Reusability and Partial Application
+With currying, we can create specialized functions by partially applying arguments.
+
+const multiply = (a) => (b) => a * b;
+
+const double = multiply(2); // Pre-configured function (Partial application)
+console.log(double(5)); // Output: 10
+console.log(double(10)); // Output: 20
+
+
+b) Function Composition
+Currying helps in function composition, making it easier to create more modular and readable code.
+const greet = (greeting) => (name) => `${greeting}, ${name}!`;
+
+const sayHello = greet("Hello");
+console.log(sayHello("Alice")); // Output: Hello, Alice!
+console.log(sayHello("Bob")); // Output: Hello, Bob!
+
+c) Avoiding Repetitive Code
+With currying, you avoid rewriting the same logic multiple times.
+const checkMinLength = (minLength) => (str) => str.length >= minLength;
+
+const isValidUsername = checkMinLength(5);
+console.log(isValidUsername("John")); // Output: false
+console.log(isValidUsername("Jonathan")); // Output: true
+
+
 function sum(a) {
   return (b) => {
       return (c) => {
@@ -1129,6 +1163,17 @@ let curriedSum = curry(sum);
 alert( curriedSum(1, 2, 3) ); // 6, still callable normally
 alert( curriedSum(1)(2,3) ); // 6, currying of 1st arg
 alert( curriedSum(1)(2)(3) ); // 6, full currying
+
+
+When to Use Currying?
+You should use currying when:
+
+You need reusability – When functions need to be reused with fixed parameters.
+You want to partially apply functions – When arguments are provided step by step.
+You need cleaner function composition – When combining multiple smaller functions.
+You work with Higher-Order Functions (HOFs) – When working with functional paradigms like .map(), .filter(), .reduce().
+You want to improve readability – When dealing with complex logic that benefits from modularity.
+
 ```
 
 43. **Check palindrome**
