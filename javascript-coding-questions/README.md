@@ -286,6 +286,31 @@ var arr = [1, 2, 3, 4, 1, 2, 3, 4, 5, 1];
 var result = countOccurrences(arr);
 console.log(result); //{1: 3, 2: 2, 3: 2, 4: 2, 5: 1}
 
+
+Finding the First Non-Repeating Character in a String (JavaScript)
+function firstNonRepeatingChar(str) {
+  const charCount = {};
+
+  // Step 1: Count occurrences
+  for (let char of str) {
+    charCount[char] = (charCount[char] || 0) + 1;
+  }
+
+  // Step 2: Find the first non-repeating character
+  for (let char of str) {
+    if (charCount[char] === 1) {
+      return char;
+    }
+  }
+
+  return null; // If all characters repeat
+}
+
+console.log(firstNonRepeatingChar("swiss"));   // Output: "w"
+console.log(firstNonRepeatingChar("racecar")); // Output: "e"
+console.log(firstNonRepeatingChar("aabbcc"));  // Output: null
+
+
 ---------------------
 
 const array = [1, 2, 2, 3, 4, 1, 5, 2, 4, 4];
@@ -886,7 +911,9 @@ function memoization(fnToAdd) {
   return function(...args) {
     const uniqueProps = setUniqueProps(fnToAdd, args);
     if (!cacheObj[uniqueProps]) {
-      cacheObj[uniqueProps] = fnToAdd(...args);
+      const result = fnToAdd(...args);
+      cacheObj[uniqueProps] = result;
+      return result;
     }
     return cacheObj[uniqueProps];
   }
@@ -1932,6 +1959,111 @@ for (var i = 0; i < arrList.length; i++) {
 }
 
 console.log(arrList); // [1, 2, 3, 4, 20]
+
+
+const numbers = [25, 100, 4, 15, 9];
+
+// Ascending Order (small to large)
+const ascending = numbers.sort((a, b) => a - b);
+console.log(ascending);  // [4, 9, 15, 25, 100]
+
+// Descending Order (large to small)
+const descending = numbers.sort((a, b) => b - a);
+console.log(descending); // [100, 25, 15, 9, 4]
+
+```
+
+**Bubble Sort (Simple & Easy to Understand)**
+```
+How It Works:
+Repeatedly compares adjacent elements and swaps them if they're in the wrong order.
+Continues until the entire array is sorted.
+
+Ascending Order:
+function bubbleSort(arr) {
+  let n = arr.length;
+  for (let i = 0; i < n - 1; i++) {
+    for (let j = 0; j < n - i - 1; j++) {
+      if (arr[j] > arr[j + 1]) { // descending arr[j] < arr[j + 1]
+        // Swap elements
+        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+      }
+    }
+  }
+  return arr;
+}
+
+const numbers = [25, 100, 4, 15, 9];
+console.log(bubbleSort(numbers));  // [4, 9, 15, 25, 100]
+Time Complexity:
+Best Case (already sorted): O(n)
+Average & Worst Case: O(n²)
+```
+
+**Insertion Sort (Efficient for Small Arrays)**
+```
+How It Works:
+Builds the sorted array one element at a time.
+Picks an element and inserts it into the correct position.
+
+function insertionSort(arr) {
+  for (let i = 1; i < arr.length; i++) {
+    let key = arr[i];
+    let j = i - 1;
+
+    // Move elements greater than key to one position ahead
+    while (j >= 0 && arr[j] > key) {
+      arr[j + 1] = arr[j];
+      j--;
+    }
+    arr[j + 1] = key;
+  }
+  return arr;
+}
+
+console.log(insertionSort([25, 100, 4, 15, 9]));  // [4, 9, 15, 25, 100]
+Time Complexity:
+Best Case (nearly sorted): O(n)
+Worst Case: O(n²)
+```
+
+**Quick Sort (Efficient for Large Datasets)**
+```
+How It Works:
+Picks a pivot element.
+Partitions the array into elements less than and greater than the pivot.
+Recursively sorts the partitions.
+
+function quickSort(arr) {
+  if (arr.length <= 1) return arr;
+
+  const pivot = arr[arr.length - 1];
+  const left = [];
+  const right = [];
+
+  for (let i = 0; i < arr.length - 1; i++) {
+    if (arr[i] < pivot) {
+      left.push(arr[i]);
+    } else {
+      right.push(arr[i]);
+    }
+  }
+
+  return [...quickSort(left), pivot, ...quickSort(right)];
+}
+
+console.log(quickSort([25, 100, 4, 15, 9]));  // [4, 9, 15, 25, 100]
+
+Time Complexity:
+Best & Average Case: O(n log n)
+Worst Case: O(n²) (rare with good pivot selection)
+```
+
+```
+Which to Use?
+For small arrays: Bubble Sort or Insertion Sort (simple & easy to implement).
+For large arrays: Quick Sort (efficient & fast).
+When stability is required: Prefer Insertion Sort or Bubble Sort.
 ```
 
 67. **Counting Zeros**
