@@ -6579,3 +6579,611 @@ There are third-party libraries and patterns that offer error boundary functiona
 ### Summary
 
 While React’s built-in error boundary support is tied to class components, you can use error boundaries with functional components either by combining them with class-based error boundaries or by leveraging third-party libraries that provide similar functionality. As React evolves, newer patterns and APIs might provide more native support for error handling in functional components.
+
+**1. Implement a Debounced Search Input**
+```
+Question:
+Create a search input field that fetches results from an API but should only make a request after the user stops typing for 500ms.
+
+Expected Concepts:
+✅ useState, useEffect, useRef, debouncing
+
+Solution:
+import React, { useState, useEffect } from "react";
+
+const SearchBox = () => {
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState([]);
+  
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (query) {
+        fetchResults(query);
+      }
+    }, 500); // Debounce time
+
+    return () => clearTimeout(timeoutId);
+  }, [query]);
+
+  const fetchResults = async (searchTerm) => {
+    console.log("Fetching results for:", searchTerm);
+    // Simulate API call
+    setResults([`Result for "${searchTerm}"`]);
+  };
+
+  return (
+    <div>
+      <input type="text" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search..." />
+      <ul>{results.map((res, index) => <li key={index}>{res}</li>)}</ul>
+    </div>
+  );
+};
+
+export default SearchBox;
+```
+
+**Implement the debounce function with useCallback()**
+```
+Explanation:
+debounce ensures that a function is executed only after a specified delay has passed since the last time it was invoked.
+useCallback memoizes the debounced function so that it doesn't get recreated on every render.
+useEffect ensures that the function is cleaned up when the component unmounts.
+
+import { useCallback, useEffect, useRef } from "react";
+
+function useDebounce(callback, delay) {
+  const timerRef = useRef(null);
+
+  const debouncedFunction = useCallback(
+    (...args) => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+      timerRef.current = setTimeout(() => {
+        callback(...args);
+      }, delay);
+    },
+    [callback, delay]
+  );
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, []);
+
+  return debouncedFunction;
+}
+
+export default useDebounce;
+
+Usage Example:
+import { useState } from "react";
+import useDebounce from "./useDebounce";
+
+function SearchComponent() {
+  const [query, setQuery] = useState("");
+
+  const handleSearch = (searchText) => {
+    console.log("Searching for:", searchText);
+  };
+
+  const debouncedSearch = useDebounce(handleSearch, 500);
+
+  const handleChange = (e) => {
+    setQuery(e.target.value);
+    debouncedSearch(e.target.value);
+  };
+
+  return (
+    <div>
+      <input
+        type="text"
+        value={query}
+        onChange={handleChange}
+        placeholder="Search..."
+      />
+    </div>
+  );
+}
+
+export default SearchComponent;
+
+```
+
+**2. Create a Custom Hook for Fetching Data**
+```
+import { useState, useEffect } from "react";
+
+const useFetch = (url) => {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Failed to fetch data");
+        const result = await response.json();
+        setData(result);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [url]);
+
+  return { data, loading, error };
+};
+
+export default useFetch;
+```
+
+**Custom useFetch Hook with Caching**
+```
+import { useState, useEffect, useRef } from "react";
+
+function useFetch(url, options = {}) {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const cacheRef = useRef(new Map()); // Cache for storing previous fetch results
+
+  useEffect(() => {
+    if (!url) return;
+
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+
+      // Check if response is cached
+      if (cacheRef.current.has(url)) {
+        console.log("Cache hit:", url);
+        setData(cacheRef.current.get(url));
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const response = await fetch(url, options);
+        if (!response.ok) {
+          throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+
+        const result = await response.json();
+        cacheRef.current.set(url, result); // Store response in cache
+        setData(result);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [url, options]);
+
+  return { data, loading, error };
+}
+
+export default useFetch;
+```
+
+**3. Implement a React Memoized Component**
+```
+Optimize the following component so that it only re-renders when the "count" changes and not when the "message" updates.
+
+const Counter = ({ count }) => {
+  console.log("Counter rendered");
+  return <h1>Count: {count}</h1>;
+};
+
+const Parent = () => {
+  const [count, setCount] = useState(0);
+  const [message, setMessage] = useState("Hello");
+
+  return (
+    <div>
+      <Counter count={count} />
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+      <button onClick={() => setMessage("Updated!")}>Update Message</button>
+    </div>
+  );
+};
+
+Solution: Use React.memo() to prevent unnecessary re-renders.
+const Counter = React.memo(({ count }) => {
+  console.log("Counter rendered");
+  return <h1>Count: {count}</h1>;
+});
+```
+
+**How useCallback Optimizes Performance in React**
+```
+useCallback is a React hook that memoizes a function, ensuring that it is not re-created on every render unless its dependencies change. This helps optimize performance, especially in cases where functions are passed as props to child components or used inside useEffect.
+
+Key Benefits of useCallback
+Prevents Unnecessary Re-renders
+When passing a function as a prop to a child component, useCallback ensures that the function reference remains the same unless its dependencies change.
+This prevents the child from re-rendering unnecessarily.
+import { useState } from "react";
+import ChildComponent from "./ChildComponent";
+
+function Parent() {
+  const [count, setCount] = useState(0);
+
+  // Function is recreated on every render
+  const handleClick = () => {
+    console.log("Clicked!");
+  };
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+      <ChildComponent handleClick={handleClick} />
+    </div>
+  );
+}
+
+export default Parent;
+
+Fix with useCallback
+import { useState, useCallback } from "react";
+import ChildComponent from "./ChildComponent";
+
+function Parent() {
+  const [count, setCount] = useState(0);
+
+  // Memoized function that stays the same across renders
+  const handleClick = useCallback(() => {
+    console.log("Clicked!");
+  }, []);
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+      <ChildComponent handleClick={handleClick} />
+    </div>
+  );
+}
+
+export default Parent;
+
+
+Example 2: Optimizing Event Handlers in Lists
+When rendering a list with buttons, using useCallback prevents function recreation for each item.
+Without useCallback (causing multiple function instances):
+function ItemList({ items }) {
+  return (
+    <ul>
+      {items.map((item) => (
+        <li key={item.id}>
+          {item.name} 
+          <button onClick={() => console.log(item.id)}>Delete</button>
+        </li>
+      ))}
+    </ul>
+  );
+}
+Each render creates new click handlers for every item.
+
+Fix with useCallback (Same Function Reference)
+import { useCallback } from "react";
+
+function ItemList({ items }) {
+  const handleDelete = useCallback((id) => {
+    console.log("Deleting item:", id);
+  }, []);
+
+  return (
+    <ul>
+      {items.map((item) => (
+        <li key={item.id}>
+          {item.name} 
+          <button onClick={() => handleDelete(item.id)}>Delete</button>
+        </li>
+      ))}
+    </ul>
+  );
+}
+Now, the function doesn’t change on every render, improving performance.
+
+```
+
+**Create a Dark Mode Toggle Using Context API**
+```
+Build a dark mode toggle using React Context API.
+
+import React, { createContext, useContext, useState } from "react";
+
+const ThemeContext = createContext();
+
+const ThemeProvider = ({ children }) => {
+  const [theme, setTheme] = useState("light");
+  const toggleTheme = () => setTheme(theme === "light" ? "dark" : "light");
+
+  return (
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+};
+
+const ThemeButton = () => {
+  const { theme, toggleTheme } = useContext(ThemeContext);
+  return (
+    <button onClick={toggleTheme} style={{ background: theme === "dark" ? "#333" : "#fff" }}>
+      Switch to {theme === "dark" ? "Light" : "Dark"} Mode
+    </button>
+  );
+};
+
+export default function App() {
+  return (
+    <ThemeProvider>
+      <ThemeButton />
+    </ThemeProvider>
+  );
+}
+
+```
+
+**Implement a Virtualized List (Optimized Large List Rendering)**
+```
+Render 10,000 list items efficiently without affecting performance.
+
+Windowing/Virtualization, react-window
+import React from "react";
+import { FixedSizeList as List } from "react-window";
+
+const items = Array.from({ length: 10000 }, (_, i) => `Item ${i}`);
+
+const Row = ({ index, style }) => <div style={style}>{items[index]}</div>;
+
+const VirtualizedList = () => (
+  <List height={400} itemCount={items.length} itemSize={35} width={"100%"}>
+    {Row}
+  </List>
+);
+
+export default VirtualizedList;
+
+```
+
+**Implement an Infinite Scroll Component**
+```
+Fetch more data automatically when the user scrolls to the bottom.
+
+import React, { useState, useEffect, useRef } from "react";
+
+const InfiniteScroll = () => {
+  const [items, setItems] = useState(
+    Array.from({ length: 20 }, (_, i) => `Item ${i + 1}`)
+  );
+  const [loading, setLoading] = useState(false);
+  const loaderRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        loadMore();
+      }
+    });
+
+    if (loaderRef.current) observer.observe(loaderRef.current);
+    return () => observer.disconnect();
+  }, [loading]);
+
+  const loadMore = async () => {
+    // setItems((prev) => [
+    //   ...prev,
+    //   ...Array.from({ length: 10 }, (_, i) => `Item ${prev.length + i + 1}`),
+    // ]);
+    setLoading(true);
+    const response = await fetch(
+      `https://api.example.com/items?start=${items.length}&limit=10`
+    );
+    const newItems = await response.json();
+    setItems((prev) => [...prev, ...newItems]);
+    setLoading(false);
+  };
+
+  return (
+    <div>
+      <h2>Infinite Scroll Example</h2>
+      {items.map((item, index) => (
+        <p key={index} style={{ padding: "10px", border: "1px solid #ccc" }}>
+          {item}
+        </p>
+      ))}
+      <div ref={loaderRef} style={{ textAlign: "center", padding: "20px" }}>
+        {loading ? "Loading..." : "Scroll down to load more"}
+      </div>
+    </div>
+  );
+};
+
+export default InfiniteScroll;
+```
+
+**react-hook-form with Yup**
+```
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
+// Define Yup Schema
+const schema = yup.object().shape({
+  username: yup.string().min(3, "Username must be at least 3 characters").required("Username is required"),
+  email: yup.string().email("Invalid email format").required("Email is required"),
+  password: yup
+    .string()
+    .min(6, "Password must be at least 6 characters")
+    .matches(/[A-Z]/, "Must include at least one uppercase letter")
+    .matches(/[0-9]/, "Must include at least one number")
+    .required("Password is required"),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("password"), null], "Passwords must match")
+    .required("Confirm password is required"),
+  country: yup.string().required("Country is required"),
+  phone: yup
+    .string()
+    .when("country", (country, schema) => {
+      return country === "USA"
+        ? schema.matches(/^\d{10}$/, "Must be a valid 10-digit phone number")
+        : schema.matches(/^\d{8,15}$/, "Must be a valid phone number");
+    })
+    .required("Phone number is required"),
+  gender: yup.string().required("Please select a gender"),
+  terms: yup.bool().oneOf([true], "You must accept the terms"),
+  comments: yup.string().max(200, "Comments cannot exceed 200 characters"),
+  profilePicture: yup
+    .mixed()
+    .test("fileSize", "File too large", (file) => !file || file[0]?.size <= 2000000) // Max 2MB
+    .test("fileType", "Unsupported file format", (file) =>
+      !file || ["image/jpeg", "image/png"].includes(file[0]?.type)
+    ),
+});
+
+export default function FullFormWithValidation() {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    trigger,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  const country = watch("country");
+  const password = watch("password");
+
+  // Revalidate phone number when country changes
+  useEffect(() => {
+    if (country) {
+      trigger("phone");
+    }
+  }, [country, trigger]);
+
+  // Revalidate confirmPassword when password changes
+  useEffect(() => {
+    if (password) {
+      trigger("confirmPassword");
+    }
+  }, [password, trigger]);
+
+  const onSubmit = (data) => {
+    console.log("Form Submitted:", data);
+    alert("Form submitted successfully!");
+  };
+
+  return (
+    <div className="p-6 max-w-md mx-auto bg-white shadow-lg rounded-lg">
+      <h2 className="text-xl font-bold mb-4">Complete Form with Dynamic Validation</h2>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        
+        {/* Username */}
+        <div>
+          <label>Username:</label>
+          <input type="text" {...register("username")} className="w-full p-2 border rounded" />
+          {errors.username && <p className="text-red-500 text-sm">{errors.username.message}</p>}
+        </div>
+
+        {/* Email */}
+        <div>
+          <label>Email:</label>
+          <input type="email" {...register("email")} className="w-full p-2 border rounded" />
+          {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+        </div>
+
+        {/* Password */}
+        <div>
+          <label>Password:</label>
+          <input type="password" {...register("password")} className="w-full p-2 border rounded" />
+          {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+        </div>
+
+        {/* Confirm Password */}
+        <div>
+          <label>Confirm Password:</label>
+          <input type="password" {...register("confirmPassword")} className="w-full p-2 border rounded" />
+          {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>}
+        </div>
+
+        {/* Country Selection */}
+        <div>
+          <label>Country:</label>
+          <select {...register("country")} className="w-full p-2 border rounded">
+            <option value="">Select a country</option>
+            <option value="USA">USA</option>
+            <option value="India">India</option>
+            <option value="UK">UK</option>
+          </select>
+          {errors.country && <p className="text-red-500 text-sm">{errors.country.message}</p>}
+        </div>
+
+        {/* Phone Number (Dynamic Validation) */}
+        <div>
+          <label>Phone Number:</label>
+          <input type="text" {...register("phone")} className="w-full p-2 border rounded" />
+          {errors.phone && <p className="text-red-500 text-sm">{errors.phone.message}</p>}
+        </div>
+
+        {/* Gender (Radio Buttons) */}
+        <div>
+          <label>Gender:</label>
+          <div className="flex gap-4">
+            <label>
+              <input type="radio" {...register("gender")} value="Male" /> Male
+            </label>
+            <label>
+              <input type="radio" {...register("gender")} value="Female" /> Female
+            </label>
+          </div>
+          {errors.gender && <p className="text-red-500 text-sm">{errors.gender.message}</p>}
+        </div>
+
+        {/* Terms & Conditions */}
+        <div>
+          <label>
+            <input type="checkbox" {...register("terms")} /> I accept the terms and conditions
+          </label>
+          {errors.terms && <p className="text-red-500 text-sm">{errors.terms.message}</p>}
+        </div>
+
+        {/* Comments (Textarea) */}
+        <div>
+          <label>Comments:</label>
+          <textarea {...register("comments")} className="w-full p-2 border rounded"></textarea>
+          {errors.comments && <p className="text-red-500 text-sm">{errors.comments.message}</p>}
+        </div>
+
+        {/* File Upload */}
+        <div>
+          <label>Profile Picture:</label>
+          <input type="file" {...register("profilePicture")} className="w-full p-2 border rounded" />
+          {errors.profilePicture && <p className="text-red-500 text-sm">{errors.profilePicture.message}</p>}
+        </div>
+
+        {/* Submit Button */}
+        <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
+          Submit
+        </button>
+      </form>
+    </div>
+  );
+}
+
+```

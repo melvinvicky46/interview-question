@@ -1,3 +1,339 @@
+**Why do we need object oriented programming?**
+```
+Object-Oriented Programming (OOP) is needed because it helps in building software that is modular, scalable, reusable, and easier to maintain. Here are some key reasons why OOP is important:
+
+1. Encapsulation (Data Hiding)
+OOP allows bundling of data (properties) and methods (functions) that operate on that data into a single unit called an object.
+It restricts direct access to some data, protecting it from unintended modifications.
+Example: In a BankAccount class, the account balance can be private, and only accessible via methods like deposit() and withdraw().
+
+2. Abstraction (Hiding Complexity)
+OOP enables you to hide implementation details and expose only essential features.
+Example: A Car class provides a startEngine() method without revealing the complex internal workings of the engine.
+
+3. Inheritance (Code Reusability)
+OOP allows classes to inherit common properties and behaviors from other classes, reducing code duplication.
+Example: A Vehicle class can define properties like speed and fuelCapacity, which Car and Bike classes can inherit.
+
+4. Polymorphism (Flexibility & Extensibility)
+Polymorphism allows methods to have multiple implementations, making the code more dynamic and flexible.
+Example: A draw() method in a Shape class can be overridden by Circle and Rectangle classes to provide different drawing logic.
+
+5. Modularity (Better Organization)
+OOP encourages breaking down a complex system into smaller, independent objects.
+This makes debugging, testing, and collaboration easier.
+
+6. Scalability & Maintainability
+Since OOP structures code in an organized manner, making changes or adding new features is easier.
+Example: If a new type of User needs to be added in an application, extending the existing User class is simpler than modifying procedural code.
+
+7. Better Collaboration
+OOP allows multiple developers to work on different parts of a project independently by defining clear contracts (interfaces and classes).
+```
+
+**Encapsulation (Data Hiding) using JavaScript by leveraging closures and ES6 classes with private fields**
+```
+Example 1: Using Closures
+function BankAccount(initialBalance) {
+    let balance = initialBalance; // Private variable
+
+    return {
+        deposit: function (amount) {
+            if (amount > 0) {
+                balance += amount;
+                console.log(`Deposited: $${amount}`);
+            } else {
+                console.log("Invalid deposit amount");
+            }
+        },
+        withdraw: function (amount) {
+            if (amount > 0 && amount <= balance) {
+                balance -= amount;
+                console.log(`Withdrawn: $${amount}`);
+            } else {
+                console.log("Invalid withdrawal amount");
+            }
+        },
+        getBalance: function () {
+            return `Balance: $${balance}`;
+        }
+    };
+}
+
+const myAccount = BankAccount(1000);
+console.log(myAccount.getBalance()); // Balance: $1000
+myAccount.deposit(500);
+console.log(myAccount.getBalance()); // Balance: $1500
+myAccount.withdraw(200);
+console.log(myAccount.getBalance()); // Balance: $1300
+
+console.log(myAccount.balance); // Undefined (Cannot access private variable)
+
+
+Example 2: Using ES6 Classes with Private Fields (#)
+class BankAccount {
+    #balance; // Private field
+
+    constructor(initialBalance) {
+        this.#balance = initialBalance;
+    }
+
+    deposit(amount) {
+        if (amount > 0) {
+            this.#balance += amount;
+            console.log(`Deposited: $${amount}`);
+        } else {
+            console.log("Invalid deposit amount");
+        }
+    }
+
+    withdraw(amount) {
+        if (amount > 0 && amount <= this.#balance) {
+            this.#balance -= amount;
+            console.log(`Withdrawn: $${amount}`);
+        } else {
+            console.log("Invalid withdrawal amount");
+        }
+    }
+
+    getBalance() {
+        return `Balance: $${this.#balance}`;
+    }
+}
+
+const myAccount = new BankAccount(1000);
+console.log(myAccount.getBalance()); // Balance: $1000
+myAccount.deposit(500);
+console.log(myAccount.getBalance()); // Balance: $1500
+myAccount.withdraw(200);
+console.log(myAccount.getBalance()); // Balance: $1300
+
+console.log(myAccount.#balance); // SyntaxError: Private field '#balance' must be declared in an enclosing class
+
+```
+
+**Abstraction (Hiding Complexity) in JavaScript**
+```
+Example: Abstraction Using a Class
+class Car {
+    constructor(brand) {
+        this.brand = brand;
+        this._fuelLevel = 100; // Private-like property (convention: "_" prefix)
+    }
+
+    // Public method (exposed to users)
+    startCar() {
+        if (this._checkFuel()) {
+            this._igniteEngine();
+            console.log(`${this.brand} is now running.`);
+        } else {
+            console.log("Cannot start the car. Fuel is too low.");
+        }
+    }
+
+    refuel(amount) {
+        this._fuelLevel += amount;
+        console.log(`${this.brand} refueled. Fuel level: ${this._fuelLevel}%`);
+    }
+
+    // Private methods (internal logic)
+    _checkFuel() {
+        return this._fuelLevel > 10; // Car won't start if fuel is below 10%
+    }
+
+    _igniteEngine() {
+        console.log("Engine started... Vroom Vroom! 🔥");
+    }
+}
+
+const myCar = new Car("Tesla");
+
+// User only interacts with high-level methods
+myCar.startCar(); // ✅ Hides how the engine starts, just provides a simple interface
+myCar.refuel(20);
+myCar.startCar();
+
+// Direct access to _igniteEngine() or _checkFuel() is discouraged
+console.log(myCar._fuelLevel); // Users shouldn't modify this directly
+
+How This Demonstrates Abstraction
+✅ Hides complexity: The user doesn't need to know about _checkFuel() or _igniteEngine().
+✅ Provides a simple interface: Users only need to call startCar() instead of dealing with low-level logic.
+✅ Encapsulation is used to support abstraction: The _ prefix conventionally indicates "private" methods (though not truly private).
+
+
+Example: Using ES6 Private Fields (#) for True Abstraction
+class Car {
+    #fuelLevel = 100; // True private field
+    constructor(brand) {
+        this.brand = brand;
+    }
+
+    startCar() {
+        if (this.#checkFuel()) {
+            this.#igniteEngine();
+            console.log(`${this.brand} is now running.`);
+        } else {
+            console.log("Cannot start the car. Fuel too low.");
+        }
+    }
+
+    refuel(amount) {
+        this.#fuelLevel += amount;
+        console.log(`${this.brand} refueled. Fuel level: ${this.#fuelLevel}%`);
+    }
+
+    #checkFuel() {
+        return this.#fuelLevel > 10;
+    }
+
+    #igniteEngine() {
+        console.log("Engine started... Vroom Vroom! 🔥");
+    }
+}
+
+const myCar = new Car("BMW");
+myCar.startCar();
+myCar.refuel(30);
+myCar.startCar();
+
+// console.log(myCar.#fuelLevel); // ❌ Error: Private field '#fuelLevel' must be declared in an enclosing class
+
+```
+
+**Inheritance (Code Reusability) in JavaScript**
+```
+Basic Inheritance with ES6 Classes
+// Parent class
+class Vehicle {
+    constructor(brand, wheels) {
+        this.brand = brand;
+        this.wheels = wheels;
+    }
+
+    start() {
+        console.log(`${this.brand} is starting...`);
+    }
+
+    stop() {
+        console.log(`${this.brand} is stopping...`);
+    }
+}
+
+// Child class inheriting from Vehicle
+class Car extends Vehicle {
+    constructor(brand, fuelType) {
+        super(brand, 4); // Calling parent constructor
+        this.fuelType = fuelType;
+    }
+
+    honk() {
+        console.log(`${this.brand} is honking: Beep Beep!`);
+    }
+}
+
+// Another child class inheriting from Vehicle
+class Bike extends Vehicle {
+    constructor(brand, type) {
+        super(brand, 2);
+        this.type = type;
+    }
+
+    wheelie() {
+        console.log(`${this.brand} is doing a wheelie! 🏍️`);
+    }
+}
+
+// Creating instances
+const myCar = new Car("Tesla", "Electric");
+const myBike = new Bike("Ducati", "Sport");
+
+myCar.start(); // Tesla is starting...
+myCar.honk();  // Tesla is honking: Beep Beep!
+console.log(`Car has ${myCar.wheels} wheels.`); // Car has 4 wheels
+
+myBike.start(); // Ducati is starting...
+myBike.wheelie(); // Ducati is doing a wheelie!
+console.log(`Bike has ${myBike.wheels} wheels.`); // Bike has 2 wheels
+
+```
+
+**Polymorphism (Flexibility & Extensibility) in JavaScript**
+```
+Example: Method Overriding in JavaScript
+
+// Parent class
+class Vehicle {
+    constructor(brand) {
+        this.brand = brand;
+    }
+
+    start() {
+        console.log(`${this.brand} is starting...`);
+    }
+}
+
+// Child class overriding the start method
+class Car extends Vehicle {
+    start() {
+        console.log(`${this.brand} car starts with a key or push-button! 🚗`);
+    }
+}
+
+// Another child class overriding the start method
+class Bike extends Vehicle {
+    start() {
+        console.log(`${this.brand} bike starts with a kick or self-start! 🏍️`);
+    }
+}
+
+// Another child class without overriding (uses parent method)
+class Truck extends Vehicle {}
+
+// Creating instances
+const myCar = new Car("Tesla");
+const myBike = new Bike("Yamaha");
+const myTruck = new Truck("Volvo");
+
+myCar.start();  // Tesla car starts with a key or push-button! 🚗
+myBike.start(); // Yamaha bike starts with a kick or self-start! 🏍️
+myTruck.start(); // Volvo is starting... (uses Vehicle's method)
+
+
+Example: Function Polymorphism Using Duck Typing
+class Dog {
+    speak() {
+        console.log("Woof! 🐶");
+    }
+}
+
+class Cat {
+    speak() {
+        console.log("Meow! 🐱");
+    }
+}
+
+class Robot {
+    speak() {
+        console.log("Beep Boop! 🤖");
+    }
+}
+
+// Function that works with any object having a 'speak' method
+function makeSound(animal) {
+    animal.speak();
+}
+
+const dog = new Dog();
+const cat = new Cat();
+const robot = new Robot();
+
+makeSound(dog);  // Woof! 🐶
+makeSound(cat);  // Meow! 🐱
+makeSound(robot); // Beep Boop! 🤖
+
+```
+
 **Object-Oriented Programming (OOP)**
 
 ```
