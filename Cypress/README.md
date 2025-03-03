@@ -155,6 +155,120 @@ describe("User List Component - API Data Fetching", () => {
         cy.get(".error-message").should("contain", "Failed to fetch users");
     });
 });
+```
+
+**Fetching Data on Button Click**
+```
+UserListButton.jsx
+import React, { useState } from "react";
+
+const UserListButton = () => {
+    const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    const fetchUsers = () => {
+        setLoading(true);
+        setError(null);
+
+        fetch("/api/users")
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Failed to fetch users");
+                }
+                return response.json();
+            })
+            .then((data) => {
+                setUsers(data);
+                setLoading(false);
+            })
+            .catch((error) => {
+                setError(error.message);
+                setLoading(false);
+            });
+    };
+
+    return (
+        <div>
+            <h1>User List</h1>
+            <button onClick={fetchUsers} className="fetch-button">
+                Load Users
+            </button>
+
+            {loading && <p className="loading">Loading users...</p>}
+            {error && <p className="error-message">{error}</p>}
+
+            {users.length > 0 && (
+                <ul>
+                    {users.map((user) => (
+                        <li key={user.id} className="user-item">
+                            <strong>{user.name}</strong> - {user.email}
+                        </li>
+                    ))}
+                </ul>
+            )}
+        </div>
+    );
+};
+
+export default UserListButton;
+
+
+userListButton.cy.js:
+describe("User List - Fetch on Button Click", () => {
+    beforeEach(() => {
+        cy.visit("/users"); // Adjust to match your component's route
+    });
+
+    it("should fetch and display users when the button is clicked", () => {
+        // Mock API response
+        cy.intercept("GET", "/api/users", {
+            statusCode: 200,
+            body: [
+                { id: 1, name: "John Doe", email: "john@example.com" },
+                { id: 2, name: "Jane Smith", email: "jane@example.com" },
+            ],
+        }).as("fetchUsers");
+
+        // Click the "Load Users" button
+        cy.get(".fetch-button").click();
+
+        // Wait for API response
+        cy.wait("@fetchUsers");
+
+        // Check if data is displayed
+        cy.get(".user-item").should("have.length", 2);
+        cy.get(".user-item").eq(0).should("contain", "John Doe");
+        cy.get(".user-item").eq(1).should("contain", "Jane Smith");
+    });
+
+    it("should show a loading message while fetching", () => {
+        cy.intercept("GET", "/api/users", (req) => {
+            req.reply((res) => {
+                res.send({ delay: 1000, body: [] }); // Simulate delay
+            });
+        }).as("fetchUsers");
+
+        cy.get(".fetch-button").click();
+
+        // Check loading message is displayed
+        cy.get(".loading").should("contain", "Loading users...");
+
+        cy.wait("@fetchUsers");
+
+        // Ensure loading message disappears
+        cy.get(".loading").should("not.exist");
+    });
+
+    it("should handle API failure gracefully", () => {
+        cy.intercept("GET", "/api/users", { statusCode: 500 }).as("fetchUsersError");
+
+        cy.get(".fetch-button").click();
+        cy.wait("@fetchUsersError");
+
+        cy.get(".error-message").should("contain", "Failed to fetch users");
+    });
+});
 
 ```
 
