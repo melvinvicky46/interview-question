@@ -1,3 +1,164 @@
+**Cypress examples**
+**Cypress Test Case for a Registration Form**
+```
+Test Case Breakdown:
+Visit the Registration Page
+Verify UI Elements (Input fields, labels, buttons, etc.)
+Validate Required Fields (Check error messages when left empty)
+Validate Email Format (Invalid vs. valid email input)
+Validate Password Strength & Matching
+Successful Form Submission
+
+Cypress Test Case Implementation:
+describe("User Registration Form", () => {
+    beforeEach(() => {
+        cy.visit("https://example.com/register"); // Replace with the actual registration URL
+    });
+
+    it("should display the registration form correctly", () => {
+        cy.get("h1").should("contain", "Register");
+        cy.get("input[name='name']").should("be.visible");
+        cy.get("input[name='email']").should("be.visible");
+        cy.get("input[name='password']").should("be.visible");
+        cy.get("input[name='confirmPassword']").should("be.visible");
+        cy.get("button[type='submit']").should("contain", "Register");
+    });
+
+    it("should show validation errors for required fields", () => {
+        cy.get("button[type='submit']").click();
+        cy.get(".error-name").should("contain", "Name is required");
+        cy.get(".error-email").should("contain", "Email is required");
+        cy.get(".error-password").should("contain", "Password is required");
+        cy.get(".error-confirmPassword").should("contain", "Confirm Password is required");
+    });
+
+    it("should validate email format", () => {
+        cy.get("input[name='email']").type("invalid-email");
+        cy.get("button[type='submit']").click();
+        cy.get(".error-email").should("contain", "Invalid email format");
+    });
+
+    it("should validate password length and matching", () => {
+        cy.get("input[name='password']").type("123"); // Weak password
+        cy.get(".error-password").should("contain", "Password must be at least 6 characters");
+
+        cy.get("input[name='password']").clear().type("StrongPass123!");
+        cy.get("input[name='confirmPassword']").type("Mismatch123!");
+        cy.get("button[type='submit']").click();
+        cy.get(".error-confirmPassword").should("contain", "Passwords do not match");
+    });
+
+    it("should successfully register a user with valid details", () => {
+        cy.get("input[name='name']").type("John Doe");
+        cy.get("input[name='email']").type("john.doe@example.com");
+        cy.get("input[name='password']").type("SecurePass123!");
+        cy.get("input[name='confirmPassword']").type("SecurePass123!");
+        cy.get("button[type='submit']").click();
+
+        // Validate success message or redirection
+        cy.url().should("include", "/welcome"); // Assuming successful registration redirects
+        cy.get(".success-message").should("contain", "Registration successful");
+    });
+});
+
+```
+
+**Fetches and Displays Data**
+```
+Component: UserList.jsx
+import React, { useEffect, useState } from "react";
+
+const UserList = () => {
+    const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        fetch("/api/users") // API endpoint
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Failed to fetch users");
+                }
+                return response.json();
+            })
+            .then((data) => {
+                setUsers(data);
+                setLoading(false);
+            })
+            .catch((error) => {
+                setError(error.message);
+                setLoading(false);
+            });
+    }, []);
+
+    if (loading) {
+        return <p className="loading">Loading users...</p>;
+    }
+
+    if (error) {
+        return <p className="error-message">{error}</p>;
+    }
+
+    return (
+        <div>
+            <h1>Users List</h1>
+            <ul>
+                {users.map((user) => (
+                    <li key={user.id} className="user-item">
+                        <strong>{user.name}</strong> - {user.email}
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
+};
+
+export default UserList;
+
+
+Cypress Test Case for This Component:
+describe("User List Component - API Data Fetching", () => {
+    beforeEach(() => {
+        cy.intercept("GET", "/api/users", { // Mock API response
+            statusCode: 200,
+            body: [
+                { id: 1, name: "John Doe", email: "john@example.com" },
+                { id: 2, name: "Jane Smith", email: "jane@example.com" },
+            ],
+        }).as("fetchUsers");
+
+        cy.visit("/users"); // Replace with the correct route where UserList is rendered
+    });
+
+    it("should display a loading state initially", () => {
+        cy.get(".loading").should("contain", "Loading users...");
+    });
+
+    it("should display the user list after API data loads", () => {
+        cy.wait("@fetchUsers"); // Wait for API call to complete
+
+        cy.get("h1").should("contain", "Users List");
+
+        cy.get(".user-item").should("have.length", 2);
+        cy.get(".user-item").eq(0).should("contain", "John Doe");
+        cy.get(".user-item").eq(0).should("contain", "john@example.com");
+        cy.get(".user-item").eq(1).should("contain", "Jane Smith");
+        cy.get(".user-item").eq(1).should("contain", "jane@example.com");
+    });
+
+    it("should handle API failure gracefully", () => {
+        cy.intercept("GET", "/api/users", { statusCode: 500 }).as("fetchUsersError");
+
+        cy.visit("/users"); // Reload page with the failing API
+        cy.wait("@fetchUsersError");
+
+        cy.get(".error-message").should("contain", "Failed to fetch users");
+    });
+});
+
+```
+
+
 Here are some interview questions that might be asked for experienced candidates applying for roles involving Cypress:
 
 1. **Can you explain what Cypress is and its advantages over other testing frameworks?**
